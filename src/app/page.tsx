@@ -149,7 +149,7 @@ export default function HomePage() {
                 <span>Promo</span>
               </Link>
               
-              <div className="flex items-center space-x-2 ml-4">
+              <div className="flex items-center space-x-2 ml-4" style={{display: 'none'}}>
                 <button className="p-2 text-gray-500 hover:text-pink-500 hover:bg-pink-100 rounded-2xl transition-smooth">
                   <Heart className="h-5 w-5" />
                 </button>

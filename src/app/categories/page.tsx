@@ -39,8 +39,13 @@ export default function CategoriesPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-pink-50 to-rose-50 flex items-center justify-center">
-        <div className="loading-spinner"></div>
+      <div className="loading-overlay">
+        <div className="loading-dots">
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+        </div>
       </div>
     );
   }
@@ -66,6 +71,9 @@ export default function CategoriesPage() {
             <nav className="hidden md:flex items-center space-x-8">
               <Link href="/" className="text-gray-700 hover:text-pink-500 transition-colors font-medium">
                 Beranda
+              </Link>
+              <Link href="/products" className="text-gray-700 hover:text-pink-500 transition-colors font-medium">
+                Produk
               </Link>
               <Link href="/categories" className="text-pink-500 font-bold relative">
                 Kategori

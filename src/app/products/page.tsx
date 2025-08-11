@@ -65,6 +65,7 @@ function ProductsContent() {
   const [products, setProducts] = useState<Product[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
+  const [initialLoading, setInitialLoading] = useState(true);
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [showFilters, setShowFilters] = useState(false);
   
@@ -142,6 +143,7 @@ function ProductsContent() {
       console.error('Error fetching products:', error);
     } finally {
       setLoading(false);
+      setInitialLoading(false);
     }
   };
 
@@ -180,16 +182,17 @@ function ProductsContent() {
             </Link>
             
             <nav className="flex space-x-6">
-              <Link href="/" className="text-gray-700 hover:text-blue-600 font-medium">
+              <Link href="/" className="text-gray-700 hover:text-pink-500 font-medium">
                 Beranda
               </Link>
-              <Link href="/products" className="text-blue-600 font-medium">
+              <Link href="/products" className="text-pink-500 font-bold relative">
                 Produk
+                <div className="absolute -bottom-1 left-0 right-0 h-0.5 bg-pink-400 rounded-full"></div>
               </Link>
-              <Link href="/categories" className="text-gray-700 hover:text-blue-600 font-medium">
+              <Link href="/categories" className="text-gray-700 hover:text-pink-500 font-medium">
                 Kategori
               </Link>
-              <Link href="/promos" className="text-gray-700 hover:text-blue-600 font-medium">
+              <Link href="/promos" className="text-gray-700 hover:text-pink-500 font-medium">
                 Promo
               </Link>
             </nav>
@@ -367,9 +370,18 @@ function ProductsContent() {
         </div>
 
         {/* Products Grid/List */}
-        {loading ? (
+        {initialLoading ? (
+          <div className="loading-overlay">
+            <div className="loading-dots">
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+            </div>
+          </div>
+        ) : loading ? (
           <div className="flex items-center justify-center py-12">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-pink-600"></div>
           </div>
         ) : products.length === 0 ? (
           <div className="text-center py-12">
@@ -380,7 +392,7 @@ function ProductsContent() {
             <p className="text-gray-600 mb-4">Coba ubah filter atau kata kunci pencarian Anda</p>
             <button
               onClick={resetFilters}
-              className="text-blue-600 hover:text-blue-700 font-medium"
+              className="text-pink-600 hover:text-pink-700 font-medium"
             >
               Reset Filter
             </button>

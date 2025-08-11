@@ -92,6 +92,7 @@ interface PromosResponse {
 export default function PromosPage() {
   const [promos, setPromos] = useState<Promo[]>([]);
   const [loading, setLoading] = useState(true);
+  const [initialLoading, setInitialLoading] = useState(true);
   const [showFilters, setShowFilters] = useState(false);
   
   // Filter states
@@ -135,6 +136,7 @@ export default function PromosPage() {
       console.error('Error fetching promos:', error);
     } finally {
       setLoading(false);
+      setInitialLoading(false);
     }
   };
 
@@ -193,6 +195,9 @@ export default function PromosPage() {
             <nav className="hidden md:flex items-center space-x-8">
               <Link href="/" className="text-gray-700 hover:text-pink-500 transition-colors font-medium">
                 Beranda
+              </Link>
+              <Link href="/products" className="text-gray-700 hover:text-pink-500 transition-colors font-medium">
+                Produk
               </Link>
               <Link href="/categories" className="text-gray-700 hover:text-pink-500 transition-colors font-medium">
                 Kategori
@@ -355,7 +360,16 @@ export default function PromosPage() {
         </div>
 
         {/* Promos Grid */}
-        {loading ? (
+        {initialLoading ? (
+          <div className="loading-overlay">
+            <div className="loading-dots">
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+            </div>
+          </div>
+        ) : loading ? (
           <div className="flex items-center justify-center py-16">
             <div className="loading-spinner"></div>
           </div>

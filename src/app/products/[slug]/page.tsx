@@ -148,8 +148,13 @@ export default function ProductDetailPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600"></div>
+      <div className="loading-overlay">
+        <div className="loading-dots">
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+        </div>
       </div>
     );
   }
@@ -162,7 +167,7 @@ export default function ProductDetailPage() {
           <p className="text-gray-600 mb-8">Produk yang Anda cari tidak tersedia.</p>
           <Link 
             href="/products" 
-            className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors"
+            className="bg-pink-400 text-white px-6 py-3 rounded-2xl hover:bg-pink-500 transition-smooth"
           >
             Kembali ke Produk
           </Link>
@@ -180,28 +185,31 @@ export default function ProductDetailPage() {
   const totalPrice = finalPrice * quantity;
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-pink-50">
       {/* Header */}
-      <header className="bg-white shadow-sm border-b">
+      <header className="bg-white shadow-sm sticky top-0 z-50 border-b border-pink-100 transition-smooth">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
-            <Link href="/" className="flex items-center space-x-2">
-              <ShoppingBag className="h-8 w-8 text-blue-600" />
-              <span className="text-xl font-bold text-gray-900">SistaBag</span>
+            <Link href="/" className="flex items-center space-x-2 group">
+              <div className="bg-pink-300 p-3 rounded-2xl group-hover:scale-105 transition-smooth">
+                <ShoppingBag className="h-6 w-6 text-white" />
+              </div>
+              <span className="text-xl font-bold text-gradient-coral">SistaBag</span>
             </Link>
             
-            <nav className="flex space-x-6">
-              <Link href="/" className="text-gray-700 hover:text-blue-600 font-medium">
-                Beranda
+            <nav className="flex items-center space-x-6">
+              <Link href="/" className="text-gray-600 hover:text-pink-500 font-medium transition-smooth flex items-center space-x-1">
+                <span>Beranda</span>
               </Link>
-              <Link href="/products" className="text-gray-700 hover:text-blue-600 font-medium">
-                Produk
+              <Link href="/products" className="text-gray-600 hover:text-pink-500 font-medium transition-smooth flex items-center space-x-1">
+                <ShoppingBag className="h-4 w-4" />
+                <span>Produk</span>
               </Link>
-              <Link href="/categories" className="text-gray-700 hover:text-blue-600 font-medium">
-                Kategori
+              <Link href="/categories" className="text-gray-600 hover:text-pink-500 font-medium transition-smooth flex items-center space-x-1">
+                <span>Kategori</span>
               </Link>
-              <Link href="/promos" className="text-gray-700 hover:text-blue-600 font-medium">
-                Promo
+              <Link href="/promos" className="text-gray-600 hover:text-pink-500 font-medium transition-smooth flex items-center space-x-1">
+                <span>Promo</span>
               </Link>
             </nav>
           </div>
@@ -229,7 +237,7 @@ export default function ProductDetailPage() {
         {/* Back Button */}
         <Link 
           href="/products" 
-          className="inline-flex items-center gap-2 text-gray-600 hover:text-blue-600 mb-8"
+          className="inline-flex items-center gap-2 text-gray-600 hover:text-pink-500 mb-8 transition-smooth"
         >
           <ArrowLeft className="h-4 w-4" />
           Kembali ke Produk
@@ -322,7 +330,7 @@ export default function ProductDetailPage() {
                 </span>
                 <Link 
                   href={`/categories/${product.category.slug}`}
-                  className="text-blue-600 hover:text-blue-700"
+                  className="text-pink-500 hover:text-pink-600 transition-smooth"
                 >
                   {product.category.name}
                 </Link>
@@ -379,33 +387,33 @@ export default function ProductDetailPage() {
                   </label>
                   <div className="flex items-center gap-3">
                     <button
-                      onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                      className="w-10 h-10 rounded-lg border border-gray-300 flex items-center justify-center hover:bg-gray-50"
-                    >
-                      -
-                    </button>
-                    <input
-                      type="number"
-                      min="1"
-                      max={product.stock}
-                      value={quantity}
-                      onChange={(e) => setQuantity(Math.max(1, Math.min(product.stock, parseInt(e.target.value) || 1)))}
-                      className="w-20 text-center border border-gray-300 rounded-lg py-2"
-                    />
-                    <button
-                      onClick={() => setQuantity(Math.min(product.stock, quantity + 1))}
-                      className="w-10 h-10 rounded-lg border border-gray-300 flex items-center justify-center hover:bg-gray-50"
-                    >
-                      +
-                    </button>
+                    onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                    className="w-10 h-10 rounded-2xl border border-pink-200 flex items-center justify-center hover:bg-pink-50 transition-smooth"
+                  >
+                    -
+                  </button>
+                  <input
+                    type="number"
+                    min="1"
+                    max={product.stock}
+                    value={quantity}
+                    onChange={(e) => setQuantity(Math.max(1, Math.min(product.stock, parseInt(e.target.value) || 1)))}
+                    className="w-20 text-center border border-pink-200 rounded-2xl py-2 focus:ring-2 focus:ring-pink-300 focus:border-pink-300 transition-smooth"
+                  />
+                  <button
+                    onClick={() => setQuantity(Math.min(product.stock, quantity + 1))}
+                    className="w-10 h-10 rounded-2xl border border-pink-200 flex items-center justify-center hover:bg-pink-50 transition-smooth"
+                  >
+                    +
+                  </button>
                     <span className="text-sm text-gray-600">Max: {product.stock}</span>
                   </div>
                 </div>
 
-                <div className="bg-gray-50 rounded-lg p-4">
+                <div className="bg-pink-50 rounded-2xl p-4">
                   <div className="flex items-center justify-between text-lg font-semibold">
                     <span>Total:</span>
-                    <span className="text-blue-600">{formatCurrency(totalPrice)}</span>
+                    <span className="text-pink-500">{formatCurrency(totalPrice)}</span>
                   </div>
                 </div>
 
@@ -420,7 +428,7 @@ export default function ProductDetailPage() {
                   
                   <button
                     onClick={handleShare}
-                    className="p-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+                    className="p-3 border border-pink-200 rounded-2xl hover:bg-pink-50 transition-smooth"
                   >
                     <Share2 className="h-5 w-5" />
                   </button>
@@ -429,12 +437,12 @@ export default function ProductDetailPage() {
             )}
 
             {/* Shipping Info */}
-            <div className="bg-blue-50 rounded-lg p-4">
-              <div className="flex items-center gap-2 text-blue-800 mb-2">
+            <div className="bg-pink-50 rounded-2xl p-4">
+              <div className="flex items-center gap-2 text-pink-700 mb-2">
                 <Truck className="h-5 w-5" />
                 <span className="font-medium">Informasi Pengiriman</span>
               </div>
-              <ul className="text-sm text-blue-700 space-y-1">
+              <ul className="text-sm text-pink-600 space-y-1">
                 <li>• Pengiriman ke seluruh Indonesia</li>
                 <li>• Estimasi 2-5 hari kerja</li>
                 <li>• Gratis ongkir untuk pembelian di atas Rp 500.000</li>
@@ -466,7 +474,7 @@ export default function ProductDetailPage() {
                     </div>
                     
                     <div className="p-4">
-                      <h3 className="font-semibold text-gray-900 mb-2 line-clamp-2 group-hover:text-blue-600">
+                      <h3 className="font-semibold text-gray-900 mb-2 line-clamp-2 group-hover:text-pink-500 transition-smooth">
                         {relatedProduct.name}
                       </h3>
                       
