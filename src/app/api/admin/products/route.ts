@@ -22,7 +22,15 @@ export const config = {
 // GET - List all products for admin
 export async function GET(request: NextRequest) {
   try {
+    console.log('🔍 GET /api/admin/products - Starting request');
+    console.log('📊 Environment check:', {
+      MONGODB_URI: process.env.MONGODB_URI ? 'Set' : 'Missing',
+      NODE_ENV: process.env.NODE_ENV
+    });
+    
+    console.log('🔗 Connecting to database...');
     await dbConnect();
+    console.log('✅ Database connected successfully');
 
     const { searchParams } = new URL(request.url);
     const page = parseInt(searchParams.get('page') || '1');
@@ -52,10 +60,14 @@ export async function GET(request: NextRequest) {
       query.isPublished = false;
     }
 
+    console.log('🔍 Query parameters:', { page, limit, search, category, status });
+    console.log('🔍 MongoDB query:', query);
+
     // Calculate pagination
     const skip = (page - 1) * limit;
 
     // Execute query
+    console.log('🔍 Executing database query...');
     const [products, totalProducts] = await Promise.all([
       Product.find(query)
         .populate('category', 'name slug')
@@ -66,6 +78,13 @@ export async function GET(request: NextRequest) {
         .lean(),
       Product.countDocuments(query)
     ]);
+    
+    console.log('✅ Query executed successfully:', {
+      productsFound: products.length,
+      totalProducts,
+      skip,
+      limit
+    });
 
     const totalPages = Math.ceil(totalProducts / limit);
 
@@ -83,7 +102,12 @@ export async function GET(request: NextRequest) {
     });
 
   } catch (error) {
-    console.error('Error fetching admin products:', error);
+    console.error('❌ Error in GET /api/admin/products:', error);
+    console.error('❌ Error details:', {
+      message: error instanceof Error ? error.message : 'Unknown error',
+      stack: error instanceof Error ? error.stack : undefined,
+      name: error instanceof Error ? error.name : undefined
+    });
     return NextResponse.json(
       { success: false, error: 'Failed to fetch products' },
       { status: 500 }
@@ -94,7 +118,15 @@ export async function GET(request: NextRequest) {
 // POST - Create new product
 export async function POST(request: NextRequest) {
   try {
+    console.log('🔍 POST /api/admin/products - Starting request');
+    console.log('📊 Environment check:', {
+      MONGODB_URI: process.env.MONGODB_URI ? 'Set' : 'Missing',
+      NODE_ENV: process.env.NODE_ENV
+    });
+    
+    console.log('🔗 Connecting to database...');
     await dbConnect();
+    console.log('✅ Database connected successfully');
 
     // Check content length
     const contentLength = request.headers.get('content-length');
