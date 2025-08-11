@@ -6,7 +6,7 @@ import Admin from '@/models/Admin';
 // DELETE - Delete admin user by ID
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     // Verify admin token
@@ -65,9 +65,9 @@ export async function DELETE(
 }
 
 // PUT - Update admin user
-export async function PUT(
+export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     // Verify admin token

@@ -6,7 +6,7 @@ import Promo from '@/models/Promo';
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { slug: string } }
+  { params }: { params: Promise<{ slug: string }> }
 ) {
   try {
     await dbConnect();
@@ -28,8 +28,8 @@ export async function GET(
 
     // Get related products from the same category
     const relatedProducts = await Product.find({
-      category: product.category,
-      _id: { $ne: product._id },
+      category: (product as any).category,
+      _id: { $ne: (product as any)._id },
       isPublished: true
     })
       .populate('category', 'name slug')

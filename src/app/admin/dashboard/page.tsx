@@ -59,7 +59,7 @@ export default function AdminDashboard() {
 
       if (productsData.success && categoriesData.success) {
         const totalViews = productsData.data.products.reduce(
-          (sum: number, product: any) => sum + product.views,
+          (sum: number, product: { views: number }) => sum + product.views,
           0
         );
 

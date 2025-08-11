@@ -32,7 +32,7 @@ export async function verifyAdminToken(request: NextRequest): Promise<{
     }
 
     // Verify JWT token
-    const payload = jwt.verify(token, JWT_SECRET) as any;
+    const payload = jwt.verify(token, JWT_SECRET) as jwt.JwtPayload & Partial<AdminTokenPayload>;
     
     if (!payload.isAdmin) {
       return {
@@ -65,7 +65,7 @@ export async function verifyAdminToken(request: NextRequest): Promise<{
   }
 }
 
-export async function generateAdminToken(admin: any): Promise<string> {
+export async function generateAdminToken(admin: { _id: string; username: string }): Promise<string> {
   const payload: Omit<AdminTokenPayload, 'iat' | 'exp'> = {
     adminId: admin._id.toString(),
     username: admin.username,
@@ -78,7 +78,7 @@ export async function generateAdminToken(admin: any): Promise<string> {
 }
 
 // Verify admin credentials with username and password
-export async function verifyAdminCredentials(username: string, password: string): Promise<{ success: boolean; admin?: any }> {
+export async function verifyAdminCredentials(username: string, password: string): Promise<{ success: boolean; admin?: { _id: string; username: string; password: string; isActive: boolean } }> {
   try {
     await dbConnect();
     

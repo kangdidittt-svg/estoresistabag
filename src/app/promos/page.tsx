@@ -96,7 +96,7 @@ export default function PromosPage() {
   
   // Filter states
   const [filterType, setFilterType] = useState<'all' | 'percentage' | 'fixed'>('all');
-  const [filterStatus, setFilterStatus] = useState<'all' | 'active' | 'expired'>('all');
+  const [filterStatus, setFilterStatus] = useState<'all' | 'active' | 'inactive'>('all');
   const [sortBy, setSortBy] = useState('startDate');
   const [sortOrder, setSortOrder] = useState('desc');
   
@@ -289,7 +289,7 @@ export default function PromosPage() {
                 </label>
                 <select
                   value={filterType}
-                  onChange={(e) => setFilterType(e.target.value as any)}
+                  onChange={(e) => setFilterType(e.target.value as 'all' | 'percentage' | 'fixed')}
                   className="w-full p-3 border border-pink-200 rounded-xl focus:ring-2 focus:ring-pink-400 focus:border-pink-400 transition-all duration-300 bg-white/50 backdrop-blur-sm"
                 >
                   <option value="all">Semua Jenis</option>
@@ -305,12 +305,12 @@ export default function PromosPage() {
                 </label>
                 <select
                   value={filterStatus}
-                  onChange={(e) => setFilterStatus(e.target.value as any)}
+                  onChange={(e) => setFilterStatus(e.target.value as 'all' | 'active' | 'inactive')}
                   className="w-full p-3 border border-pink-200 rounded-xl focus:ring-2 focus:ring-pink-400 focus:border-pink-400 transition-all duration-300 bg-white/50 backdrop-blur-sm"
                 >
                   <option value="all">Semua Status</option>
                   <option value="active">Aktif</option>
-                  <option value="expired">Berakhir</option>
+                  <option value="inactive">Tidak Aktif</option>
                 </select>
               </div>
 

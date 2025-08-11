@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { Eye, EyeOff, Lock, Shield } from 'lucide-react';
 
 export default function AdminLoginPage() {
@@ -143,12 +144,12 @@ export default function AdminLoginPage() {
 
         {/* Back to Store */}
         <div className="text-center mt-6">
-          <a
+          <Link
             href="/"
             className="text-pink-500 hover:text-pink-600 text-sm font-medium transition-colors"
           >
             ← Kembali ke Toko
-          </a>
+          </Link>
         </div>
       </div>
     </div>

@@ -206,7 +206,7 @@ export default function AdminCategoriesPage() {
                         onClick={() => handleDelete(category._id, category.name, category.productCount || 0)}
                         className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
                         title="Hapus kategori"
-                        disabled={category.productCount && category.productCount > 0}
+                        disabled={Boolean(category.productCount && category.productCount > 0)}
                       >
                         <Trash2 className="h-4 w-4" />
                       </button>
