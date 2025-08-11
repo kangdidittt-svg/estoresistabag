@@ -4,6 +4,21 @@ import Product from '@/models/Product';
 import Category from '@/models/Category';
 import { generateSlug, generateSKU } from '@/lib/utils';
 
+// Runtime configuration for handling larger payloads
+export const runtime = 'nodejs';
+export const maxDuration = 30;
+export const dynamic = 'force-dynamic';
+
+// API Route configuration for larger payloads
+export const config = {
+  api: {
+    bodyParser: {
+      sizeLimit: '10mb',
+    },
+    responseLimit: '10mb',
+  },
+};
+
 // GET - List all products for admin
 export async function GET(request: NextRequest) {
   try {
@@ -81,7 +96,25 @@ export async function POST(request: NextRequest) {
   try {
     await dbConnect();
 
-    const body = await request.json();
+    // Check content length
+    const contentLength = request.headers.get('content-length');
+    if (contentLength && parseInt(contentLength) > 10 * 1024 * 1024) { // 10MB
+      return NextResponse.json(
+        { success: false, error: 'Request payload too large. Maximum size is 10MB.' },
+        { status: 413 }
+      );
+    }
+
+    let body;
+    try {
+      body = await request.json();
+    } catch (jsonError) {
+      return NextResponse.json(
+        { success: false, error: 'Invalid JSON payload or payload too large' },
+        { status: 400 }
+      );
+    }
+
     const {
       name,
       description,

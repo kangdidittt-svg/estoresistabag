@@ -2,6 +2,14 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
 export function middleware(request: NextRequest) {
+  // Handle large request bodies for API routes
+  if (request.nextUrl.pathname.startsWith('/api/admin')) {
+    // Set headers for larger payload handling
+    const response = NextResponse.next();
+    response.headers.set('Content-Length-Limit', '10485760'); // 10MB
+    return response;
+  }
+  
   // Check if the request is for admin routes
   if (request.nextUrl.pathname.startsWith('/admin')) {
     // Skip middleware for login page

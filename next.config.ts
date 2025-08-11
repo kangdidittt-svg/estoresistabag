@@ -6,6 +6,11 @@ const nextConfig: NextConfig = {
     optimizePackageImports: ['lucide-react']
   },
   
+  // Server configuration for larger payloads
+  serverRuntimeConfig: {
+    maxDuration: 30,
+  },
+  
   // Image optimization
   images: {
     domains: ['res.cloudinary.com', 'localhost'],
