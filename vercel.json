@@ -1,12 +1,4 @@
 {
-  "env": {
-    "MONGODB_URI": "@mongodb-uri",
-    "JWT_SECRET": "@jwt-secret",
-    "ADMIN_SECRET_TOKEN": "@admin-secret-token",
-    "CLOUDINARY_CLOUD_NAME": "@cloudinary-cloud-name",
-    "CLOUDINARY_API_KEY": "@cloudinary-api-key",
-    "CLOUDINARY_API_SECRET": "@cloudinary-api-secret"
-  },
   "functions": {
     "src/app/api/**/*.ts": {
       "maxDuration": 30
