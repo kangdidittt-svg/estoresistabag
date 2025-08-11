@@ -12,7 +12,12 @@ import {
   Clock,
   ArrowRight,
   Filter,
-  ChevronDown
+  ChevronDown,
+  Menu,
+  User,
+  Heart,
+  ShoppingCart,
+  Search
 } from 'lucide-react';
 import { formatCurrency, formatDate } from '@/lib/utils';
 
@@ -168,83 +173,124 @@ export default function PromosPage() {
 
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gradient-to-br from-pink-50 to-rose-50">
       {/* Header */}
-      <header className="bg-white shadow-sm border-b">
+      <header className="bg-white/90 backdrop-blur-md shadow-lg border-b border-pink-100 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
-            <Link href="/" className="flex items-center space-x-2">
-              <ShoppingBag className="h-8 w-8 text-blue-600" />
-              <span className="text-xl font-bold text-gray-900">SistaBag</span>
+            <Link href="/" className="flex items-center space-x-2 group">
+              <div className="relative">
+                <div className="absolute inset-0 bg-pink-400 rounded-lg blur opacity-75 group-hover:opacity-100 transition-opacity"></div>
+                <div className="relative bg-pink-500 p-2 rounded-lg">
+                  <ShoppingBag className="h-6 w-6 text-white" />
+                </div>
+              </div>
+              <span className="text-xl font-bold text-pink-600">
+                Toko Siska
+              </span>
             </Link>
             
-            <nav className="flex space-x-6">
-              <Link href="/" className="text-gray-700 hover:text-blue-600 font-medium">
+            <nav className="hidden md:flex items-center space-x-8">
+              <Link href="/" className="text-gray-700 hover:text-pink-500 transition-colors font-medium">
                 Beranda
               </Link>
-              <Link href="/products" className="text-gray-700 hover:text-blue-600 font-medium">
-                Produk
-              </Link>
-              <Link href="/categories" className="text-gray-700 hover:text-blue-600 font-medium">
+              <Link href="/categories" className="text-gray-700 hover:text-pink-500 transition-colors font-medium">
                 Kategori
               </Link>
-              <Link href="/promos" className="text-blue-600 font-medium">
+              <Link href="/promos" className="text-pink-500 font-bold relative">
                 Promo
+                <div className="absolute -bottom-1 left-0 right-0 h-0.5 bg-pink-400 rounded-full"></div>
               </Link>
             </nav>
+            
+            <div className="flex items-center space-x-4">
+              <button className="p-2 text-gray-600 hover:text-pink-500 transition-colors">
+                <Search className="h-5 w-5" />
+              </button>
+              {/* Hidden buttons as requested */}
+              <button className="p-2 text-gray-600 hover:text-pink-500 transition-colors hidden">
+                <Heart className="h-5 w-5" />
+              </button>
+              <button className="p-2 text-gray-600 hover:text-pink-500 transition-colors relative hidden">
+                <ShoppingCart className="h-5 w-5" />
+                <span className="absolute -top-1 -right-1 bg-pink-400 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-bold">0</span>
+              </button>
+              <button className="p-2 text-gray-600 hover:text-pink-500 transition-colors hidden">
+                <User className="h-5 w-5" />
+              </button>
+            </div>
           </div>
         </div>
       </header>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Breadcrumb */}
-        <nav className="flex items-center space-x-2 text-sm text-gray-600 mb-8">
-          <Link href="/" className="hover:text-blue-600">Beranda</Link>
-          <span>/</span>
-          <span className="text-gray-900">Promo</span>
-        </nav>
-
         {/* Page Header */}
-        <div className="text-center mb-12">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-red-500 to-pink-500 rounded-full mb-4">
-            <Gift className="h-8 w-8 text-white" />
+        <div className="relative bg-gradient-to-r from-pink-400 via-rose-400 to-pink-500 overflow-hidden -mx-4 sm:-mx-6 lg:-mx-8 mb-12 rounded-3xl">
+          <div className="absolute inset-0 bg-black/10"></div>
+          <div className="absolute inset-0">
+            <div className="absolute top-10 left-10 w-20 h-20 bg-white/10 rounded-full blur-xl"></div>
+            <div className="absolute bottom-10 right-10 w-32 h-32 bg-white/10 rounded-full blur-xl"></div>
+            <div className="absolute top-1/2 left-1/2 w-16 h-16 bg-white/10 rounded-full blur-xl"></div>
           </div>
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">Promo Spesial</h1>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            Dapatkan penawaran terbaik dan hemat lebih banyak dengan promo eksklusif kami
-          </p>
+          <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+            {/* Breadcrumb */}
+            <nav className="flex items-center space-x-2 text-sm text-white/80 mb-8">
+              <Link href="/" className="hover:text-white transition-colors">Beranda</Link>
+              <span>/</span>
+              <span className="text-white font-medium">Promo</span>
+            </nav>
+            
+            <div className="text-center animate-fade-in-up">
+              <div className="inline-flex items-center space-x-2 bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full mb-6">
+                <Gift className="h-5 w-5 text-white" />
+                <span className="text-white font-semibold text-sm tracking-wider">PROMO SPESIAL</span>
+              </div>
+              <h1 className="text-4xl md:text-5xl font-bold text-white mb-4 leading-tight">
+                Penawaran Terbaik
+                <span className="block text-rose-200">Untuk Anda</span>
+              </h1>
+              <p className="text-xl text-white/90 max-w-2xl mx-auto leading-relaxed">
+                Dapatkan penawaran terbaik dan hemat lebih banyak dengan promo eksklusif kami
+              </p>
+            </div>
+          </div>
         </div>
 
         {/* Filters */}
-        <div className="bg-white rounded-lg shadow-sm border p-6 mb-8">
+        <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg border border-pink-100 p-6 mb-8 animate-fade-in-up">
           <div className="flex items-center justify-between mb-4">
             <button
               onClick={() => setShowFilters(!showFilters)}
-              className="flex items-center gap-2 text-gray-700 hover:text-blue-600"
+              className="flex items-center gap-2 text-gray-700 hover:text-pink-500 transition-colors font-medium"
             >
-              <Filter className="h-5 w-5" />
+              <div className="p-2 bg-pink-200 rounded-lg">
+                <Filter className="h-4 w-4 text-pink-600" />
+              </div>
               Filter & Urutkan
               <ChevronDown className={`h-4 w-4 transition-transform ${
                 showFilters ? 'rotate-180' : ''
               }`} />
             </button>
             
-            <span className="text-sm text-gray-600">
-              {totalPromos} promo tersedia
-            </span>
+            <div className="flex items-center space-x-2">
+              <div className="w-2 h-2 bg-pink-400 rounded-full"></div>
+              <span className="text-sm text-gray-600 font-medium">
+                {totalPromos} promo tersedia
+              </span>
+            </div>
           </div>
 
           {showFilters && (
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-4 border-t">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-6 border-t border-pink-100">
               {/* Type Filter */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-bold text-gray-700 mb-3">
                   Jenis Promo
                 </label>
                 <select
                   value={filterType}
                   onChange={(e) => setFilterType(e.target.value as any)}
-                  className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full p-3 border border-pink-200 rounded-xl focus:ring-2 focus:ring-pink-400 focus:border-pink-400 transition-all duration-300 bg-white/50 backdrop-blur-sm"
                 >
                   <option value="all">Semua Jenis</option>
                   <option value="percentage">Diskon Persentase</option>
@@ -254,13 +300,13 @@ export default function PromosPage() {
 
               {/* Status Filter */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-bold text-gray-700 mb-3">
                   Status
                 </label>
                 <select
                   value={filterStatus}
                   onChange={(e) => setFilterStatus(e.target.value as any)}
-                  className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full p-3 border border-pink-200 rounded-xl focus:ring-2 focus:ring-pink-400 focus:border-pink-400 transition-all duration-300 bg-white/50 backdrop-blur-sm"
                 >
                   <option value="all">Semua Status</option>
                   <option value="active">Aktif</option>
@@ -270,7 +316,7 @@ export default function PromosPage() {
 
               {/* Sort */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-bold text-gray-700 mb-3">
                   Urutkan
                 </label>
                 <select
@@ -280,7 +326,7 @@ export default function PromosPage() {
                     setSortBy(sort);
                     setSortOrder(order);
                   }}
-                  className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full p-3 border border-pink-200 rounded-xl focus:ring-2 focus:ring-pink-400 focus:border-pink-400 transition-all duration-300 bg-white/50 backdrop-blur-sm"
                 >
                   <option value="startDate-desc">Terbaru</option>
                   <option value="startDate-asc">Terlama</option>
@@ -294,12 +340,15 @@ export default function PromosPage() {
 
           {/* Reset Filters */}
           {(filterType !== 'all' || filterStatus !== 'all') && (
-            <div className="pt-4 border-t mt-4">
+            <div className="pt-6 border-t border-pink-100 mt-6">
               <button
                 onClick={resetFilters}
-                className="text-sm text-blue-600 hover:text-blue-700 font-medium"
+                className="inline-flex items-center space-x-2 text-sm text-pink-500 hover:text-pink-600 font-bold transition-colors"
               >
-                Reset Semua Filter
+                <div className="w-4 h-4 bg-pink-400 rounded-full flex items-center justify-center text-white text-xs">
+                  ×
+                </div>
+                <span>Reset Semua Filter</span>
               </button>
             </div>
           )}
@@ -307,21 +356,24 @@ export default function PromosPage() {
 
         {/* Promos Grid */}
         {loading ? (
-          <div className="flex items-center justify-center py-12">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+          <div className="flex items-center justify-center py-16">
+            <div className="loading-spinner"></div>
           </div>
         ) : promos.length === 0 ? (
-          <div className="text-center py-12">
-            <div className="text-gray-400 mb-4">
-              <Gift className="h-16 w-16 mx-auto" />
+          <div className="text-center py-16 animate-fade-in-up">
+            <div className="inline-flex items-center justify-center w-20 h-20 bg-pink-100 rounded-full mb-6">
+              <Gift className="h-10 w-10 text-pink-500" />
             </div>
-            <h3 className="text-lg font-medium text-gray-900 mb-2">Tidak ada promo ditemukan</h3>
-            <p className="text-gray-600 mb-4">Belum ada promo tersedia atau coba ubah filter Anda</p>
+            <h3 className="text-2xl font-bold text-gray-900 mb-3">Tidak ada promo ditemukan</h3>
+            <p className="text-gray-600 mb-6 max-w-md mx-auto leading-relaxed">Belum ada promo tersedia atau coba ubah filter Anda untuk menemukan penawaran menarik</p>
             <button
               onClick={resetFilters}
-              className="text-blue-600 hover:text-blue-700 font-medium"
+              className="inline-flex items-center space-x-2 bg-pink-400 text-white px-6 py-3 rounded-xl font-bold hover:bg-pink-500 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105"
             >
-              Reset Filter
+              <span>Reset Filter</span>
+              <div className="w-5 h-5 bg-white/20 rounded-full flex items-center justify-center text-sm">
+                ↻
+              </div>
             </button>
           </div>
         ) : (
@@ -334,12 +386,12 @@ export default function PromosPage() {
 
             {/* Pagination */}
             {totalPages > 1 && (
-              <div className="flex items-center justify-center mt-12">
-                <nav className="flex items-center space-x-2">
+              <div className="flex items-center justify-center mt-16 animate-fade-in-up">
+                <nav className="flex items-center space-x-3">
                   <button
                     onClick={() => handlePageChange(currentPage - 1)}
                     disabled={currentPage === 1}
-                    className="p-2 rounded-lg border border-gray-300 text-gray-500 hover:text-gray-700 hover:border-gray-400 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="p-3 rounded-xl border border-pink-200 text-pink-500 hover:text-pink-600 hover:border-pink-300 hover:bg-pink-50 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 shadow-sm hover:shadow-md"
                   >
                     <ArrowRight className="h-4 w-4 rotate-180" />
                   </button>
@@ -360,10 +412,10 @@ export default function PromosPage() {
                       <button
                         key={pageNum}
                         onClick={() => handlePageChange(pageNum)}
-                        className={`px-3 py-2 rounded-lg border ${
+                        className={`px-4 py-3 rounded-xl border font-bold transition-all duration-300 shadow-sm hover:shadow-md ${
                           currentPage === pageNum
-                            ? 'bg-blue-600 text-white border-blue-600'
-                            : 'border-gray-300 text-gray-700 hover:text-gray-900 hover:border-gray-400'
+                            ? 'bg-pink-400 text-white border-pink-400 shadow-lg scale-105'
+                            : 'border-pink-200 text-pink-500 hover:text-pink-600 hover:border-pink-300 hover:bg-pink-50'
                         }`}
                       >
                         {pageNum}
@@ -374,7 +426,7 @@ export default function PromosPage() {
                   <button
                     onClick={() => handlePageChange(currentPage + 1)}
                     disabled={currentPage === totalPages}
-                    className="p-2 rounded-lg border border-gray-300 text-gray-500 hover:text-gray-700 hover:border-gray-400 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="p-3 rounded-xl border border-pink-200 text-pink-500 hover:text-pink-600 hover:border-pink-300 hover:bg-pink-50 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 shadow-sm hover:shadow-md"
                   >
                     <ArrowRight className="h-4 w-4" />
                   </button>
@@ -419,8 +471,8 @@ function PromoCard({ promo }: { promo: Promo }) {
       {/* Header */}
       <div className={`p-6 ${
         isActive 
-          ? 'bg-gradient-to-r from-green-500 to-emerald-500' 
-          : 'bg-gradient-to-r from-gray-400 to-gray-500'
+          ? 'bg-pink-400' 
+          : 'bg-gray-400'
       }`}>
         <div className="flex items-center justify-between text-white mb-4">
           <div className="flex items-center gap-2">
@@ -461,7 +513,7 @@ function PromoCard({ promo }: { promo: Promo }) {
           </div>
           
           {isActive && (
-            <div className="flex items-center gap-2 text-sm text-orange-600">
+            <div className="flex items-center gap-2 text-sm text-pink-500">
               <Clock className="h-4 w-4" />
               <span className="font-medium">{timeRemaining}</span>
             </div>
@@ -520,9 +572,9 @@ function PromoCard({ promo }: { promo: Promo }) {
         {/* Action Button */}
         <Link 
           href={`/products?promo=${promo._id}`}
-          className={`w-full inline-flex items-center justify-center gap-2 px-4 py-3 rounded-lg font-medium transition-colors ${
+          className={`w-full inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl font-bold transition-all duration-300 shadow-sm hover:shadow-md ${
             isActive
-              ? 'bg-blue-600 text-white hover:bg-blue-700'
+              ? 'bg-pink-400 text-white hover:bg-pink-500 transform hover:scale-105'
               : 'bg-gray-100 text-gray-500 cursor-not-allowed'
           }`}
         >

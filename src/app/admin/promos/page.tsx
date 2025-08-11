@@ -157,13 +157,13 @@ export default function AdminPromosPage() {
                 ← Kembali ke Dashboard
               </Link>
               <div className="flex items-center space-x-2">
-                <DollarSign className="h-6 w-6 text-purple-600" />
+                <DollarSign className="h-6 w-6 text-orange-600" />
                 <h1 className="text-xl font-semibold text-gray-900">Kelola Promo</h1>
               </div>
             </div>
             <Link
               href="/admin/promos/new"
-              className="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 flex items-center space-x-2"
+              className="bg-orange-600 text-white px-4 py-2 rounded-lg hover:bg-orange-700 flex items-center space-x-2"
             >
               <Plus className="h-4 w-4" />
               <span>Tambah Promo</span>
@@ -217,7 +217,7 @@ export default function AdminPromosPage() {
         {/* Promos Grid */}
         {loading ? (
           <div className="flex items-center justify-center py-12">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-600"></div>
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-orange-600"></div>
           </div>
         ) : (
           <>
@@ -227,7 +227,7 @@ export default function AdminPromosPage() {
                 return (
                   <div key={promo._id} className="bg-white rounded-lg shadow-sm overflow-hidden hover:shadow-md transition-shadow">
                     {/* Promo Header */}
-                    <div className="bg-gradient-to-r from-purple-500 to-pink-500 p-4 text-white">
+                    <div className="bg-gradient-to-r from-orange-500 to-red-500 p-4 text-white">
                       <div className="flex items-start justify-between mb-2">
                         <div className="flex-1">
                           <h3 className="font-semibold text-lg mb-1">{promo.title}</h3>
@@ -332,7 +332,7 @@ export default function AdminPromosPage() {
                       <ChevronLeft className="h-4 w-4" />
                     </button>
                     
-                    <span className="px-3 py-1 bg-purple-100 text-purple-800 rounded-lg text-sm font-medium">
+                    <span className="px-3 py-1 bg-orange-100 text-orange-800 rounded-lg text-sm font-medium">
                       {currentPage} / {pagination.totalPages}
                     </span>
                     
@@ -366,7 +366,7 @@ export default function AdminPromosPage() {
             {!searchQuery && statusFilter === 'all' && (
               <Link
                 href="/admin/promos/new"
-                className="inline-flex items-center px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700"
+                className="inline-flex items-center px-4 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700"
               >
                 <Plus className="h-4 w-4 mr-2" />
                 Tambah Promo

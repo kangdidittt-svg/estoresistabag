@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Search, ShoppingBag, Star, Eye, Tag } from 'lucide-react';
+import { Search, ShoppingBag, Star, Eye, Tag, Menu, User, Heart, ShoppingCart, ChevronLeft, ChevronRight, Mail, Facebook, Instagram, Twitter, Grid, Package } from 'lucide-react';
 import { formatCurrency, calculateDiscountPercentage } from '@/lib/utils';
 
 interface Product {
@@ -50,6 +50,8 @@ export default function HomePage() {
   const [promos, setPromos] = useState<Promo[]>([]);
   const [popularProducts, setPopularProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const itemsPerSlide = 4;
   const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
@@ -92,152 +94,144 @@ export default function HomePage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600"></div>
+      <div className="loading-overlay">
+        <div className="loading-dots">
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-pink-50">
       {/* Header */}
-      <header className="bg-white shadow-sm border-b">
+      <header className="bg-white shadow-sm sticky top-0 z-50 border-b border-pink-100 transition-smooth">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center">
-              <Link href="/" className="flex items-center space-x-2">
-                <ShoppingBag className="h-8 w-8 text-blue-600" />
-                <span className="text-xl font-bold text-gray-900">SistaBag</span>
+              <Link href="/" className="flex items-center space-x-2 group">
+                <div className="bg-pink-300 p-3 rounded-2xl group-hover:scale-105 transition-smooth">
+                  <ShoppingBag className="h-6 w-6 text-white" />
+                </div>
+                <span className="text-xl font-bold text-gradient-coral animate-fade-in">SistaBag</span>
               </Link>
             </div>
             
             <div className="flex-1 max-w-lg mx-8">
-              <form onSubmit={handleSearch} className="relative">
+              <form onSubmit={handleSearch} className="relative animate-fade-in animate-delay-100">
                 <input
                   type="text"
                   placeholder="Cari tas impian Anda..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full pl-10 pr-4 py-3 border border-pink-200 rounded-2xl focus:ring-2 focus:ring-pink-300 focus:border-pink-300 transition-smooth bg-pink-50 hover:bg-pink-100"
                 />
-                <Search className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
+                <Search className="absolute left-3 top-3.5 h-5 w-5 text-pink-400" />
               </form>
             </div>
 
-            <nav className="flex space-x-6">
-              <Link href="/products" className="text-gray-700 hover:text-blue-600 font-medium">
-                Produk
+            <nav className="flex items-center space-x-6 animate-fade-in animate-delay-200">
+              <Link href="/products" className="text-gray-600 hover:text-pink-500 font-medium transition-smooth flex items-center space-x-1">
+                <ShoppingBag className="h-4 w-4" />
+                <span>Produk</span>
               </Link>
-              <Link href="/categories" className="text-gray-700 hover:text-blue-600 font-medium">
-                Kategori
+              
+              <Link href="/categories" className="text-gray-600 hover:text-pink-500 font-medium transition-smooth flex items-center space-x-1">
+                <Menu className="h-4 w-4" />
+                <span>Kategori</span>
               </Link>
-              <Link href="/promos" className="text-gray-700 hover:text-blue-600 font-medium">
-                Promo
+              
+              <Link href="/promos" className="text-gray-600 hover:text-pink-500 font-medium transition-smooth flex items-center space-x-1">
+                <Tag className="h-4 w-4" />
+                <span>Promo</span>
               </Link>
+              
+              <div className="flex items-center space-x-2 ml-4">
+                <button className="p-2 text-gray-500 hover:text-pink-500 hover:bg-pink-100 rounded-2xl transition-smooth">
+                  <Heart className="h-5 w-5" />
+                </button>
+                <button className="p-2 text-gray-500 hover:text-pink-500 hover:bg-pink-100 rounded-2xl transition-smooth">
+                  <ShoppingCart className="h-5 w-5" />
+                </button>
+                <button className="p-2 text-gray-500 hover:text-pink-500 hover:bg-pink-100 rounded-2xl transition-smooth">
+                  <User className="h-5 w-5" />
+                </button>
+              </div>
             </nav>
           </div>
         </div>
       </header>
 
       {/* Hero Section */}
-      <section className="bg-gradient-to-r from-blue-600 to-purple-600 text-white py-20">
+      <section className="bg-pink-200 text-gray-800 py-20 relative">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-4xl md:text-6xl font-bold mb-6">
-            Koleksi Tas Terbaik
-          </h1>
-          <p className="text-xl md:text-2xl mb-8 opacity-90">
-            Temukan tas impian Anda dengan kualitas terbaik dan harga terjangkau
-          </p>
-          <Link
-            href="/products"
-            className="inline-block bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors"
-          >
-            Jelajahi Koleksi
-          </Link>
+          <div className="animate-fade-in-up">
+            <h1 className="text-4xl lg:text-5xl font-bold mb-6 leading-tight text-gray-700">
+              Koleksi Tas Terbaru
+              <br />
+              <span className="text-pink-500">untuk Gaya Hidup Modern</span>
+            </h1>
+            <p className="text-lg text-gray-600 mb-8 max-w-2xl mx-auto leading-relaxed">
+              Temukan tas impian kamu dari koleksi eksklusif kami. Kualitas premium dengan desain yang memukau.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+              <Link
+                href="/products"
+                className="inline-block bg-pink-400 text-white px-8 py-3 rounded-2xl font-semibold hover:bg-pink-500 transition-smooth shadow-sm"
+              >
+                Jelajahi Koleksi
+              </Link>
+              <Link
+                href="/promos"
+                className="inline-block border-2 border-pink-400 text-pink-500 px-8 py-3 rounded-2xl font-semibold hover:bg-pink-50 transition-smooth"
+              >
+                Lihat Promo
+              </Link>
+            </div>
+          </div>
         </div>
       </section>
 
-      {/* Categories Section */}
-      {categories.length > 0 && (
-        <section className="py-16">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold text-gray-900 mb-4">Kategori Unggulan</h2>
-              <p className="text-gray-600">Pilih kategori sesuai kebutuhan Anda</p>
-            </div>
-            
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-              {categories.slice(0, 8).map((category) => (
-                <Link
-                  key={category._id}
-                  href={`/categories/${category.slug}`}
-                  className="group bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow border"
-                >
-                  <div className="text-center">
-                    <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-blue-200 transition-colors">
-                      <ShoppingBag className="h-8 w-8 text-blue-600" />
-                    </div>
-                    <h3 className="font-semibold text-gray-900 mb-2">{category.name}</h3>
-                    <p className="text-sm text-gray-500">{category.productCount} produk</p>
-                  </div>
-                </Link>
-              ))}
-            </div>
-          </div>
-        </section>
-      )}
-
-      {/* Popular Products */}
-      {popularProducts.length > 0 && (
-        <section className="py-16 bg-white">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex items-center justify-between mb-12">
-              <div>
-                <h2 className="text-3xl font-bold text-gray-900 mb-4">Produk Populer</h2>
-                <p className="text-gray-600">Produk yang paling banyak dilihat</p>
+      {/* Promo Section */}
+        {promos.length > 0 && (
+          <section className="py-16 bg-white">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="text-center mb-12 animate-fade-in-up">
+                <div className="inline-flex items-center bg-pink-400 text-white px-4 py-2 rounded-2xl text-sm font-semibold mb-4">
+                  <Tag className="h-4 w-4 mr-2" />
+                  PROMO SPESIAL
+                </div>
+                <h2 className="text-3xl font-bold text-gray-700 mb-3">Penawaran Terbaik Hari Ini</h2>
+                <p className="text-gray-600 text-base">Jangan lewatkan kesempatan emas ini! Hemat hingga 70%</p>
               </div>
-              <Link
-                href="/products?sort=views&order=desc"
-                className="text-blue-600 hover:text-blue-700 font-medium"
-              >
-                Lihat Semua →
-              </Link>
-            </div>
             
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {popularProducts.map((product) => (
-                <ProductCard key={product._id} product={product} showPopularBadge />
-              ))}
-            </div>
-          </div>
-        </section>
-      )}
-
-      {/* Promo Section */}
-      {promos.length > 0 && (
-        <section className="py-16 bg-red-50">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold text-gray-900 mb-4">Promo Aktif</h2>
-              <p className="text-gray-600">Jangan lewatkan penawaran terbaik kami</p>
-            </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {promos.slice(0, 3).map((promo) => (
+              {promos.slice(0, 3).map((promo, index) => (
                 <Link
                   key={promo._id}
                   href={`/promos`}
-                  className="bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow border border-red-200"
+                  className="group bg-white rounded-3xl p-6 shadow-sm hover:shadow-md transition-smooth border border-pink-100 hover:border-pink-200 relative"
                 >
-                  <div className="flex items-center mb-4">
-                    <Tag className="h-6 w-6 text-red-600 mr-2" />
-                    <span className="text-red-600 font-semibold">PROMO</span>
+                  <div className="absolute top-0 right-0 bg-pink-400 text-white px-3 py-1 rounded-bl-2xl rounded-tr-3xl">
+                    <span className="text-xs font-semibold">HOT!</span>
                   </div>
-                  <h3 className="font-bold text-gray-900 mb-2">{promo.title}</h3>
-                  <p className="text-2xl font-bold text-red-600 mb-2">
+                  <div className="flex items-center mb-4">
+                    <div className="bg-pink-300 p-2 rounded-2xl mr-3">
+                      <Tag className="h-5 w-5 text-white" />
+                    </div>
+                    <span className="text-pink-500 font-semibold text-sm">PROMO SPESIAL</span>
+                  </div>
+                  <h3 className="font-bold text-gray-800 mb-3 text-lg">{promo.title}</h3>
+                  <p className="text-2xl font-bold text-pink-500 mb-3">
                     {promo.type === 'percent' ? `${promo.value}%` : formatCurrency(promo.value)} OFF
                   </p>
-                  <p className="text-sm text-gray-500">{promo.productCount} produk tersedia</p>
+                  <p className="text-gray-500 mb-4 text-sm">{promo.productCount} produk tersedia</p>
+                  <div className="bg-pink-400 text-white px-4 py-2 rounded-2xl text-center font-semibold text-sm group-hover:bg-pink-500 transition-smooth">
+                    Ambil Sekarang!
+                  </div>
                 </Link>
               ))}
             </div>
@@ -245,52 +239,196 @@ export default function HomePage() {
         </section>
       )}
 
-      {/* Latest Products */}
-      {products.length > 0 && (
-        <section className="py-16">
+      {/* Categories Section */}
+      {categories.length > 0 && (
+        <section className="py-16 bg-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex items-center justify-between mb-12">
-              <div>
-                <h2 className="text-3xl font-bold text-gray-900 mb-4">Produk Terbaru</h2>
-                <p className="text-gray-600">Koleksi terbaru yang baru saja tiba</p>
+            <div className="text-center mb-12">
+              <div className="inline-flex items-center bg-pink-400 text-white px-4 py-2 rounded-2xl text-sm font-semibold mb-4">
+                <Menu className="h-4 w-4 mr-2" />
+                KATEGORI PRODUK
               </div>
-              <Link
-                href="/products"
-                className="text-blue-600 hover:text-blue-700 font-medium"
-              >
-                Lihat Semua →
-              </Link>
+              <h2 className="text-3xl font-bold text-gray-700 mb-3">Jelajahi Kategori</h2>
+              <p className="text-gray-600 text-base">Temukan produk sesuai kebutuhan Anda</p>
             </div>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-              {products.map((product) => (
-                <ProductCard key={product._id} product={product} />
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {categories.slice(0, 6).map((category, index) => (
+                <Link
+                  key={category._id}
+                  href={`/products?category=${category.slug}`}
+                  className="group bg-white rounded-3xl p-5 shadow-sm hover:shadow-md transition-smooth border border-pink-100 hover:border-pink-200 text-center"
+                >
+                  <div className="bg-pink-300 w-12 h-12 rounded-2xl mx-auto mb-3 flex items-center justify-center">
+                    <ShoppingBag className="h-6 w-6 text-white" />
+                  </div>
+                  <h3 className="font-bold text-gray-800 mb-2 text-base">{category.name}</h3>
+                  <p className="text-gray-500 text-xs mb-3">{category.productCount} produk</p>
+                  <div className="bg-pink-400 text-white px-3 py-1 rounded-2xl text-xs font-semibold group-hover:bg-pink-500 transition-smooth">
+                    Lihat Produk
+                  </div>
+                </Link>
               ))}
             </div>
           </div>
         </section>
       )}
 
+      {/* Popular Products Slider */}
+      {popularProducts.length > 0 && (
+        <section className="py-16 bg-white">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex items-center justify-between mb-8 animate-fade-in-up">
+              <div>
+                <h2 className="text-2xl font-bold text-gradient-coral mb-2">Produk Populer</h2>
+                <p className="text-gray-600 animate-fade-in animate-delay-100">Pilihan favorit pelanggan kami</p>
+              </div>
+              <div className="flex items-center space-x-4 animate-fade-in animate-delay-200">
+                <button
+                  onClick={() => setCurrentSlide(Math.max(0, currentSlide - 1))}
+                  disabled={currentSlide === 0}
+                  className="p-2 rounded-full bg-coral-100 text-coral-600 hover:bg-coral-200 disabled:opacity-50 disabled:cursor-not-allowed transition-smooth hover-scale"
+                >
+                  <ChevronLeft className="h-5 w-5" />
+                </button>
+                <button
+                  onClick={() => setCurrentSlide(Math.min(Math.ceil(popularProducts.length / itemsPerSlide) - 1, currentSlide + 1))}
+                  disabled={currentSlide >= Math.ceil(popularProducts.length / itemsPerSlide) - 1}
+                  className="p-2 rounded-full bg-coral-100 text-coral-600 hover:bg-coral-200 disabled:opacity-50 disabled:cursor-not-allowed transition-smooth hover-scale"
+                >
+                  <ChevronRight className="h-5 w-5" />
+                </button>
+                <Link
+                  href="/products?sort=views&order=desc"
+                  className="text-coral-600 hover:text-coral-700 font-medium text-sm transition-smooth hover-lift"
+                >
+                  Lihat Semua →
+                </Link>
+              </div>
+            </div>
+            
+            <div className="relative overflow-hidden">
+              <div 
+                className="flex transition-all duration-500 ease-out"
+                style={{ transform: `translateX(-${currentSlide * 100}%)` }}
+              >
+                {Array.from({ length: Math.ceil(popularProducts.length / itemsPerSlide) }).map((_, slideIndex) => (
+                  <div key={slideIndex} className="w-full flex-shrink-0">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                      {popularProducts
+                        .slice(slideIndex * itemsPerSlide, (slideIndex + 1) * itemsPerSlide)
+                        .map((product, index) => (
+                          <div key={product._id} className={`animate-scale-in animate-delay-${(index + 1) * 100}`}>
+                            <ProductCard product={product} showPopularBadge />
+                          </div>
+                        ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+            
+            {/* Slide Indicators */}
+            <div className="flex justify-center mt-6 space-x-2 animate-fade-in animate-delay-300">
+              {Array.from({ length: Math.ceil(popularProducts.length / itemsPerSlide) }).map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => setCurrentSlide(index)}
+                  className={`w-3 h-3 rounded-full transition-smooth hover-scale ${
+                    currentSlide === index ? 'bg-coral-500 shadow-lg' : 'bg-gray-300 hover:bg-coral-300'
+                  }`}
+                />
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+
+
+      {/* Featured Products */}
+      {products.length > 0 && (
+        <section className="py-16 bg-pink-50">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-12">
+              <div className="inline-flex items-center bg-pink-400 text-white px-4 py-2 rounded-2xl text-sm font-semibold mb-4">
+                <Star className="h-4 w-4 mr-2" />
+                PRODUK UNGGULAN
+              </div>
+              <h2 className="text-3xl font-bold text-gray-700 mb-3">Koleksi Terpopuler</h2>
+              <p className="text-gray-600 text-base">Produk pilihan yang paling disukai pelanggan kami</p>
+            </div>
+            
+            <div className="flex justify-center mb-8">
+              <Link
+                href="/products"
+                className="bg-pink-400 text-white px-6 py-3 rounded-2xl font-semibold hover:bg-pink-500 transition-smooth shadow-sm"
+              >
+                Lihat Semua →
+              </Link>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {products.map((product, index) => (
+                <div key={product._id}>
+                  <ProductCard product={product} />
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+
+
+      {/* Newsletter */}
+      <section className="py-16 bg-pink-100">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <div className="inline-flex items-center bg-pink-400 text-white px-4 py-2 rounded-2xl text-sm font-semibold mb-4">
+            <Mail className="h-4 w-4 mr-2" />
+            NEWSLETTER
+          </div>
+          <h2 className="text-3xl font-bold text-gray-700 mb-3">Dapatkan Update Terbaru</h2>
+          <p className="text-gray-600 text-base mb-8">Berlangganan newsletter kami dan dapatkan info promo eksklusif</p>
+          
+          <form className="max-w-md mx-auto flex gap-3">
+            <input
+              type="email"
+              placeholder="Masukkan email Anda"
+              className="flex-1 px-4 py-3 border border-pink-200 rounded-2xl focus:ring-2 focus:ring-pink-300 focus:border-pink-300 transition-smooth bg-white"
+            />
+            <button
+              type="submit"
+              className="bg-pink-400 text-white px-6 py-3 rounded-2xl font-semibold hover:bg-pink-500 transition-smooth"
+            >
+              Berlangganan
+            </button>
+          </form>
+        </div>
+      </section>
+
       {/* Footer */}
-      <footer className="bg-gray-900 text-white py-12">
+      <footer className="bg-gray-800 text-white py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
             <div>
               <div className="flex items-center space-x-2 mb-4">
-                <ShoppingBag className="h-8 w-8 text-blue-400" />
-                <span className="text-xl font-bold">SistaBag</span>
+                <div className="bg-pink-400 p-2 rounded-xl">
+                  <ShoppingBag className="h-5 w-5 text-white" />
+                </div>
+                <span className="text-xl font-bold text-pink-300">SistaBag</span>
               </div>
-              <p className="text-gray-400">
-                Toko tas terpercaya dengan koleksi terlengkap dan kualitas terbaik.
+              <p className="text-gray-300 text-sm leading-relaxed">
+                Toko tas terpercaya dengan koleksi terlengkap dan kualitas terbaik. Kepuasan pelanggan adalah prioritas utama kami.
               </p>
             </div>
             
             <div>
-              <h3 className="font-semibold mb-4">Kategori</h3>
-              <ul className="space-y-2 text-gray-400">
+              <h3 className="font-bold mb-4 text-lg text-pink-300">Kategori</h3>
+              <ul className="space-y-2 text-gray-300">
                 {categories.slice(0, 4).map((category) => (
                   <li key={category._id}>
-                    <Link href={`/categories/${category.slug}`} className="hover:text-white">
+                    <Link href={`/categories/${category.slug}`} className="hover:text-pink-300 transition-smooth text-sm">
                       {category.name}
                     </Link>
                   </li>
@@ -299,26 +437,38 @@ export default function HomePage() {
             </div>
             
             <div>
-              <h3 className="font-semibold mb-4">Bantuan</h3>
-              <ul className="space-y-2 text-gray-400">
-                <li><a href="#" className="hover:text-white">Cara Pemesanan</a></li>
-                <li><a href="#" className="hover:text-white">Kebijakan Privasi</a></li>
-                <li><a href="#" className="hover:text-white">Syarat & Ketentuan</a></li>
+              <h3 className="font-bold mb-4 text-lg text-pink-300">Bantuan</h3>
+              <ul className="space-y-2 text-gray-300">
+                <li><a href="#" className="hover:text-pink-300 transition-smooth text-sm">
+                  Cara Pemesanan
+                </a></li>
+                <li><a href="#" className="hover:text-pink-300 transition-smooth text-sm">
+                  Kebijakan Privasi
+                </a></li>
+                <li><a href="#" className="hover:text-pink-300 transition-smooth text-sm">
+                  Syarat & Ketentuan
+                </a></li>
               </ul>
             </div>
             
             <div>
-              <h3 className="font-semibold mb-4">Kontak</h3>
-              <ul className="space-y-2 text-gray-400">
-                <li>WhatsApp: +62 812-3456-7890</li>
-                <li>Email: info@sistabag.com</li>
-                <li>Alamat: Jakarta, Indonesia</li>
+              <h3 className="font-bold mb-4 text-lg text-pink-300">Kontak</h3>
+              <ul className="space-y-2 text-gray-300">
+                <li className="text-sm">
+                  WhatsApp: +62 812-3456-7890
+                </li>
+                <li className="text-sm">
+                  Email: info@sistabag.com
+                </li>
+                <li className="text-sm">
+                  Alamat: Jakarta, Indonesia
+                </li>
               </ul>
             </div>
           </div>
           
-          <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-            <p>&copy; 2024 SistaBag. All rights reserved.</p>
+          <div className="border-t border-gray-700 pt-6 text-center">
+            <p className="text-gray-400 text-sm">&copy; 2024 SistaBag. All rights reserved. Made with ❤️ for fashion lovers.</p>
           </div>
         </div>
       </footer>
@@ -336,63 +486,63 @@ function ProductCard({ product, showPopularBadge = false }: { product: Product; 
 
   return (
     <Link href={`/products/${product.slug}`} className="group">
-      <div className="bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow border overflow-hidden">
+      <div className="bg-white rounded-3xl shadow-sm hover:shadow-md transition-smooth border border-pink-100 hover:border-pink-200 overflow-hidden">
         <div className="relative aspect-square">
           <Image
             src={product.images[0] || '/placeholder-bag.jpg'}
             alt={product.name}
             fill
-            className="object-cover group-hover:scale-105 transition-transform duration-300"
+            className="object-cover group-hover:scale-105 transition-smooth"
           />
           
           {/* Badges */}
           <div className="absolute top-3 left-3 flex flex-col gap-2">
             {showPopularBadge && isPopular && (
-              <span className="bg-yellow-500 text-white px-2 py-1 rounded-full text-xs font-semibold flex items-center gap-1">
+              <span className="bg-pink-400 text-white px-2 py-1 rounded-2xl text-xs font-semibold flex items-center gap-1">
                 <Star className="h-3 w-3" />
                 Populer
               </span>
             )}
             {discountPercentage > 0 && (
-              <span className="bg-red-500 text-white px-2 py-1 rounded-full text-xs font-semibold">
+              <span className="bg-pink-500 text-white px-2 py-1 rounded-2xl text-xs font-semibold">
                 -{discountPercentage}%
               </span>
             )}
           </div>
           
           {/* Views */}
-          <div className="absolute top-3 right-3 bg-black bg-opacity-50 text-white px-2 py-1 rounded-full text-xs flex items-center gap-1">
+          <div className="absolute top-3 right-3 bg-gray-700 text-white px-2 py-1 rounded-2xl text-xs flex items-center gap-1">
             <Eye className="h-3 w-3" />
             {product.views}
           </div>
         </div>
         
         <div className="p-4">
-          <h3 className="font-semibold text-gray-900 mb-2 line-clamp-2">{product.name}</h3>
-          <p className="text-sm text-gray-500 mb-2">{product.category.name}</p>
+          <h3 className="font-bold text-gray-800 mb-2 line-clamp-2 text-base group-hover:text-pink-500 transition-smooth">{product.name}</h3>
+          <p className="text-xs text-gray-500 mb-3">{product.category.name}</p>
           
           <div className="flex items-center justify-between">
             <div>
               {product.priceAfterDiscount ? (
-                <div className="flex items-center gap-2">
-                  <span className="text-lg font-bold text-red-600">
+                <div className="flex flex-col">
+                  <span className="text-lg font-bold text-pink-500">
                     {formatCurrency(product.priceAfterDiscount)}
                   </span>
-                  <span className="text-sm text-gray-500 line-through">
+                  <span className="text-xs text-gray-500 line-through">
                     {formatCurrency(product.price)}
                   </span>
                 </div>
               ) : (
-                <span className="text-lg font-bold text-gray-900">
+                <span className="text-lg font-bold text-gray-800">
                   {formatCurrency(product.price)}
                 </span>
               )}
             </div>
             
-            <span className={`text-xs px-2 py-1 rounded-full ${
+            <span className={`text-xs px-2 py-1 rounded-2xl font-semibold ${
               product.stock > 0 
-                ? 'bg-green-100 text-green-800' 
-                : 'bg-red-100 text-red-800'
+                ? 'bg-green-100 text-green-700' 
+                : 'bg-red-100 text-red-700'
             }`}>
               {product.stock > 0 ? 'Tersedia' : 'Habis'}
             </span>

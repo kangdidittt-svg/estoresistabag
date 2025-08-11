@@ -261,7 +261,7 @@ export default function ProductDetailPage() {
                   </span>
                 )}
                 {product.promo && (
-                  <span className="bg-purple-500 text-white px-3 py-1 rounded-full text-sm font-semibold flex items-center gap-1">
+                  <span className="bg-orange-500 text-white px-3 py-1 rounded-full text-sm font-semibold flex items-center gap-1">
                     <Tag className="h-4 w-4" />
                     {product.promo.title}
                   </span>

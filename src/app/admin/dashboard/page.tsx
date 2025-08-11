@@ -161,8 +161,8 @@ export default function AdminDashboard() {
 
           <div className="bg-white rounded-lg shadow p-6">
             <div className="flex items-center">
-              <div className="p-2 bg-purple-100 rounded-lg">
-                <DollarSign className="h-6 w-6 text-purple-600" />
+              <div className="p-2 bg-orange-100 rounded-lg">
+                  <DollarSign className="h-6 w-6 text-orange-600" />
               </div>
               <div className="ml-4">
                 <p className="text-sm font-medium text-gray-600">Promosi</p>
@@ -205,7 +205,7 @@ export default function AdminDashboard() {
               </button>
               <button
                 onClick={() => router.push('/admin/promos/new')}
-                className="flex items-center justify-center p-4 border-2 border-dashed border-gray-300 rounded-lg hover:border-purple-500 hover:bg-purple-50 transition-colors"
+                className="flex items-center justify-center p-4 border-2 border-dashed border-gray-300 rounded-lg hover:border-orange-500 hover:bg-orange-50 transition-colors"
               >
                 <Plus className="h-5 w-5 text-gray-400 mr-2" />
                 <span className="text-sm font-medium text-gray-600">Tambah Promo</span>
@@ -264,7 +264,7 @@ export default function AdminDashboard() {
               onClick={() => router.push('/admin/promos')}
               className="flex flex-col items-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
             >
-              <DollarSign className="h-8 w-8 text-purple-600 mb-2" />
+              <DollarSign className="h-8 w-8 text-orange-600 mb-2" />
               <span className="text-sm font-medium text-gray-900">Kelola Promo</span>
             </button>
             <button
