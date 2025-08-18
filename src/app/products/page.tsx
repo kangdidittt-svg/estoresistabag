@@ -13,10 +13,16 @@ import {
   Star, 
   Eye, 
   ShoppingBag,
+  ShoppingCart,
   ArrowLeft,
-  ArrowRight
+  ArrowRight,
+  Menu,
+  X
 } from 'lucide-react';
 import { formatCurrency, calculateDiscountPercentage } from '@/lib/utils';
+import LoadingSpinner from '@/components/LoadingSpinner';
+import { useCart } from '@/contexts/CartContext';
+import Navigation from '@/components/Navigation';
 
 interface Product {
   _id: string;
@@ -61,6 +67,7 @@ interface ProductsResponse {
 }
 
 function ProductsContent() {
+  const { state, dispatch } = useCart();
   const searchParams = useSearchParams();
   const [products, setProducts] = useState<Product[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
@@ -171,44 +178,19 @@ function ProductsContent() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-theme-main">
       {/* Header */}
-      <header className="bg-white shadow-sm border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
-            <Link href="/" className="flex items-center space-x-2">
-              <ShoppingBag className="h-8 w-8 text-blue-600" />
-              <span className="text-xl font-bold text-gray-900">SistaBag</span>
-            </Link>
-            
-            <nav className="flex space-x-6">
-              <Link href="/" className="text-gray-700 hover:text-pink-500 font-medium">
-                Beranda
-              </Link>
-              <Link href="/products" className="text-pink-500 font-bold relative">
-                Produk
-                <div className="absolute -bottom-1 left-0 right-0 h-0.5 bg-pink-400 rounded-full"></div>
-              </Link>
-              <Link href="/categories" className="text-gray-700 hover:text-pink-500 font-medium">
-                Kategori
-              </Link>
-              <Link href="/promos" className="text-gray-700 hover:text-pink-500 font-medium">
-                Promo
-              </Link>
-            </nav>
-          </div>
-        </div>
-      </header>
+      <Navigation />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Page Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-4">Semua Produk</h1>
-          <p className="text-gray-600">Temukan tas impian Anda dari koleksi terlengkap kami</p>
+          <h1 className="text-3xl font-bold text-theme-primary mb-4">Semua Produk</h1>
+          <p className="text-theme-primary opacity-75">Temukan tas impian Anda dari koleksi terlengkap kami</p>
         </div>
 
         {/* Search and Filters */}
-        <div className="bg-white rounded-lg shadow-sm border p-6 mb-8">
+        <div className="bg-theme-card rounded-2xl shadow-lg border border-theme-primary border-opacity-20 p-6 mb-8">
           {/* Search Bar */}
           <form onSubmit={handleSearch} className="mb-6">
             <div className="relative">
@@ -217,9 +199,9 @@ function ProductsContent() {
                 placeholder="Cari produk..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full pl-10 pr-4 py-3 border border-theme-primary border-opacity-30 rounded-2xl focus:ring-2 focus:ring-accent-peach focus:border-accent-peach bg-theme-main text-theme-primary"
               />
-              <Search className="absolute left-3 top-3.5 h-5 w-5 text-gray-400" />
+              <Search className="absolute left-3 top-3.5 h-5 w-5 text-theme-primary opacity-60" />
             </div>
           </form>
 
@@ -227,7 +209,7 @@ function ProductsContent() {
           <div className="flex items-center justify-between mb-4">
             <button
               onClick={() => setShowFilters(!showFilters)}
-              className="flex items-center gap-2 text-gray-700 hover:text-blue-600"
+              className="flex items-center gap-2 text-theme-primary hover:text-accent-peach transition-colors duration-300"
             >
               <Filter className="h-5 w-5" />
               Filter & Urutkan
@@ -237,20 +219,20 @@ function ProductsContent() {
             </button>
             
             <div className="flex items-center gap-4">
-              <span className="text-sm text-gray-600">
+              <span className="text-sm text-theme-primary opacity-75">
                 {totalProducts} produk ditemukan
               </span>
               
               <div className="flex items-center gap-2">
                 <button
                   onClick={() => setViewMode('grid')}
-                  className={`p-2 rounded ${viewMode === 'grid' ? 'bg-blue-100 text-blue-600' : 'text-gray-400'}`}
+                  className={`p-2 rounded-xl transition-all duration-300 ${viewMode === 'grid' ? 'bg-accent-blue text-on-accent' : 'text-theme-primary opacity-60 hover:bg-accent-blue hover:bg-opacity-20'}`}
                 >
                   <Grid3X3 className="h-4 w-4" />
                 </button>
                 <button
                   onClick={() => setViewMode('list')}
-                  className={`p-2 rounded ${viewMode === 'list' ? 'bg-blue-100 text-blue-600' : 'text-gray-400'}`}
+                  className={`p-2 rounded-xl transition-all duration-300 ${viewMode === 'list' ? 'bg-accent-blue text-on-accent' : 'text-theme-primary opacity-60 hover:bg-accent-blue hover:bg-opacity-20'}`}
                 >
                   <List className="h-4 w-4" />
                 </button>
@@ -260,16 +242,16 @@ function ProductsContent() {
 
           {/* Filters */}
           {showFilters && (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 pt-4 border-t">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 pt-4 border-t border-theme-primary border-opacity-20">
               {/* Category Filter */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-theme-primary mb-2">
                   Kategori
                 </label>
                 <select
                   value={selectedCategory}
                   onChange={(e) => setSelectedCategory(e.target.value)}
-                  className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full p-2 border border-theme-primary border-opacity-30 rounded-xl focus:ring-2 focus:ring-accent-peach focus:border-accent-peach bg-theme-main text-theme-primary"
                 >
                   <option value="">Semua Kategori</option>
                   {categories.map((category) => (
@@ -282,7 +264,7 @@ function ProductsContent() {
 
               {/* Price Range */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-theme-primary mb-2">
                   Rentang Harga
                 </label>
                 <div className="flex gap-2">
@@ -291,21 +273,21 @@ function ProductsContent() {
                     placeholder="Min"
                     value={minPrice}
                     onChange={(e) => setMinPrice(e.target.value)}
-                    className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full p-2 border border-theme-primary border-opacity-30 rounded-xl focus:ring-2 focus:ring-accent-peach focus:border-accent-peach bg-theme-main text-theme-primary"
                   />
                   <input
                     type="number"
                     placeholder="Max"
                     value={maxPrice}
                     onChange={(e) => setMaxPrice(e.target.value)}
-                    className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full p-2 border border-theme-primary border-opacity-30 rounded-xl focus:ring-2 focus:ring-accent-peach focus:border-accent-peach bg-theme-main text-theme-primary"
                   />
                 </div>
               </div>
 
               {/* Sort */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-theme-primary mb-2">
                   Urutkan
                 </label>
                 <select
@@ -315,7 +297,7 @@ function ProductsContent() {
                     setSortBy(sort);
                     setSortOrder(order);
                   }}
-                  className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full p-2 border border-theme-primary border-opacity-30 rounded-xl focus:ring-2 focus:ring-accent-peach focus:border-accent-peach bg-theme-main text-theme-primary"
                 >
                   <option value="createdAt-desc">Terbaru</option>
                   <option value="createdAt-asc">Terlama</option>
@@ -329,7 +311,7 @@ function ProductsContent() {
 
               {/* Additional Filters */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-theme-primary mb-2">
                   Filter Tambahan
                 </label>
                 <div className="space-y-2">
@@ -338,18 +320,18 @@ function ProductsContent() {
                       type="checkbox"
                       checked={onlyPromo}
                       onChange={(e) => setOnlyPromo(e.target.checked)}
-                      className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                      className="rounded border-theme-primary text-accent-peach focus:ring-accent-peach"
                     />
-                    <span className="ml-2 text-sm text-gray-700">Hanya Promo</span>
+                    <span className="ml-2 text-sm text-theme-primary">Hanya Promo</span>
                   </label>
                   <label className="flex items-center">
                     <input
                       type="checkbox"
                       checked={onlyInStock}
                       onChange={(e) => setOnlyInStock(e.target.checked)}
-                      className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                      className="rounded border-theme-primary text-accent-peach focus:ring-accent-peach"
                     />
-                    <span className="ml-2 text-sm text-gray-700">Stok Tersedia</span>
+                    <span className="ml-2 text-sm text-theme-primary">Stok Tersedia</span>
                   </label>
                 </div>
               </div>
@@ -361,7 +343,7 @@ function ProductsContent() {
             <div className="pt-4 border-t mt-4">
               <button
                 onClick={resetFilters}
-                className="text-sm text-blue-600 hover:text-blue-700 font-medium"
+                className="text-sm text-theme-primary hover:text-accent-peach font-medium transition-colors duration-200"
               >
                 Reset Semua Filter
               </button>
@@ -371,28 +353,21 @@ function ProductsContent() {
 
         {/* Products Grid/List */}
         {initialLoading ? (
-          <div className="loading-overlay">
-            <div className="loading-dots">
-              <div></div>
-              <div></div>
-              <div></div>
-              <div></div>
-            </div>
-          </div>
+          <LoadingSpinner overlay={true} />
         ) : loading ? (
           <div className="flex items-center justify-center py-12">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-pink-600"></div>
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-accent-peach"></div>
           </div>
         ) : products.length === 0 ? (
           <div className="text-center py-12">
-            <div className="text-gray-400 mb-4">
+            <div className="text-theme-primary text-opacity-40 mb-4">
               <ShoppingBag className="h-16 w-16 mx-auto" />
             </div>
-            <h3 className="text-lg font-medium text-gray-900 mb-2">Tidak ada produk ditemukan</h3>
-            <p className="text-gray-600 mb-4">Coba ubah filter atau kata kunci pencarian Anda</p>
+            <h3 className="text-lg font-medium text-theme-primary mb-2">Tidak ada produk ditemukan</h3>
+            <p className="text-theme-primary text-opacity-60 mb-4">Coba ubah filter atau kata kunci pencarian Anda</p>
             <button
               onClick={resetFilters}
-              className="text-pink-600 hover:text-pink-700 font-medium"
+              className="text-accent-peach hover:text-accent-yellow font-medium transition-colors duration-200"
             >
               Reset Filter
             </button>
@@ -483,11 +458,28 @@ export default function ProductsPage() {
 
 // Product Card Component
 function ProductCard({ product, viewMode }: { product: Product; viewMode: 'grid' | 'list' }) {
+  const { dispatch } = useCart();
   const discountPercentage = product.priceAfterDiscount 
     ? calculateDiscountPercentage(product.price, product.priceAfterDiscount)
     : 0;
 
   const isPopular = product.views >= 100;
+
+  const handleAddToCart = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    dispatch({
+      type: 'ADD_ITEM',
+      payload: {
+        id: product._id,
+        name: product.name,
+        price: product.priceAfterDiscount || product.price,
+        image: product.images[0] || '/placeholder-bag.jpg',
+        slug: product.slug
+      }
+    });
+  };
 
   if (viewMode === 'list') {
     return (
@@ -557,6 +549,18 @@ function ProductCard({ product, viewMode }: { product: Product; viewMode: 'grid'
                       {formatCurrency(product.price)}
                     </div>
                   )}
+                  
+                  <button
+                    onClick={handleAddToCart}
+                    disabled={product.stock === 0}
+                    className={`mt-3 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                      product.stock === 0
+                        ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                        : 'bg-accent-peach text-on-accent hover:bg-accent-yellow'
+                    }`}
+                  >
+                    {product.stock === 0 ? 'Habis' : 'Tambah ke Keranjang'}
+                  </button>
                 </div>
               </div>
             </div>
@@ -623,13 +627,27 @@ function ProductCard({ product, viewMode }: { product: Product; viewMode: 'grid'
               )}
             </div>
             
-            <span className={`text-xs px-2 py-1 rounded-full ${
-              product.stock > 0 
-                ? 'bg-green-100 text-green-800' 
-                : 'bg-red-100 text-red-800'
-            }`}>
-              {product.stock > 0 ? 'Tersedia' : 'Habis'}
-            </span>
+            <div className="flex flex-col gap-2">
+              <span className={`text-xs px-2 py-1 rounded-full text-center ${
+                product.stock > 0 
+                  ? 'bg-green-100 text-green-800' 
+                  : 'bg-red-100 text-red-800'
+              }`}>
+                {product.stock > 0 ? 'Tersedia' : 'Habis'}
+              </span>
+              
+              <button
+                onClick={handleAddToCart}
+                disabled={product.stock === 0}
+                className={`px-3 py-1 rounded-lg text-xs font-medium transition-colors ${
+                  product.stock === 0
+                    ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                    : 'bg-accent-peach text-on-accent hover:bg-accent-yellow'
+                }`}
+              >
+                {product.stock === 0 ? 'Habis' : '+ Keranjang'}
+              </button>
+            </div>
           </div>
         </div>
       </div>

@@ -352,28 +352,28 @@ export default function EditProductPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+      <div className="min-h-screen bg-theme-main flex items-center justify-center">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-accent-peach"></div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-theme-main">
       {/* Header */}
-      <div className="bg-white shadow-sm border-b">
+      <div className="bg-theme-header shadow-soft border-b border-theme-primary border-opacity-10">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center space-x-4">
               <Link 
                 href="/admin/products"
-                className="text-gray-600 hover:text-gray-900"
+                className="text-theme-primary hover:text-accent-peach transition-colors"
               >
                 ← Kembali ke Kelola Produk
               </Link>
               <div className="flex items-center space-x-2">
-                <Package className="h-6 w-6 text-blue-600" />
-                <h1 className="text-xl font-semibold text-gray-900">Edit Produk</h1>
+                <Package className="h-6 w-6 text-accent-peach" />
+                <h1 className="text-xl font-semibold text-theme-primary">Edit Produk</h1>
               </div>
             </div>
           </div>
@@ -383,13 +383,13 @@ export default function EditProductPage() {
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Basic Information */}
-          <div className="bg-white rounded-lg shadow-sm p-6">
-            <h2 className="text-lg font-medium text-gray-900 mb-4">Informasi Dasar</h2>
+          <div className="card-theme rounded-lg shadow-soft p-6">
+            <h2 className="text-lg font-semibold text-theme-primary mb-4">Informasi Dasar</h2>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Product Name */}
               <div className="md:col-span-2">
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-theme-primary mb-2">
                   Nama Produk *
                 </label>
                 <input
@@ -397,13 +397,13 @@ export default function EditProductPage() {
                   name="name"
                   value={formData.name}
                   onChange={handleInputChange}
-                  className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-                    errors.name ? 'border-red-500' : 'border-gray-300'
+                  className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-accent-peach focus:border-accent-peach transition-all duration-200 bg-theme-main text-theme-primary ${
+                    errors.name ? 'border-red-500' : 'border-theme-primary border-opacity-30'
                   }`}
                   placeholder="Masukkan nama produk"
                 />
                 {errors.name && (
-                  <p className="mt-1 text-sm text-red-600 flex items-center">
+                  <p className="mt-1 text-sm text-red-500 flex items-center">
                     <AlertCircle className="h-4 w-4 mr-1" />
                     {errors.name}
                   </p>
@@ -412,7 +412,7 @@ export default function EditProductPage() {
 
               {/* Slug */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-theme-primary mb-2">
                   Slug *
                 </label>
                 <input
@@ -420,13 +420,13 @@ export default function EditProductPage() {
                   name="slug"
                   value={formData.slug}
                   onChange={handleInputChange}
-                  className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-                    errors.slug ? 'border-red-500' : 'border-gray-300'
+                  className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-accent-peach focus:border-accent-peach transition-all duration-200 bg-theme-main text-theme-primary ${
+                    errors.slug ? 'border-red-500' : 'border-theme-primary border-opacity-30'
                   }`}
                   placeholder="produk-slug"
                 />
                 {errors.slug && (
-                  <p className="mt-1 text-sm text-red-600 flex items-center">
+                  <p className="mt-1 text-sm text-red-500 flex items-center">
                     <AlertCircle className="h-4 w-4 mr-1" />
                     {errors.slug}
                   </p>
@@ -435,7 +435,7 @@ export default function EditProductPage() {
 
               {/* SKU */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-theme-primary mb-2">
                   SKU
                 </label>
                 <input
@@ -443,14 +443,14 @@ export default function EditProductPage() {
                   name="sku"
                   value={formData.sku}
                   onChange={handleInputChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-3 py-2 border border-theme-primary border-opacity-30 rounded-lg focus:ring-2 focus:ring-accent-peach focus:border-accent-peach transition-all duration-200 bg-theme-main text-theme-primary"
                   placeholder="SKU-001"
                 />
               </div>
 
               {/* Description */}
               <div className="md:col-span-2">
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-theme-primary mb-2">
                   Deskripsi
                 </label>
                 <textarea
@@ -458,7 +458,7 @@ export default function EditProductPage() {
                   value={formData.description}
                   onChange={handleInputChange}
                   rows={4}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-3 py-2 border border-theme-primary border-opacity-30 rounded-lg focus:ring-2 focus:ring-accent-peach focus:border-accent-peach transition-all duration-200 bg-theme-main text-theme-primary"
                   placeholder="Deskripsi produk..."
                 />
               </div>
@@ -466,18 +466,18 @@ export default function EditProductPage() {
           </div>
 
           {/* Pricing & Inventory */}
-          <div className="bg-white rounded-lg shadow-sm p-6">
-            <h2 className="text-lg font-medium text-gray-900 mb-4">Harga & Inventori</h2>
+          <div className="card-theme rounded-lg shadow-soft p-6">
+            <h2 className="text-lg font-semibold text-theme-primary mb-4">Harga & Inventori</h2>
             
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {/* Price */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-theme-primary mb-2">
                   Harga *
                 </label>
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <DollarSign className="h-4 w-4 text-gray-400" />
+                    <DollarSign className="h-4 w-4 text-theme-primary opacity-60" />
                   </div>
                   <input
                     type="number"
@@ -485,14 +485,14 @@ export default function EditProductPage() {
                     value={formData.price}
                     onChange={handleInputChange}
                     min="0"
-                    className={`w-full pl-10 pr-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-                      errors.price ? 'border-red-500' : 'border-gray-300'
+                    className={`w-full pl-10 pr-3 py-2 border rounded-lg focus:ring-2 focus:ring-accent-peach focus:border-accent-peach transition-all duration-200 bg-theme-main text-theme-primary ${
+                      errors.price ? 'border-red-500' : 'border-theme-primary border-opacity-30'
                     }`}
                     placeholder="0"
                   />
                 </div>
                 {errors.price && (
-                  <p className="mt-1 text-sm text-red-600 flex items-center">
+                  <p className="mt-1 text-sm text-red-500 flex items-center">
                     <AlertCircle className="h-4 w-4 mr-1" />
                     {errors.price}
                   </p>
@@ -501,7 +501,7 @@ export default function EditProductPage() {
 
               {/* Compare Price */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-theme-primary mb-2">
                   Harga Coret
                 </label>
                 <input
@@ -510,14 +510,14 @@ export default function EditProductPage() {
                   value={formData.comparePrice}
                   onChange={handleInputChange}
                   min="0"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-3 py-2 border border-theme-primary border-opacity-30 rounded-lg focus:ring-2 focus:ring-accent-peach focus:border-accent-peach transition-all duration-200 bg-theme-main text-theme-primary"
                   placeholder="0"
                 />
               </div>
 
               {/* Stock */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-theme-primary mb-2">
                   Stok *
                 </label>
                 <input
@@ -526,13 +526,13 @@ export default function EditProductPage() {
                   value={formData.stock}
                   onChange={handleInputChange}
                   min="0"
-                  className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-                    errors.stock ? 'border-red-500' : 'border-gray-300'
+                  className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-accent-peach focus:border-accent-peach transition-all duration-200 bg-theme-main text-theme-primary ${
+                    errors.stock ? 'border-red-500' : 'border-theme-primary border-opacity-30'
                   }`}
                   placeholder="0"
                 />
                 {errors.stock && (
-                  <p className="mt-1 text-sm text-red-600 flex items-center">
+                  <p className="mt-1 text-sm text-red-500 flex items-center">
                     <AlertCircle className="h-4 w-4 mr-1" />
                     {errors.stock}
                   </p>
@@ -542,21 +542,21 @@ export default function EditProductPage() {
           </div>
 
           {/* Category & Promo */}
-          <div className="bg-white rounded-lg shadow-sm p-6">
-            <h2 className="text-lg font-medium text-gray-900 mb-4">Kategori & Promo</h2>
+          <div className="card-theme rounded-lg shadow-soft p-6">
+            <h2 className="text-lg font-semibold text-theme-primary mb-4">Kategori & Promo</h2>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Category */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-theme-primary mb-2">
                   Kategori *
                 </label>
                 <select
                   name="category"
                   value={formData.category}
                   onChange={handleInputChange}
-                  className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-                    errors.category ? 'border-red-500' : 'border-gray-300'
+                  className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-accent-peach focus:border-accent-peach transition-all duration-200 bg-theme-main text-theme-primary ${
+                    errors.category ? 'border-red-500' : 'border-theme-primary border-opacity-30'
                   }`}
                 >
                   <option value="">Pilih Kategori</option>
@@ -567,7 +567,7 @@ export default function EditProductPage() {
                   ))}
                 </select>
                 {errors.category && (
-                  <p className="mt-1 text-sm text-red-600 flex items-center">
+                  <p className="mt-1 text-sm text-red-500 flex items-center">
                     <AlertCircle className="h-4 w-4 mr-1" />
                     {errors.category}
                   </p>
@@ -576,14 +576,14 @@ export default function EditProductPage() {
 
               {/* Promo */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-theme-primary mb-2">
                   Promo
                 </label>
                 <select
                   name="promo"
                   value={formData.promo}
                   onChange={handleInputChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-3 py-2 border border-theme-primary border-opacity-30 rounded-lg focus:ring-2 focus:ring-accent-peach focus:border-accent-peach transition-all duration-200 bg-theme-main text-theme-primary"
                 >
                   <option value="">Tidak ada promo</option>
                   {promos.map(promo => (
@@ -597,17 +597,17 @@ export default function EditProductPage() {
           </div>
 
           {/* Images */}
-          <div className="bg-white rounded-lg shadow-sm p-6">
-            <h2 className="text-lg font-medium text-gray-900 mb-4">Gambar Produk</h2>
+          <div className="card-theme rounded-lg shadow-soft p-6">
+            <h2 className="text-lg font-semibold text-theme-primary mb-4">Gambar Produk</h2>
             
             {/* Existing Images */}
             {existingImages.length > 0 && (
               <div className="mb-6">
-                <h3 className="text-sm font-medium text-gray-700 mb-3">Gambar Saat Ini</h3>
+                <h3 className="text-sm font-medium text-theme-primary mb-3">Gambar Saat Ini</h3>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                   {existingImages.map((image, index) => (
                     <div key={index} className="relative group">
-                      <div className="relative w-full h-32 rounded-lg overflow-hidden border-2 border-gray-200">
+                      <div className="relative w-full h-32 rounded-lg overflow-hidden border-2 border-theme-primary border-opacity-20">
                         <Image
                           src={image.url}
                           alt={image.alt}
@@ -615,7 +615,7 @@ export default function EditProductPage() {
                           className="object-cover"
                         />
                         {image.isPrimary && (
-                          <div className="absolute top-2 left-2 bg-blue-500 text-white text-xs px-2 py-1 rounded">
+                          <div className="absolute top-2 left-2 bg-accent-peach text-on-accent text-xs px-2 py-1 rounded">
                             Utama
                           </div>
                         )}
@@ -625,7 +625,7 @@ export default function EditProductPage() {
                           <button
                             type="button"
                             onClick={() => setPrimaryImage(index, true)}
-                            className="p-1 bg-blue-500 text-white rounded text-xs"
+                            className="p-1 bg-accent-peach text-on-accent rounded text-xs"
                           >
                             Jadikan Utama
                           </button>
@@ -647,11 +647,11 @@ export default function EditProductPage() {
             {/* New Images */}
             {newImagePreviews.length > 0 && (
               <div className="mb-6">
-                <h3 className="text-sm font-medium text-gray-700 mb-3">Gambar Baru</h3>
+                <h3 className="text-sm font-medium text-theme-primary mb-3">Gambar Baru</h3>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                   {newImagePreviews.map((preview, index) => (
                     <div key={index} className="relative group">
-                      <div className="relative w-full h-32 rounded-lg overflow-hidden border-2 border-gray-200">
+                      <div className="relative w-full h-32 rounded-lg overflow-hidden border-2 border-theme-primary border-opacity-20">
                         <Image
                           src={preview}
                           alt={`Preview ${index + 1}`}
@@ -673,11 +673,11 @@ export default function EditProductPage() {
             )}
 
             {/* Upload New Images */}
-            <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-blue-400 transition-colors">
-              <ImageIcon className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+            <div className="border-2 border-dashed border-theme-primary border-opacity-30 rounded-lg p-6 text-center hover:border-accent-peach transition-colors">
+              <ImageIcon className="h-12 w-12 text-theme-primary opacity-60 mx-auto mb-4" />
               <div className="space-y-2">
                 <label className="cursor-pointer">
-                  <span className="text-blue-600 hover:text-blue-700 font-medium">
+                  <span className="text-accent-peach hover:text-accent-orange font-medium">
                     Tambah gambar baru
                   </span>
                   <input
@@ -688,7 +688,7 @@ export default function EditProductPage() {
                     className="hidden"
                   />
                 </label>
-                <p className="text-sm text-gray-500">
+                <p className="text-sm text-theme-primary opacity-60">
                   PNG, JPG, JPEG hingga 5MB per file
                 </p>
               </div>
@@ -696,13 +696,13 @@ export default function EditProductPage() {
           </div>
 
           {/* Physical Properties */}
-          <div className="bg-white rounded-lg shadow-sm p-6">
-            <h2 className="text-lg font-medium text-gray-900 mb-4">Properti Fisik</h2>
+          <div className="card-theme rounded-lg shadow-soft p-6">
+            <h2 className="text-lg font-semibold text-theme-primary mb-4">Properti Fisik</h2>
             
             <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
               {/* Weight */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-theme-primary mb-2">
                   Berat (gram)
                 </label>
                 <input
@@ -711,14 +711,14 @@ export default function EditProductPage() {
                   value={formData.weight}
                   onChange={handleInputChange}
                   min="0"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-3 py-2 border border-theme-primary border-opacity-30 rounded-lg focus:ring-2 focus:ring-accent-peach focus:border-accent-peach transition-all duration-200 bg-theme-main text-theme-primary"
                   placeholder="0"
                 />
               </div>
 
               {/* Dimensions */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-theme-primary mb-2">
                   Panjang (cm)
                 </label>
                 <input
@@ -727,13 +727,13 @@ export default function EditProductPage() {
                   value={formData.dimensions.length}
                   onChange={handleInputChange}
                   min="0"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-3 py-2 border border-theme-primary border-opacity-30 rounded-lg focus:ring-2 focus:ring-accent-peach focus:border-accent-peach transition-all duration-200 bg-theme-main text-theme-primary"
                   placeholder="0"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-theme-primary mb-2">
                   Lebar (cm)
                 </label>
                 <input
@@ -742,13 +742,13 @@ export default function EditProductPage() {
                   value={formData.dimensions.width}
                   onChange={handleInputChange}
                   min="0"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-3 py-2 border border-theme-primary border-opacity-30 rounded-lg focus:ring-2 focus:ring-accent-peach focus:border-accent-peach transition-all duration-200 bg-theme-main text-theme-primary"
                   placeholder="0"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-theme-primary mb-2">
                   Tinggi (cm)
                 </label>
                 <input
@@ -757,7 +757,7 @@ export default function EditProductPage() {
                   value={formData.dimensions.height}
                   onChange={handleInputChange}
                   min="0"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-3 py-2 border border-theme-primary border-opacity-30 rounded-lg focus:ring-2 focus:ring-accent-peach focus:border-accent-peach transition-all duration-200 bg-theme-main text-theme-primary"
                   placeholder="0"
                 />
               </div>
@@ -765,29 +765,29 @@ export default function EditProductPage() {
           </div>
 
           {/* Tags */}
-          <div className="bg-white rounded-lg shadow-sm p-6">
-            <h2 className="text-lg font-medium text-gray-900 mb-4">Tags</h2>
+          <div className="card-theme rounded-lg shadow-soft p-6">
+            <h2 className="text-lg font-semibold text-theme-primary mb-4">Tags</h2>
             
             <div className="space-y-4">
               {/* Add Tag */}
               <div className="flex space-x-2">
                 <div className="flex-1 relative">
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <Tag className="h-4 w-4 text-gray-400" />
+                    <Tag className="h-4 w-4 text-theme-primary opacity-60" />
                   </div>
                   <input
                     type="text"
                     value={tagInput}
                     onChange={(e) => setTagInput(e.target.value)}
                     onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), addTag())}
-                    className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full pl-10 pr-3 py-2 border border-theme-primary border-opacity-30 rounded-lg focus:ring-2 focus:ring-accent-peach focus:border-accent-peach transition-all duration-200 bg-theme-main text-theme-primary"
                     placeholder="Tambah tag..."
                   />
                 </div>
                 <button
                   type="button"
                   onClick={addTag}
-                  className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                  className="px-4 py-2 bg-gradient-to-r from-accent-peach to-accent-orange text-on-accent rounded-lg hover:shadow-md transition-all duration-200"
                 >
                   Tambah
                 </button>
@@ -799,13 +799,13 @@ export default function EditProductPage() {
                   {formData.tags.map((tag, index) => (
                     <span
                       key={index}
-                      className="inline-flex items-center px-3 py-1 rounded-full text-sm bg-blue-100 text-blue-800"
+                      className="inline-flex items-center px-3 py-1 rounded-full text-sm bg-accent-peach bg-opacity-20 text-accent-peach"
                     >
                       {tag}
                       <button
                         type="button"
                         onClick={() => removeTag(tag)}
-                        className="ml-2 text-blue-600 hover:text-blue-800"
+                        className="ml-2 text-accent-peach hover:text-accent-orange transition-colors"
                       >
                         <X className="h-3 w-3" />
                       </button>
@@ -817,13 +817,13 @@ export default function EditProductPage() {
           </div>
 
           {/* SEO */}
-          <div className="bg-white rounded-lg shadow-sm p-6">
-            <h2 className="text-lg font-medium text-gray-900 mb-4">SEO</h2>
+          <div className="card-theme rounded-lg shadow-soft p-6">
+            <h2 className="text-lg font-semibold text-theme-primary mb-4">SEO</h2>
             
             <div className="space-y-4">
               {/* Meta Title */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-theme-primary mb-2">
                   Meta Title
                 </label>
                 <input
@@ -831,14 +831,14 @@ export default function EditProductPage() {
                   name="metaTitle"
                   value={formData.metaTitle}
                   onChange={handleInputChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-3 py-2 border border-theme-primary border-opacity-30 rounded-lg focus:ring-2 focus:ring-accent-peach focus:border-accent-peach transition-all duration-200 bg-theme-main text-theme-primary"
                   placeholder="Judul untuk SEO"
                 />
               </div>
 
               {/* Meta Description */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-theme-primary mb-2">
                   Meta Description
                 </label>
                 <textarea
@@ -846,7 +846,7 @@ export default function EditProductPage() {
                   value={formData.metaDescription}
                   onChange={handleInputChange}
                   rows={3}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-3 py-2 border border-theme-primary border-opacity-30 rounded-lg focus:ring-2 focus:ring-accent-peach focus:border-accent-peach transition-all duration-200 bg-theme-main text-theme-primary"
                   placeholder="Deskripsi untuk SEO"
                 />
               </div>
@@ -854,8 +854,8 @@ export default function EditProductPage() {
           </div>
 
           {/* Status */}
-          <div className="bg-white rounded-lg shadow-sm p-6">
-            <h2 className="text-lg font-medium text-gray-900 mb-4">Status</h2>
+          <div className="card-theme rounded-lg shadow-soft p-6">
+            <h2 className="text-lg font-semibold text-theme-primary mb-4">Status</h2>
             
             <div className="space-y-4">
               <div className="flex items-center">
@@ -864,9 +864,9 @@ export default function EditProductPage() {
                   name="isPublished"
                   checked={formData.isPublished}
                   onChange={handleInputChange}
-                  className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                  className="h-4 w-4 text-accent-peach focus:ring-accent-peach border-theme-primary border-opacity-30 rounded"
                 />
-                <label className="ml-2 text-sm text-gray-700">
+                <label className="ml-2 text-sm text-theme-primary">
                   Publikasikan produk
                 </label>
               </div>
@@ -877,9 +877,9 @@ export default function EditProductPage() {
                   name="isFeatured"
                   checked={formData.isFeatured}
                   onChange={handleInputChange}
-                  className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                  className="h-4 w-4 text-accent-peach focus:ring-accent-peach border-theme-primary border-opacity-30 rounded"
                 />
-                <label className="ml-2 text-sm text-gray-700">
+                <label className="ml-2 text-sm text-theme-primary">
                   Jadikan produk unggulan
                 </label>
               </div>
@@ -890,18 +890,18 @@ export default function EditProductPage() {
           <div className="flex items-center justify-end space-x-4 pt-6">
             <Link
               href="/admin/products"
-              className="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+              className="px-6 py-2 bg-theme-primary bg-opacity-10 text-theme-primary border border-theme-primary border-opacity-50 rounded-lg hover:bg-theme-primary hover:bg-opacity-20 transition-all duration-200"
             >
               Batal
             </Link>
             <button
               type="submit"
               disabled={saving}
-              className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center space-x-2"
+              className="px-6 py-2 bg-gradient-to-r from-accent-peach to-accent-orange text-on-accent rounded-lg hover:shadow-md disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 flex items-center space-x-2"
             >
               {saving ? (
                 <>
-                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-on-accent"></div>
                   <span>Menyimpan...</span>
                 </>
               ) : (

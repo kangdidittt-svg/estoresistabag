@@ -186,21 +186,21 @@ export default function NewPromoPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-theme-main">
       {/* Header */}
-      <div className="bg-white shadow-sm border-b">
+      <div className="bg-theme-header shadow-soft border-b border-theme-primary border-opacity-10">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center space-x-4">
               <Link 
                 href="/admin/promos"
-                className="text-gray-600 hover:text-gray-900"
+                className="text-theme-primary hover:text-accent-peach transition-colors"
               >
                 ← Kembali ke Kelola Promo
               </Link>
               <div className="flex items-center space-x-2">
-                <DollarSign className="h-6 w-6 text-orange-600" />
-                <h1 className="text-xl font-semibold text-gray-900">Tambah Promo Baru</h1>
+                <DollarSign className="h-6 w-6 text-accent-peach" />
+                <h1 className="text-xl font-semibold text-theme-primary">Tambah Promo Baru</h1>
               </div>
             </div>
           </div>
@@ -210,13 +210,13 @@ export default function NewPromoPage() {
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Basic Information */}
-          <div className="bg-white rounded-lg shadow-sm p-6">
-            <h2 className="text-lg font-medium text-gray-900 mb-4">Informasi Dasar</h2>
+          <div className="card-theme rounded-lg shadow-soft p-6">
+            <h2 className="text-lg font-medium text-theme-primary mb-4">Informasi Dasar</h2>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Title */}
               <div className="md:col-span-2">
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-theme-primary mb-2">
                   Judul Promo *
                 </label>
                 <input
@@ -224,13 +224,13 @@ export default function NewPromoPage() {
                   name="title"
                   value={formData.title}
                   onChange={handleInputChange}
-                  className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent ${
-                    errors.title ? 'border-red-500' : 'border-gray-300'
+                  className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-accent-peach focus:border-accent-peach transition-all duration-200 bg-theme-main text-theme-primary ${
+                    errors.title ? 'border-red-500' : 'border-theme-primary border-opacity-30'
                   }`}
                   placeholder="Contoh: Diskon Akhir Tahun 50%"
                 />
                 {errors.title && (
-                  <p className="mt-1 text-sm text-red-600 flex items-center">
+                  <p className="mt-1 text-sm text-red-500 flex items-center">
                     <AlertCircle className="h-4 w-4 mr-1" />
                     {errors.title}
                   </p>
@@ -239,7 +239,7 @@ export default function NewPromoPage() {
 
               {/* Description */}
               <div className="md:col-span-2">
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-theme-primary mb-2">
                   Deskripsi
                 </label>
                 <textarea
@@ -247,21 +247,21 @@ export default function NewPromoPage() {
                   value={formData.description}
                   onChange={handleInputChange}
                   rows={3}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                  className="w-full px-3 py-2 border border-theme-primary border-opacity-30 rounded-lg focus:ring-2 focus:ring-accent-peach focus:border-accent-peach transition-all duration-200 bg-theme-main text-theme-primary"
                   placeholder="Deskripsi detail tentang promo ini..."
                 />
               </div>
 
               {/* Discount Type */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-theme-primary mb-2">
                   Jenis Diskon *
                 </label>
                 <select
                   name="type"
                   value={formData.type}
                   onChange={handleInputChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                  className="w-full px-3 py-2 border border-theme-primary border-opacity-30 rounded-lg focus:ring-2 focus:ring-accent-peach focus:border-accent-peach transition-all duration-200 bg-theme-main text-theme-primary"
                 >
                   <option value="percentage">Persentase (%)</option>
                   <option value="fixed">Nominal Tetap (Rp)</option>
@@ -270,15 +270,15 @@ export default function NewPromoPage() {
 
               {/* Discount Value */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-theme-primary mb-2">
                   Nilai Diskon *
                 </label>
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                     {formData.type === 'percentage' ? (
-                      <Percent className="h-4 w-4 text-gray-400" />
+                      <Percent className="h-4 w-4 text-theme-primary opacity-60" />
                     ) : (
-                      <span className="text-gray-400 text-sm">Rp</span>
+                      <span className="text-theme-primary opacity-60 text-sm">Rp</span>
                     )}
                   </div>
                   <input
@@ -288,14 +288,14 @@ export default function NewPromoPage() {
                     onChange={handleInputChange}
                     min="0"
                     max={formData.type === 'percentage' ? "100" : undefined}
-                    className={`w-full pl-8 pr-3 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent ${
-                      errors.value ? 'border-red-500' : 'border-gray-300'
+                    className={`w-full pl-8 pr-3 py-2 border rounded-lg focus:ring-2 focus:ring-accent-peach focus:border-accent-peach transition-all duration-200 bg-theme-main text-theme-primary ${
+                      errors.value ? 'border-red-500' : 'border-theme-primary border-opacity-30'
                     }`}
                     placeholder={formData.type === 'percentage' ? '10' : '50000'}
                   />
                 </div>
                 {errors.value && (
-                  <p className="mt-1 text-sm text-red-600 flex items-center">
+                  <p className="mt-1 text-sm text-red-500 flex items-center">
                     <AlertCircle className="h-4 w-4 mr-1" />
                     {errors.value}
                   </p>
@@ -305,31 +305,31 @@ export default function NewPromoPage() {
           </div>
 
           {/* Date Range */}
-          <div className="bg-white rounded-lg shadow-sm p-6">
-            <h2 className="text-lg font-medium text-gray-900 mb-4">Periode Promo</h2>
+          <div className="card-theme rounded-lg shadow-soft p-6">
+            <h2 className="text-lg font-medium text-theme-primary mb-4">Periode Promo</h2>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Start Date */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-theme-primary mb-2">
                   Tanggal Mulai *
                 </label>
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <Calendar className="h-4 w-4 text-gray-400" />
+                    <Calendar className="h-4 w-4 text-theme-primary opacity-60" />
                   </div>
                   <input
                     type="date"
                     name="startDate"
                     value={formData.startDate}
                     onChange={handleInputChange}
-                    className={`w-full pl-10 pr-3 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent ${
-                      errors.startDate ? 'border-red-500' : 'border-gray-300'
+                    className={`w-full pl-10 pr-3 py-2 border rounded-lg focus:ring-2 focus:ring-accent-peach focus:border-accent-peach transition-all duration-200 bg-theme-main text-theme-primary ${
+                      errors.startDate ? 'border-red-500' : 'border-theme-primary border-opacity-30'
                     }`}
                   />
                 </div>
                 {errors.startDate && (
-                  <p className="mt-1 text-sm text-red-600 flex items-center">
+                  <p className="mt-1 text-sm text-red-500 flex items-center">
                     <AlertCircle className="h-4 w-4 mr-1" />
                     {errors.startDate}
                   </p>
@@ -338,12 +338,12 @@ export default function NewPromoPage() {
 
               {/* End Date */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-theme-primary mb-2">
                   Tanggal Berakhir *
                 </label>
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <Calendar className="h-4 w-4 text-gray-400" />
+                    <Calendar className="h-4 w-4 text-theme-primary opacity-60" />
                   </div>
                   <input
                     type="date"
@@ -351,13 +351,13 @@ export default function NewPromoPage() {
                     value={formData.endDate}
                     onChange={handleInputChange}
                     min={formData.startDate}
-                    className={`w-full pl-10 pr-3 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent ${
-                      errors.endDate ? 'border-red-500' : 'border-gray-300'
+                    className={`w-full pl-10 pr-3 py-2 border rounded-lg focus:ring-2 focus:ring-accent-peach focus:border-accent-peach transition-all duration-200 bg-theme-main text-theme-primary ${
+                      errors.endDate ? 'border-red-500' : 'border-theme-primary border-opacity-30'
                     }`}
                   />
                 </div>
                 {errors.endDate && (
-                  <p className="mt-1 text-sm text-red-600 flex items-center">
+                  <p className="mt-1 text-sm text-red-500 flex items-center">
                     <AlertCircle className="h-4 w-4 mr-1" />
                     {errors.endDate}
                   </p>
@@ -367,18 +367,18 @@ export default function NewPromoPage() {
           </div>
 
           {/* Advanced Settings */}
-          <div className="bg-white rounded-lg shadow-sm p-6">
-            <h2 className="text-lg font-medium text-gray-900 mb-4">Pengaturan Lanjutan</h2>
+          <div className="card-theme rounded-lg shadow-soft p-6">
+            <h2 className="text-lg font-medium text-theme-primary mb-4">Pengaturan Lanjutan</h2>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Min Purchase */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-theme-primary mb-2">
                   Minimal Pembelian
                 </label>
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <ShoppingCart className="h-4 w-4 text-gray-400" />
+                    <ShoppingCart className="h-4 w-4 text-theme-primary opacity-60" />
                   </div>
                   <input
                     type="number"
@@ -386,11 +386,11 @@ export default function NewPromoPage() {
                     value={formData.minPurchase}
                     onChange={handleInputChange}
                     min="0"
-                    className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                    className="w-full pl-10 pr-3 py-2 border border-theme-primary border-opacity-30 rounded-lg focus:ring-2 focus:ring-accent-peach focus:border-accent-peach transition-all duration-200 bg-theme-main text-theme-primary"
                     placeholder="0 (tidak ada minimal)"
                   />
                 </div>
-                <p className="mt-1 text-xs text-gray-500">
+                <p className="mt-1 text-xs text-theme-primary opacity-60">
                   Kosongkan atau isi 0 jika tidak ada minimal pembelian
                 </p>
               </div>
@@ -407,18 +407,18 @@ export default function NewPromoPage() {
                     value={formData.maxDiscount}
                     onChange={handleInputChange}
                     min="0"
-                    className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent ${
-                      errors.maxDiscount ? 'border-red-500' : 'border-gray-300'
+                    className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-accent-peach focus:border-accent-peach transition-all duration-200 bg-theme-main text-theme-primary ${
+                      errors.maxDiscount ? 'border-red-500' : 'border-theme-primary border-opacity-30'
                     }`}
                     placeholder="0 (tidak ada batas)"
                   />
                   {errors.maxDiscount && (
-                    <p className="mt-1 text-sm text-red-600 flex items-center">
+                    <p className="mt-1 text-sm text-red-500 flex items-center">
                       <AlertCircle className="h-4 w-4 mr-1" />
                       {errors.maxDiscount}
                     </p>
                   )}
-                  <p className="mt-1 text-xs text-gray-500">
+                  <p className="mt-1 text-xs text-theme-primary opacity-60">
                     Kosongkan atau isi 0 jika tidak ada batas maksimal
                   </p>
                 </div>
@@ -426,12 +426,12 @@ export default function NewPromoPage() {
 
               {/* Usage Limit */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-theme-primary mb-2">
                   Batas Penggunaan
                 </label>
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <Users className="h-4 w-4 text-gray-400" />
+                    <Users className="h-4 w-4 text-theme-primary opacity-60" />
                   </div>
                   <input
                     type="number"
@@ -439,11 +439,11 @@ export default function NewPromoPage() {
                     value={formData.usageLimit}
                     onChange={handleInputChange}
                     min="0"
-                    className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                    className="w-full pl-10 pr-3 py-2 border border-theme-primary border-opacity-30 rounded-lg focus:ring-2 focus:ring-accent-peach focus:border-accent-peach transition-all duration-200 bg-theme-main text-theme-primary"
                     placeholder="0 (tidak terbatas)"
                   />
                 </div>
-                <p className="mt-1 text-xs text-gray-500">
+                <p className="mt-1 text-xs text-theme-primary opacity-60">
                   Kosongkan atau isi 0 jika tidak ada batas penggunaan
                 </p>
               </div>
@@ -451,16 +451,16 @@ export default function NewPromoPage() {
           </div>
 
           {/* Image Upload */}
-          <div className="bg-white rounded-lg shadow-sm p-6">
-            <h2 className="text-lg font-medium text-gray-900 mb-4">Gambar Promo</h2>
+          <div className="card-theme rounded-lg shadow-soft p-6">
+            <h2 className="text-lg font-medium text-theme-primary mb-4">Gambar Promo</h2>
             
             <div className="space-y-4">
               {!imagePreview ? (
-                <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-orange-400 transition-colors">
-                  <Upload className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+                <div className="border-2 border-dashed border-theme-primary border-opacity-30 rounded-lg p-6 text-center hover:border-accent-peach transition-colors">
+                  <Upload className="h-12 w-12 text-theme-primary opacity-60 mx-auto mb-4" />
                   <div className="space-y-2">
                     <label className="cursor-pointer">
-                      <span className="text-orange-600 hover:text-orange-700 font-medium">
+                      <span className="text-accent-peach hover:text-accent-mint font-medium">
                         Klik untuk upload gambar
                       </span>
                       <input
@@ -470,7 +470,7 @@ export default function NewPromoPage() {
                         className="hidden"
                       />
                     </label>
-                    <p className="text-sm text-gray-500">
+                    <p className="text-sm text-theme-primary opacity-60">
                       PNG, JPG, JPEG hingga 5MB
                     </p>
                   </div>
@@ -496,7 +496,7 @@ export default function NewPromoPage() {
               )}
               
               {errors.image && (
-                <p className="text-sm text-red-600 flex items-center">
+                <p className="text-sm text-red-500 flex items-center">
                   <AlertCircle className="h-4 w-4 mr-1" />
                   {errors.image}
                 </p>
@@ -505,8 +505,8 @@ export default function NewPromoPage() {
           </div>
 
           {/* Status */}
-          <div className="bg-white rounded-lg shadow-sm p-6">
-            <h2 className="text-lg font-medium text-gray-900 mb-4">Status</h2>
+          <div className="card-theme rounded-lg shadow-soft p-6">
+            <h2 className="text-lg font-medium text-theme-primary mb-4">Status</h2>
             
             <div className="flex items-center">
               <input
@@ -514,13 +514,13 @@ export default function NewPromoPage() {
                 name="isActive"
                 checked={formData.isActive}
                 onChange={handleInputChange}
-                className="h-4 w-4 text-orange-600 focus:ring-orange-500 border-gray-300 rounded"
+                className="h-4 w-4 text-accent-peach focus:ring-accent-peach border-theme-primary border-opacity-30 rounded"
               />
-              <label className="ml-2 text-sm text-gray-700">
+              <label className="ml-2 text-sm text-theme-primary">
                 Aktifkan promo setelah dibuat
               </label>
             </div>
-            <p className="mt-1 text-xs text-gray-500">
+            <p className="mt-1 text-xs text-theme-primary opacity-60">
               Promo yang tidak aktif tidak akan ditampilkan kepada pelanggan
             </p>
           </div>
@@ -529,14 +529,14 @@ export default function NewPromoPage() {
           <div className="flex items-center justify-end space-x-4 pt-6">
             <Link
               href="/admin/promos"
-              className="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+              className="px-6 py-2 bg-theme-primary bg-opacity-10 text-theme-primary border border-theme-primary border-opacity-50 rounded-lg hover:bg-theme-primary hover:bg-opacity-20 transition-colors"
             >
               Batal
             </Link>
             <button
               type="submit"
               disabled={loading}
-              className="px-6 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center space-x-2"
+              className="px-6 py-2 bg-gradient-to-r from-accent-peach to-accent-mint text-on-accent rounded-lg hover:from-accent-mint hover:to-accent-yellow disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 shadow-soft hover:shadow-medium flex items-center space-x-2"
             >
               {loading ? (
                 <>

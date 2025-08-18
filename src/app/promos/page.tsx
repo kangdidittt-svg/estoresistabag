@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { 
-  ShoppingBag, 
   Calendar, 
   Tag, 
   Percent, 
@@ -12,14 +11,11 @@ import {
   Clock,
   ArrowRight,
   Filter,
-  ChevronDown,
-  Menu,
-  User,
-  Heart,
-  ShoppingCart,
-  Search
+  ChevronDown
 } from 'lucide-react';
 import { formatCurrency, formatDate } from '@/lib/utils';
+import { useCart } from '@/contexts/CartContext';
+import Navigation from '@/components/Navigation';
 
 // Helper functions
 const isPromoActive = (promo: Promo) => {
@@ -90,6 +86,7 @@ interface PromosResponse {
 }
 
 export default function PromosPage() {
+  const { state, dispatch } = useCart();
   const [promos, setPromos] = useState<Promo[]>([]);
   const [loading, setLoading] = useState(true);
   const [initialLoading, setInitialLoading] = useState(true);
@@ -175,62 +172,13 @@ export default function PromosPage() {
 
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-pink-50 to-rose-50">
+    <div className="min-h-screen bg-theme-main">
       {/* Header */}
-      <header className="bg-white/90 backdrop-blur-md shadow-lg border-b border-pink-100 sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
-            <Link href="/" className="flex items-center space-x-2 group">
-              <div className="relative">
-                <div className="absolute inset-0 bg-pink-400 rounded-lg blur opacity-75 group-hover:opacity-100 transition-opacity"></div>
-                <div className="relative bg-pink-500 p-2 rounded-lg">
-                  <ShoppingBag className="h-6 w-6 text-white" />
-                </div>
-              </div>
-              <span className="text-xl font-bold text-pink-600">
-                Toko Siska
-              </span>
-            </Link>
-            
-            <nav className="hidden md:flex items-center space-x-8">
-              <Link href="/" className="text-gray-700 hover:text-pink-500 transition-colors font-medium">
-                Beranda
-              </Link>
-              <Link href="/products" className="text-gray-700 hover:text-pink-500 transition-colors font-medium">
-                Produk
-              </Link>
-              <Link href="/categories" className="text-gray-700 hover:text-pink-500 transition-colors font-medium">
-                Kategori
-              </Link>
-              <Link href="/promos" className="text-pink-500 font-bold relative">
-                Promo
-                <div className="absolute -bottom-1 left-0 right-0 h-0.5 bg-pink-400 rounded-full"></div>
-              </Link>
-            </nav>
-            
-            <div className="flex items-center space-x-4">
-              <button className="p-2 text-gray-600 hover:text-pink-500 transition-colors">
-                <Search className="h-5 w-5" />
-              </button>
-              {/* Hidden buttons as requested */}
-              <button className="p-2 text-gray-600 hover:text-pink-500 transition-colors hidden">
-                <Heart className="h-5 w-5" />
-              </button>
-              <button className="p-2 text-gray-600 hover:text-pink-500 transition-colors relative hidden">
-                <ShoppingCart className="h-5 w-5" />
-                <span className="absolute -top-1 -right-1 bg-pink-400 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-bold">0</span>
-              </button>
-              <button className="p-2 text-gray-600 hover:text-pink-500 transition-colors hidden">
-                <User className="h-5 w-5" />
-              </button>
-            </div>
-          </div>
-        </div>
-      </header>
+      <Navigation />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Page Header */}
-        <div className="relative bg-gradient-to-r from-pink-400 via-rose-400 to-pink-500 overflow-hidden -mx-4 sm:-mx-6 lg:-mx-8 mb-12 rounded-3xl">
+        <div className="relative bg-gradient-to-r from-accent-peach via-accent-mint to-accent-yellow overflow-hidden -mx-4 sm:-mx-6 lg:-mx-8 mb-12 rounded-3xl">
           <div className="absolute inset-0 bg-black/10"></div>
           <div className="absolute inset-0">
             <div className="absolute top-10 left-10 w-20 h-20 bg-white/10 rounded-full blur-xl"></div>
@@ -239,22 +187,22 @@ export default function PromosPage() {
           </div>
           <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
             {/* Breadcrumb */}
-            <nav className="flex items-center space-x-2 text-sm text-white/80 mb-8">
-              <Link href="/" className="hover:text-white transition-colors">Beranda</Link>
+            <nav className="flex items-center space-x-2 text-sm text-on-accent text-opacity-80 mb-8">
+              <Link href="/" className="hover:text-on-accent transition-colors">Beranda</Link>
               <span>/</span>
-              <span className="text-white font-medium">Promo</span>
+              <span className="text-on-accent font-medium">Promo</span>
             </nav>
             
             <div className="text-center animate-fade-in-up">
               <div className="inline-flex items-center space-x-2 bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full mb-6">
-                <Gift className="h-5 w-5 text-white" />
-                <span className="text-white font-semibold text-sm tracking-wider">PROMO SPESIAL</span>
+                <Gift className="h-5 w-5 text-on-accent" />
+                <span className="text-on-accent font-semibold text-sm tracking-wider">PROMO SPESIAL</span>
               </div>
-              <h1 className="text-4xl md:text-5xl font-bold text-white mb-4 leading-tight">
+              <h1 className="text-4xl md:text-5xl font-bold text-on-accent mb-4 leading-tight">
                 Penawaran Terbaik
-                <span className="block text-rose-200">Untuk Anda</span>
+                <span className="block text-on-accent text-opacity-80">Untuk Anda</span>
               </h1>
-              <p className="text-xl text-white/90 max-w-2xl mx-auto leading-relaxed">
+              <p className="text-xl text-on-accent text-opacity-90 max-w-2xl mx-auto leading-relaxed">
                 Dapatkan penawaran terbaik dan hemat lebih banyak dengan promo eksklusif kami
               </p>
             </div>
@@ -262,14 +210,14 @@ export default function PromosPage() {
         </div>
 
         {/* Filters */}
-        <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg border border-pink-100 p-6 mb-8 animate-fade-in-up">
+        <div className="card-theme rounded-2xl shadow-soft border border-theme-primary border-opacity-10 p-6 mb-8 animate-fade-in-up">
           <div className="flex items-center justify-between mb-4">
             <button
               onClick={() => setShowFilters(!showFilters)}
-              className="flex items-center gap-2 text-gray-700 hover:text-pink-500 transition-colors font-medium"
+              className="flex items-center gap-2 text-theme-primary hover:text-accent-peach transition-colors font-medium"
             >
-              <div className="p-2 bg-pink-200 rounded-lg">
-                <Filter className="h-4 w-4 text-pink-600" />
+              <div className="p-2 bg-accent-peach bg-opacity-20 rounded-lg">
+                <Filter className="h-4 w-4 text-accent-peach" />
               </div>
               Filter & Urutkan
               <ChevronDown className={`h-4 w-4 transition-transform ${
@@ -278,24 +226,24 @@ export default function PromosPage() {
             </button>
             
             <div className="flex items-center space-x-2">
-              <div className="w-2 h-2 bg-pink-400 rounded-full"></div>
-              <span className="text-sm text-gray-600 font-medium">
+              <div className="w-2 h-2 bg-accent-peach rounded-full"></div>
+              <span className="text-sm text-theme-primary text-opacity-60 font-medium">
                 {totalPromos} promo tersedia
               </span>
             </div>
           </div>
 
           {showFilters && (
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-6 border-t border-pink-100">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-6 border-t border-theme-primary border-opacity-10">
               {/* Type Filter */}
               <div>
-                <label className="block text-sm font-bold text-gray-700 mb-3">
+                <label className="block text-sm font-bold text-theme-primary mb-3">
                   Jenis Promo
                 </label>
                 <select
                   value={filterType}
                   onChange={(e) => setFilterType(e.target.value as 'all' | 'percentage' | 'fixed')}
-                  className="w-full p-3 border border-pink-200 rounded-xl focus:ring-2 focus:ring-pink-400 focus:border-pink-400 transition-all duration-300 bg-white/50 backdrop-blur-sm"
+                  className="w-full p-3 border border-theme-primary border-opacity-20 rounded-xl focus:ring-2 focus:ring-accent-peach focus:border-accent-peach transition-all duration-300 bg-theme-main backdrop-blur-sm text-theme-primary"
                 >
                   <option value="all">Semua Jenis</option>
                   <option value="percentage">Diskon Persentase</option>
@@ -305,13 +253,13 @@ export default function PromosPage() {
 
               {/* Status Filter */}
               <div>
-                <label className="block text-sm font-bold text-gray-700 mb-3">
+                <label className="block text-sm font-bold text-theme-primary mb-3">
                   Status
                 </label>
                 <select
                   value={filterStatus}
                   onChange={(e) => setFilterStatus(e.target.value as 'all' | 'active' | 'inactive')}
-                  className="w-full p-3 border border-pink-200 rounded-xl focus:ring-2 focus:ring-pink-400 focus:border-pink-400 transition-all duration-300 bg-white/50 backdrop-blur-sm"
+                  className="w-full p-3 border border-theme-primary border-opacity-20 rounded-xl focus:ring-2 focus:ring-accent-peach focus:border-accent-peach transition-all duration-300 bg-theme-main backdrop-blur-sm text-theme-primary"
                 >
                   <option value="all">Semua Status</option>
                   <option value="active">Aktif</option>
@@ -321,7 +269,7 @@ export default function PromosPage() {
 
               {/* Sort */}
               <div>
-                <label className="block text-sm font-bold text-gray-700 mb-3">
+                <label className="block text-sm font-bold text-theme-primary mb-3">
                   Urutkan
                 </label>
                 <select
@@ -331,7 +279,7 @@ export default function PromosPage() {
                     setSortBy(sort);
                     setSortOrder(order);
                   }}
-                  className="w-full p-3 border border-pink-200 rounded-xl focus:ring-2 focus:ring-pink-400 focus:border-pink-400 transition-all duration-300 bg-white/50 backdrop-blur-sm"
+                  className="w-full p-3 border border-theme-primary border-opacity-20 rounded-xl focus:ring-2 focus:ring-accent-peach focus:border-accent-peach transition-all duration-300 bg-theme-main backdrop-blur-sm text-theme-primary"
                 >
                   <option value="startDate-desc">Terbaru</option>
                   <option value="startDate-asc">Terlama</option>
@@ -345,12 +293,12 @@ export default function PromosPage() {
 
           {/* Reset Filters */}
           {(filterType !== 'all' || filterStatus !== 'all') && (
-            <div className="pt-6 border-t border-pink-100 mt-6">
+            <div className="pt-6 border-t border-theme-primary border-opacity-10 mt-6">
               <button
                 onClick={resetFilters}
-                className="inline-flex items-center space-x-2 text-sm text-pink-500 hover:text-pink-600 font-bold transition-colors"
+                className="inline-flex items-center space-x-2 text-sm text-accent-peach hover:text-accent-mint font-bold transition-colors"
               >
-                <div className="w-4 h-4 bg-pink-400 rounded-full flex items-center justify-center text-white text-xs">
+                <div className="w-4 h-4 bg-accent-peach rounded-full flex items-center justify-center text-on-accent text-xs">
                   ×
                 </div>
                 <span>Reset Semua Filter</span>
@@ -375,14 +323,14 @@ export default function PromosPage() {
           </div>
         ) : promos.length === 0 ? (
           <div className="text-center py-16 animate-fade-in-up">
-            <div className="inline-flex items-center justify-center w-20 h-20 bg-pink-100 rounded-full mb-6">
-              <Gift className="h-10 w-10 text-pink-500" />
+            <div className="inline-flex items-center justify-center w-20 h-20 bg-accent-peach bg-opacity-20 rounded-full mb-6">
+              <Gift className="h-10 w-10 text-accent-peach" />
             </div>
-            <h3 className="text-2xl font-bold text-gray-900 mb-3">Tidak ada promo ditemukan</h3>
-            <p className="text-gray-600 mb-6 max-w-md mx-auto leading-relaxed">Belum ada promo tersedia atau coba ubah filter Anda untuk menemukan penawaran menarik</p>
+            <h3 className="text-2xl font-bold text-theme-primary mb-3">Tidak ada promo ditemukan</h3>
+            <p className="text-theme-primary text-opacity-60 mb-6 max-w-md mx-auto leading-relaxed">Belum ada promo tersedia atau coba ubah filter Anda untuk menemukan penawaran menarik</p>
             <button
               onClick={resetFilters}
-              className="inline-flex items-center space-x-2 bg-pink-400 text-white px-6 py-3 rounded-xl font-bold hover:bg-pink-500 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105"
+              className="inline-flex items-center space-x-2 bg-accent-peach text-on-accent px-6 py-3 rounded-xl font-bold hover:bg-accent-mint transition-all duration-300 shadow-soft hover:shadow-medium hover:scale-105"
             >
               <span>Reset Filter</span>
               <div className="w-5 h-5 bg-white/20 rounded-full flex items-center justify-center text-sm">
@@ -405,7 +353,7 @@ export default function PromosPage() {
                   <button
                     onClick={() => handlePageChange(currentPage - 1)}
                     disabled={currentPage === 1}
-                    className="p-3 rounded-xl border border-pink-200 text-pink-500 hover:text-pink-600 hover:border-pink-300 hover:bg-pink-50 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 shadow-sm hover:shadow-md"
+                    className="p-3 rounded-xl border border-theme-primary border-opacity-20 text-accent-peach hover:text-accent-mint hover:border-accent-peach hover:bg-accent-peach hover:bg-opacity-10 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 shadow-soft hover:shadow-medium"
                   >
                     <ArrowRight className="h-4 w-4 rotate-180" />
                   </button>
@@ -426,10 +374,10 @@ export default function PromosPage() {
                       <button
                         key={pageNum}
                         onClick={() => handlePageChange(pageNum)}
-                        className={`px-4 py-3 rounded-xl border font-bold transition-all duration-300 shadow-sm hover:shadow-md ${
+                        className={`px-4 py-3 rounded-xl border font-bold transition-all duration-300 shadow-soft hover:shadow-medium ${
                           currentPage === pageNum
-                            ? 'bg-pink-400 text-white border-pink-400 shadow-lg scale-105'
-                            : 'border-pink-200 text-pink-500 hover:text-pink-600 hover:border-pink-300 hover:bg-pink-50'
+                            ? 'bg-accent-peach text-on-accent border-accent-peach shadow-medium scale-105'
+                            : 'border-theme-primary border-opacity-20 text-accent-peach hover:text-accent-mint hover:border-accent-peach hover:bg-accent-peach hover:bg-opacity-10'
                         }`}
                       >
                         {pageNum}
@@ -440,7 +388,7 @@ export default function PromosPage() {
                   <button
                     onClick={() => handlePageChange(currentPage + 1)}
                     disabled={currentPage === totalPages}
-                    className="p-3 rounded-xl border border-pink-200 text-pink-500 hover:text-pink-600 hover:border-pink-300 hover:bg-pink-50 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 shadow-sm hover:shadow-md"
+                    className="p-3 rounded-xl border border-theme-primary border-opacity-20 text-accent-peach hover:text-accent-mint hover:border-accent-peach hover:bg-accent-peach hover:bg-opacity-10 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 shadow-soft hover:shadow-medium"
                   >
                     <ArrowRight className="h-4 w-4" />
                   </button>
@@ -479,16 +427,16 @@ function PromoCard({ promo }: { promo: Promo }) {
   };
 
   return (
-    <div className={`bg-white rounded-2xl shadow-sm hover:shadow-lg transition-all duration-300 border overflow-hidden ${
-      isActive ? 'border-green-200' : 'border-gray-200'
+    <div className={`card-theme rounded-2xl shadow-soft hover:shadow-medium transition-all duration-300 border overflow-hidden ${
+      isActive ? 'border-accent-mint border-opacity-50' : 'border-theme-primary border-opacity-20'
     }`}>
       {/* Header */}
       <div className={`p-6 ${
         isActive 
-          ? 'bg-pink-400' 
-          : 'bg-gray-400'
+          ? 'bg-gradient-to-r from-accent-peach to-accent-mint' 
+          : 'bg-theme-primary bg-opacity-40'
       }`}>
-        <div className="flex items-center justify-between text-white mb-4">
+        <div className="flex items-center justify-between text-on-accent mb-4">
           <div className="flex items-center gap-2">
             {getPromoIcon(promo.type)}
             <span className="text-sm font-medium capitalize">
@@ -498,55 +446,55 @@ function PromoCard({ promo }: { promo: Promo }) {
           
           <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
             isActive 
-              ? 'bg-white bg-opacity-20 text-white' 
-              : 'bg-white bg-opacity-20 text-white'
+              ? 'bg-white bg-opacity-20 text-on-accent' 
+              : 'bg-white bg-opacity-20 text-on-accent'
           }`}>
             {isActive ? 'Aktif' : 'Berakhir'}
           </span>
         </div>
         
         <div className="text-center">
-          <div className="text-4xl font-bold mb-2">
+          <div className="text-4xl font-bold mb-2 text-on-accent">
             {getPromoValue(promo)}
           </div>
-          <h3 className="text-xl font-semibold">{promo.title}</h3>
+          <h3 className="text-xl font-semibold text-on-accent">{promo.title}</h3>
         </div>
       </div>
       
       {/* Content */}
       <div className="p-6">
         {promo.description && (
-          <p className="text-gray-600 mb-4 line-clamp-2">{promo.description}</p>
+          <p className="text-theme-primary text-opacity-70 mb-4 line-clamp-2">{promo.description}</p>
         )}
         
         {/* Details */}
         <div className="space-y-3 mb-6">
-          <div className="flex items-center gap-2 text-sm text-gray-600">
+          <div className="flex items-center gap-2 text-sm text-theme-primary text-opacity-60">
             <Calendar className="h-4 w-4" />
             <span>Berlaku: {formatDate(promo.startDate)} - {formatDate(promo.endDate)}</span>
           </div>
           
           {isActive && (
-            <div className="flex items-center gap-2 text-sm text-pink-500">
+            <div className="flex items-center gap-2 text-sm text-accent-peach">
               <Clock className="h-4 w-4" />
               <span className="font-medium">{timeRemaining}</span>
             </div>
           )}
           
           {promo.minPurchase && (
-            <div className="text-sm text-gray-600">
+            <div className="text-sm text-theme-primary text-opacity-60">
               Min. pembelian: {formatCurrency(promo.minPurchase)}
             </div>
           )}
           
           {promo.maxDiscount && promo.type === 'percentage' && (
-            <div className="text-sm text-gray-600">
+            <div className="text-sm text-theme-primary text-opacity-60">
               Maks. potongan: {formatCurrency(promo.maxDiscount)}
             </div>
           )}
           
           {promo.usageLimit && (
-            <div className="text-sm text-gray-600">
+            <div className="text-sm text-theme-primary text-opacity-60">
               Tersisa: {promo.usageLimit - promo.usageCount} dari {promo.usageLimit}
             </div>
           )}
@@ -555,7 +503,7 @@ function PromoCard({ promo }: { promo: Promo }) {
         {/* Products Preview */}
         {promo.products && promo.products.length > 0 && (
           <div className="mb-6">
-            <h4 className="text-sm font-medium text-gray-900 mb-3">Produk Promo:</h4>
+            <h4 className="text-sm font-medium text-theme-primary mb-3">Produk Promo:</h4>
             <div className="grid grid-cols-3 gap-2">
               {promo.products.slice(0, 3).map((product) => (
                 <Link 
@@ -571,12 +519,12 @@ function PromoCard({ promo }: { promo: Promo }) {
                       className="object-cover group-hover:scale-105 transition-transform duration-300"
                     />
                   </div>
-                  <p className="text-xs text-gray-600 mt-1 line-clamp-1">{product.name}</p>
+                  <p className="text-xs text-theme-primary text-opacity-60 mt-1 line-clamp-1">{product.name}</p>
                 </Link>
               ))}
             </div>
             {promo.products.length > 3 && (
-              <p className="text-xs text-gray-500 mt-2">
+              <p className="text-xs text-theme-primary text-opacity-50 mt-2">
                 +{promo.products.length - 3} produk lainnya
               </p>
             )}
@@ -586,10 +534,10 @@ function PromoCard({ promo }: { promo: Promo }) {
         {/* Action Button */}
         <Link 
           href={`/products?promo=${promo._id}`}
-          className={`w-full inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl font-bold transition-all duration-300 shadow-sm hover:shadow-md ${
+          className={`w-full inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl font-bold transition-all duration-300 shadow-soft hover:shadow-medium ${
             isActive
-              ? 'bg-pink-400 text-white hover:bg-pink-500 transform hover:scale-105'
-              : 'bg-gray-100 text-gray-500 cursor-not-allowed'
+              ? 'bg-gradient-to-r from-accent-peach to-accent-mint hover:from-accent-mint hover:to-accent-yellow text-on-accent transform hover:scale-105'
+              : 'bg-theme-primary bg-opacity-20 text-theme-primary text-opacity-60 cursor-not-allowed'
           }`}
         >
           {isActive ? 'Lihat Produk Promo' : 'Promo Berakhir'}

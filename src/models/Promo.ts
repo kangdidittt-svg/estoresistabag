@@ -2,12 +2,19 @@ import mongoose, { Document, Schema } from 'mongoose';
 
 export interface IPromo extends Document {
   title: string;
-  type: 'percent' | 'fixed';
+  slug: string;
+  description: string;
+  type: 'percentage' | 'fixed';
   value: number;
   startDate: Date;
   endDate: Date;
-  products: mongoose.Types.ObjectId[];
   isActive: boolean;
+  minPurchase: number;
+  maxDiscount: number;
+  usageLimit: number;
+  usageCount: number;
+  image: string;
+  applicableProducts: mongoose.Types.ObjectId[];
   createdAt: Date;
   updatedAt: Date;
 }
@@ -19,11 +26,22 @@ const PromoSchema = new Schema<IPromo>({
     trim: true,
     maxlength: [200, 'Promo title cannot exceed 200 characters']
   },
+  slug: {
+    type: String,
+    required: [true, 'Promo slug is required'],
+    unique: true,
+    trim: true
+  },
+  description: {
+    type: String,
+    trim: true,
+    maxlength: [1000, 'Description cannot exceed 1000 characters']
+  },
   type: {
     type: String,
     required: [true, 'Promo type is required'],
-    enum: ['percent', 'fixed'],
-    default: 'percent'
+    enum: ['percentage', 'fixed'],
+    default: 'percentage'
   },
   value: {
     type: Number,
@@ -38,14 +56,38 @@ const PromoSchema = new Schema<IPromo>({
     type: Date,
     required: [true, 'End date is required']
   },
-  products: [{
-    type: Schema.Types.ObjectId,
-    ref: 'Product'
-  }],
   isActive: {
     type: Boolean,
     default: true
-  }
+  },
+  minPurchase: {
+    type: Number,
+    default: 0,
+    min: [0, 'Minimum purchase cannot be negative']
+  },
+  maxDiscount: {
+    type: Number,
+    default: 0,
+    min: [0, 'Maximum discount cannot be negative']
+  },
+  usageLimit: {
+    type: Number,
+    default: 0,
+    min: [0, 'Usage limit cannot be negative']
+  },
+  usageCount: {
+    type: Number,
+    default: 0,
+    min: [0, 'Usage count cannot be negative']
+  },
+  image: {
+    type: String,
+    default: ''
+  },
+  applicableProducts: [{
+    type: Schema.Types.ObjectId,
+    ref: 'Product'
+  }]
 }, {
   timestamps: true
 });

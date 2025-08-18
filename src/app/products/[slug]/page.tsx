@@ -16,9 +16,15 @@ import {
   ChevronRight,
   Tag,
   Package,
-  Truck
+  Truck,
+  Menu,
+  X,
+  Search,
+  Grid
 } from 'lucide-react';
 import { formatCurrency, calculateDiscountPercentage } from '@/lib/utils';
+import LoadingSpinner from '@/components/LoadingSpinner';
+import { useCart } from '@/contexts/CartContext';
 
 interface Product {
   _id: string;
@@ -59,6 +65,7 @@ interface RelatedProduct {
 export default function ProductDetailPage() {
   const params = useParams();
   const slug = params.slug as string;
+  const { dispatch } = useCart();
   
   const [product, setProduct] = useState<Product | null>(null);
   const [relatedProducts, setRelatedProducts] = useState<RelatedProduct[]>([]);
@@ -66,6 +73,7 @@ export default function ProductDetailPage() {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isImageModalOpen, setIsImageModalOpen] = useState(false);
   const [quantity, setQuantity] = useState(1);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     if (slug) {
@@ -95,6 +103,23 @@ export default function ProductDetailPage() {
   };
 
 
+
+  const handleAddToCart = () => {
+    if (!product) return;
+    
+    dispatch({
+      type: 'ADD_ITEM',
+      payload: {
+        id: product._id,
+        name: product.name,
+        slug: product.slug,
+        price: product.price,
+        priceAfterDiscount: product.priceAfterDiscount,
+        image: product.images[0] || '/placeholder-bag.jpg',
+        stock: product.stock
+      }
+    });
+  };
 
   const handleWhatsAppOrder = () => {
     if (!product) return;
@@ -147,27 +172,18 @@ export default function ProductDetailPage() {
   };
 
   if (loading) {
-    return (
-      <div className="loading-overlay">
-        <div className="loading-dots">
-          <div></div>
-          <div></div>
-          <div></div>
-          <div></div>
-        </div>
-      </div>
-    );
+    return <LoadingSpinner overlay={true} />;
   }
 
   if (!product) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-screen bg-theme-main flex items-center justify-center">
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-gray-900 mb-4">Produk Tidak Ditemukan</h1>
-          <p className="text-gray-600 mb-8">Produk yang Anda cari tidak tersedia.</p>
+          <h1 className="text-2xl font-bold text-theme-primary mb-4">Produk Tidak Ditemukan</h1>
+          <p className="text-theme-primary text-opacity-60 mb-8">Produk yang Anda cari tidak tersedia.</p>
           <Link 
             href="/products" 
-            className="bg-pink-400 text-white px-6 py-3 rounded-2xl hover:bg-pink-500 transition-smooth"
+            className="bg-accent-peach text-on-accent px-6 py-3 rounded-2xl hover:bg-accent-yellow transition-colors duration-200"
           >
             Kembali ke Produk
           </Link>
@@ -185,59 +201,108 @@ export default function ProductDetailPage() {
   const totalPrice = finalPrice * quantity;
 
   return (
-    <div className="min-h-screen bg-pink-50">
+    <div className="min-h-screen bg-theme-main">
       {/* Header */}
-      <header className="bg-white shadow-sm sticky top-0 z-50 border-b border-pink-100 transition-smooth">
+      <header className="bg-theme-header shadow-sm sticky top-0 z-50 border-b border-theme-primary border-opacity-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <Link href="/" className="flex items-center space-x-2 group">
-              <div className="bg-pink-300 p-3 rounded-2xl group-hover:scale-105 transition-smooth">
-                <ShoppingBag className="h-6 w-6 text-white" />
+              <div className="bg-accent-peach p-3 rounded-2xl group-hover:scale-105 transition-all duration-200">
+                <ShoppingBag className="h-6 w-6 text-on-accent" />
               </div>
-              <span className="text-xl font-bold text-gradient-coral">SistaBag</span>
+              <span className="text-xl font-bold text-theme-primary">SistaBag</span>
             </Link>
             
-            <nav className="flex items-center space-x-6">
-              <Link href="/" className="text-gray-600 hover:text-pink-500 font-medium transition-smooth flex items-center space-x-1">
+            {/* Desktop Navigation */}
+            <nav className="hidden md:flex items-center space-x-6">
+              <Link href="/" className="text-theme-primary hover:text-accent-peach font-medium transition-colors duration-200 flex items-center space-x-1">
                 <span>Beranda</span>
               </Link>
-              <Link href="/products" className="text-gray-600 hover:text-pink-500 font-medium transition-smooth flex items-center space-x-1">
+              <Link href="/products" className="text-theme-primary hover:text-accent-peach font-medium transition-colors duration-200 flex items-center space-x-1">
                 <ShoppingBag className="h-4 w-4" />
                 <span>Produk</span>
               </Link>
-              <Link href="/categories" className="text-gray-600 hover:text-pink-500 font-medium transition-smooth flex items-center space-x-1">
+              <Link href="/categories" className="text-theme-primary hover:text-accent-peach font-medium transition-colors duration-200 flex items-center space-x-1">
                 <span>Kategori</span>
               </Link>
-              <Link href="/promos" className="text-gray-600 hover:text-pink-500 font-medium transition-smooth flex items-center space-x-1">
+              <Link href="/promos" className="text-theme-primary hover:text-accent-peach font-medium transition-colors duration-200 flex items-center space-x-1">
                 <span>Promo</span>
               </Link>
             </nav>
+
+            {/* Mobile Menu Button */}
+            <button
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              className="md:hidden p-2 rounded-lg text-theme-primary hover:bg-theme-primary hover:bg-opacity-10 transition-colors duration-200"
+            >
+              {isMobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+            </button>
           </div>
+
+          {/* Mobile Menu */}
+          {isMobileMenuOpen && (
+            <div className="md:hidden border-t border-theme-primary border-opacity-20 py-4">
+              <div className="flex flex-col space-y-4">
+                <Link 
+                  href="/" 
+                  className="flex items-center space-x-3 text-theme-primary hover:text-accent-peach transition-colors duration-200 px-2 py-2 rounded-lg hover:bg-theme-primary hover:bg-opacity-5"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  <ShoppingBag className="h-5 w-5" />
+                  <span>Beranda</span>
+                </Link>
+                <Link 
+                  href="/products" 
+                  className="flex items-center space-x-3 text-theme-primary hover:text-accent-peach transition-colors duration-200 px-2 py-2 rounded-lg hover:bg-theme-primary hover:bg-opacity-5"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  <Package className="h-5 w-5" />
+                  <span>Produk</span>
+                </Link>
+                <Link 
+                  href="/categories" 
+                  className="flex items-center space-x-3 text-theme-primary hover:text-accent-peach transition-colors duration-200 px-2 py-2 rounded-lg hover:bg-theme-primary hover:bg-opacity-5"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  <Grid className="h-5 w-5" />
+                  <span>Kategori</span>
+                </Link>
+                <Link 
+                  href="/promos" 
+                  className="flex items-center space-x-3 text-theme-primary hover:text-accent-peach transition-colors duration-200 px-2 py-2 rounded-lg hover:bg-theme-primary hover:bg-opacity-5"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  <Tag className="h-5 w-5" />
+                  <span>Promo</span>
+                </Link>
+              </div>
+            </div>
+          )}
         </div>
       </header>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Breadcrumb */}
-        <nav className="flex items-center space-x-2 text-sm text-gray-600 mb-8">
-          <Link href="/" className="hover:text-blue-600">Beranda</Link>
+        <nav className="flex items-center space-x-2 text-sm text-theme-primary text-opacity-60 mb-8">
+          <Link href="/" className="hover:text-accent-peach transition-colors duration-200">Beranda</Link>
           <span>/</span>
-          <Link href="/products" className="hover:text-blue-600">Produk</Link>
+          <Link href="/products" className="hover:text-accent-peach transition-colors duration-200">Produk</Link>
           <span>/</span>
           {product.category && (
             <>
-              <Link href={`/categories/${product.category.slug}`} className="hover:text-blue-600">
+              <Link href={`/categories/${product.category.slug}`} className="hover:text-accent-peach transition-colors duration-200">
                 {product.category.name}
               </Link>
               <span>/</span>
             </>
           )}
-          <span className="text-gray-900">{product.name}</span>
+          <span className="text-theme-primary">{product.name}</span>
         </nav>
 
         {/* Back Button */}
         <Link 
           href="/products" 
-          className="inline-flex items-center gap-2 text-gray-600 hover:text-pink-500 mb-8 transition-smooth"
+          className="inline-flex items-center gap-2 text-theme-primary hover:text-accent-peach mb-8 transition-colors duration-200"
         >
           <ArrowLeft className="h-4 w-4" />
           Kembali ke Produk
@@ -246,7 +311,7 @@ export default function ProductDetailPage() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
           {/* Product Images */}
           <div className="space-y-4">
-            <div className="relative aspect-square bg-white rounded-xl overflow-hidden border">
+            <div className="relative aspect-square bg-theme-card rounded-xl overflow-hidden border border-theme-primary border-opacity-20">
               <Image
                 src={product.images[currentImageIndex] || '/placeholder-bag.jpg'}
                 alt={product.name}
@@ -258,18 +323,18 @@ export default function ProductDetailPage() {
               {/* Badges */}
               <div className="absolute top-4 left-4 flex flex-col gap-2">
                 {isPopular && (
-                  <span className="bg-yellow-500 text-white px-3 py-1 rounded-full text-sm font-semibold flex items-center gap-1">
+                  <span className="bg-accent-yellow text-on-accent px-3 py-1 rounded-full text-sm font-semibold flex items-center gap-1">
                     <Star className="h-4 w-4" />
                     Populer
                   </span>
                 )}
                 {discountPercentage > 0 && (
-                  <span className="bg-red-500 text-white px-3 py-1 rounded-full text-sm font-semibold">
+                  <span className="bg-accent-peach text-on-accent px-3 py-1 rounded-full text-sm font-semibold">
                     -{discountPercentage}%
                   </span>
                 )}
                 {product.promo && (
-                  <span className="bg-orange-500 text-white px-3 py-1 rounded-full text-sm font-semibold flex items-center gap-1">
+                  <span className="bg-accent-mint text-on-accent px-3 py-1 rounded-full text-sm font-semibold flex items-center gap-1">
                     <Tag className="h-4 w-4" />
                     {product.promo.title}
                   </span>
@@ -303,7 +368,7 @@ export default function ProductDetailPage() {
                     key={index}
                     onClick={() => setCurrentImageIndex(index)}
                     className={`relative w-20 h-20 flex-shrink-0 rounded-lg overflow-hidden border-2 ${
-                      currentImageIndex === index ? 'border-blue-600' : 'border-gray-200'
+                      currentImageIndex === index ? 'border-accent-peach' : 'border-theme-primary border-opacity-20'
                     }`}
                   >
                     <Image
@@ -321,8 +386,8 @@ export default function ProductDetailPage() {
           {/* Product Info */}
           <div className="space-y-6">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900 mb-2">{product.name}</h1>
-              <div className="flex items-center gap-4 text-sm text-gray-600">
+              <h1 className="text-3xl font-bold text-theme-primary mb-2">{product.name}</h1>
+              <div className="flex items-center gap-4 text-sm text-theme-primary text-opacity-60">
                 <span>SKU: {product.sku}</span>
                 <span className="flex items-center gap-1">
                   <Eye className="h-4 w-4" />
@@ -330,7 +395,7 @@ export default function ProductDetailPage() {
                 </span>
                 <Link 
                   href={`/categories/${product.category.slug}`}
-                  className="text-pink-500 hover:text-pink-600 transition-smooth"
+                  className="text-accent-peach hover:text-accent-yellow transition-colors duration-200"
                 >
                   {product.category.name}
                 </Link>
@@ -341,18 +406,18 @@ export default function ProductDetailPage() {
             <div className="space-y-2">
               {product.priceAfterDiscount ? (
                 <div>
-                  <div className="text-3xl font-bold text-red-600">
+                  <div className="text-3xl font-bold text-accent-peach">
                     {formatCurrency(product.priceAfterDiscount)}
                   </div>
-                  <div className="text-lg text-gray-500 line-through">
+                  <div className="text-lg text-theme-primary text-opacity-50 line-through">
                     {formatCurrency(product.price)}
                   </div>
-                  <div className="text-sm text-green-600 font-medium">
+                  <div className="text-sm text-accent-mint font-medium">
                     Hemat {formatCurrency(product.price - product.priceAfterDiscount)}
                   </div>
                 </div>
               ) : (
-                <div className="text-3xl font-bold text-gray-900">
+                <div className="text-3xl font-bold text-theme-primary">
                   {formatCurrency(product.price)}
                 </div>
               )}
@@ -360,9 +425,9 @@ export default function ProductDetailPage() {
 
             {/* Stock Status */}
             <div className="flex items-center gap-2">
-              <Package className="h-5 w-5 text-gray-400" />
+              <Package className="h-5 w-5 text-theme-primary text-opacity-40" />
               <span className={`font-medium ${
-                product.stock > 0 ? 'text-green-600' : 'text-red-600'
+                product.stock > 0 ? 'text-accent-mint' : 'text-accent-peach'
               }`}>
                 {product.stock > 0 ? `Stok tersedia (${product.stock} pcs)` : 'Stok habis'}
               </span>
@@ -370,8 +435,8 @@ export default function ProductDetailPage() {
 
             {/* Description */}
             <div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-3">Deskripsi Produk</h3>
-              <div className="prose prose-sm text-gray-600">
+              <h3 className="text-lg font-semibold text-theme-primary mb-3">Deskripsi Produk</h3>
+              <div className="prose prose-sm text-theme-primary text-opacity-80">
                 {product.description.split('\n').map((paragraph, index) => (
                   <p key={index} className="mb-2">{paragraph}</p>
                 ))}
@@ -382,13 +447,13 @@ export default function ProductDetailPage() {
             {product.stock > 0 && (
               <div className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-theme-primary mb-2">
                     Jumlah
                   </label>
                   <div className="flex items-center gap-3">
                     <button
                     onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                    className="w-10 h-10 rounded-2xl border border-pink-200 flex items-center justify-center hover:bg-pink-50 transition-smooth"
+                    className="w-10 h-10 rounded-2xl border border-theme-primary border-opacity-30 flex items-center justify-center hover:bg-accent-peach hover:text-on-accent transition-all duration-200"
                   >
                     -
                   </button>
@@ -398,29 +463,38 @@ export default function ProductDetailPage() {
                     max={product.stock}
                     value={quantity}
                     onChange={(e) => setQuantity(Math.max(1, Math.min(product.stock, parseInt(e.target.value) || 1)))}
-                    className="w-20 text-center border border-pink-200 rounded-2xl py-2 focus:ring-2 focus:ring-pink-300 focus:border-pink-300 transition-smooth"
+                    className="w-20 text-center border border-theme-primary border-opacity-30 rounded-2xl py-2 focus:ring-2 focus:ring-accent-peach focus:border-accent-peach bg-theme-main text-theme-primary transition-all duration-200"
                   />
                   <button
                     onClick={() => setQuantity(Math.min(product.stock, quantity + 1))}
-                    className="w-10 h-10 rounded-2xl border border-pink-200 flex items-center justify-center hover:bg-pink-50 transition-smooth"
+                    className="w-10 h-10 rounded-2xl border border-theme-primary border-opacity-30 flex items-center justify-center hover:bg-accent-peach hover:text-on-accent transition-all duration-200"
                   >
                     +
                   </button>
-                    <span className="text-sm text-gray-600">Max: {product.stock}</span>
+                    <span className="text-sm text-theme-primary text-opacity-60">Max: {product.stock}</span>
                   </div>
                 </div>
 
-                <div className="bg-pink-50 rounded-2xl p-4">
+                <div className="card-theme p-4">
                   <div className="flex items-center justify-between text-lg font-semibold">
-                    <span>Total:</span>
-                    <span className="text-pink-500">{formatCurrency(totalPrice)}</span>
+                    <span className="text-theme-primary">Total:</span>
+                    <span className="text-accent-peach">{formatCurrency(totalPrice)}</span>
                   </div>
                 </div>
 
                 <div className="flex gap-3">
                   <button
+                    onClick={handleAddToCart}
+                    className="flex-1 bg-accent-peach text-on-accent py-3 px-6 rounded-2xl font-semibold hover:bg-opacity-90 transition-all duration-200 flex items-center justify-center gap-2 shadow-soft"
+                    disabled={product.stock === 0}
+                  >
+                    <ShoppingBag className="h-5 w-5" />
+                    {product.stock === 0 ? 'Stok Habis' : 'Tambah ke Keranjang'}
+                  </button>
+                  
+                  <button
                     onClick={handleWhatsAppOrder}
-                    className="flex-1 bg-green-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-green-700 transition-colors flex items-center justify-center gap-2"
+                    className="flex-1 bg-accent-mint text-on-accent py-3 px-6 rounded-2xl font-semibold hover:bg-opacity-90 transition-all duration-200 flex items-center justify-center gap-2 shadow-soft"
                   >
                     <MessageCircle className="h-5 w-5" />
                     Pesan via WhatsApp
@@ -428,7 +502,7 @@ export default function ProductDetailPage() {
                   
                   <button
                     onClick={handleShare}
-                    className="p-3 border border-pink-200 rounded-2xl hover:bg-pink-50 transition-smooth"
+                    className="p-3 border border-theme-primary border-opacity-30 rounded-2xl hover:bg-accent-peach hover:text-on-accent transition-all duration-200"
                   >
                     <Share2 className="h-5 w-5" />
                   </button>
@@ -437,12 +511,12 @@ export default function ProductDetailPage() {
             )}
 
             {/* Shipping Info */}
-            <div className="bg-pink-50 rounded-2xl p-4">
-              <div className="flex items-center gap-2 text-pink-700 mb-2">
+            <div className="card-theme p-4">
+              <div className="flex items-center gap-2 text-accent-peach mb-2">
                 <Truck className="h-5 w-5" />
                 <span className="font-medium">Informasi Pengiriman</span>
               </div>
-              <ul className="text-sm text-pink-600 space-y-1">
+              <ul className="text-sm text-theme-primary text-opacity-80 space-y-1">
                 <li>• Pengiriman ke seluruh Indonesia</li>
                 <li>• Estimasi 2-5 hari kerja</li>
                 <li>• Gratis ongkir untuk pembelian di atas Rp 500.000</li>
@@ -454,11 +528,11 @@ export default function ProductDetailPage() {
         {/* Related Products */}
         {relatedProducts.length > 0 && (
           <div className="mt-16">
-            <h2 className="text-2xl font-bold text-gray-900 mb-8">Produk Serupa</h2>
+            <h2 className="text-2xl font-bold text-theme-primary mb-8">Produk Serupa</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
               {relatedProducts.map((relatedProduct) => (
                 <Link key={relatedProduct._id} href={`/products/${relatedProduct.slug}`} className="group">
-                  <div className="bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow border overflow-hidden">
+                  <div className="card-theme rounded-2xl shadow-soft hover:shadow-md transition-all duration-200 border border-theme-primary border-opacity-10 overflow-hidden">
                     <div className="relative aspect-square">
                       <Image
                         src={relatedProduct.images[0] || '/placeholder-bag.jpg'}
@@ -474,7 +548,7 @@ export default function ProductDetailPage() {
                     </div>
                     
                     <div className="p-4">
-                      <h3 className="font-semibold text-gray-900 mb-2 line-clamp-2 group-hover:text-pink-500 transition-smooth">
+                      <h3 className="font-semibold text-theme-primary mb-2 line-clamp-2 group-hover:text-accent-peach transition-all duration-200">
                         {relatedProduct.name}
                       </h3>
                       
@@ -482,15 +556,15 @@ export default function ProductDetailPage() {
                         <div>
                           {relatedProduct.priceAfterDiscount ? (
                             <div className="flex items-center gap-2">
-                              <span className="text-lg font-bold text-red-600">
+                              <span className="text-lg font-bold text-accent-peach">
                                 {formatCurrency(relatedProduct.priceAfterDiscount)}
                               </span>
-                              <span className="text-sm text-gray-500 line-through">
+                              <span className="text-sm text-theme-primary text-opacity-50 line-through">
                                 {formatCurrency(relatedProduct.price)}
                               </span>
                             </div>
                           ) : (
-                            <span className="text-lg font-bold text-gray-900">
+                            <span className="text-lg font-bold text-theme-primary">
                               {formatCurrency(relatedProduct.price)}
                             </span>
                           )}
@@ -498,8 +572,8 @@ export default function ProductDetailPage() {
                         
                         <span className={`text-xs px-2 py-1 rounded-full ${
                           relatedProduct.stock > 0 
-                            ? 'bg-green-100 text-green-800' 
-                            : 'bg-red-100 text-red-800'
+                            ? 'bg-accent-mint bg-opacity-20 text-accent-mint' 
+                            : 'bg-accent-peach bg-opacity-20 text-accent-peach'
                         }`}>
                           {relatedProduct.stock > 0 ? 'Tersedia' : 'Habis'}
                         </span>

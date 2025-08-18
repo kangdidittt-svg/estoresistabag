@@ -78,19 +78,38 @@ export async function POST(request: NextRequest) {
   try {
     await dbConnect();
 
-    const formData = await request.formData();
-    
-    const title = formData.get('title') as string;
-    const description = formData.get('description') as string;
-    const type = formData.get('type') as string;
-    const value = parseFloat(formData.get('value') as string);
-    const startDate = formData.get('startDate') as string;
-    const endDate = formData.get('endDate') as string;
-    const isActive = formData.get('isActive') === 'true';
-    const minPurchase = parseFloat(formData.get('minPurchase') as string) || 0;
-    const maxDiscount = parseFloat(formData.get('maxDiscount') as string) || 0;
-    const usageLimit = parseInt(formData.get('usageLimit') as string) || 0;
-    const imageFile = formData.get('image') as File;
+    const contentType = request.headers.get('content-type');
+    let title, description, type, value, startDate, endDate, isActive, minPurchase, maxDiscount, usageLimit, imageFile;
+
+    if (contentType?.includes('application/json')) {
+      // Handle JSON request
+      const body = await request.json();
+      title = body.title;
+      description = body.description;
+      type = body.type;
+      value = parseFloat(body.value);
+      startDate = body.startDate;
+      endDate = body.endDate;
+      isActive = body.isActive;
+      minPurchase = parseFloat(body.minPurchase) || 0;
+      maxDiscount = parseFloat(body.maxDiscount) || 0;
+      usageLimit = parseInt(body.usageLimit) || 0;
+      imageFile = null; // No image for JSON requests
+    } else {
+      // Handle FormData request
+      const formData = await request.formData();
+      title = formData.get('title') as string;
+      description = formData.get('description') as string;
+      type = formData.get('type') as string;
+      value = parseFloat(formData.get('value') as string);
+      startDate = formData.get('startDate') as string;
+      endDate = formData.get('endDate') as string;
+      isActive = formData.get('isActive') === 'true';
+      minPurchase = parseFloat(formData.get('minPurchase') as string) || 0;
+      maxDiscount = parseFloat(formData.get('maxDiscount') as string) || 0;
+      usageLimit = parseInt(formData.get('usageLimit') as string) || 0;
+      imageFile = formData.get('image') as File;
+    }
 
     // Validate required fields
     if (!title || !type || !value || !startDate || !endDate) {

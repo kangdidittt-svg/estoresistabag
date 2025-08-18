@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Eye, EyeOff, Lock, Shield } from 'lucide-react';
+import LoadingSpinner from '@/components/LoadingSpinner';
 
 export default function AdminLoginPage() {
   const [username, setUsername] = useState('');
@@ -43,58 +44,60 @@ export default function AdminLoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-pink-50 to-pink-100 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-theme-main flex items-center justify-center p-4">
       <div className="max-w-md w-full">
         {/* Header */}
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-pink-400 rounded-full mb-4">
-            <Shield className="w-8 h-8 text-white" />
+          <div className="inline-flex items-center justify-center w-16 h-16 bg-theme-header rounded-full mb-4 shadow-lg">
+            <Shield className="w-8 h-8 text-on-accent" />
           </div>
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Admin Login</h1>
-          <p className="text-gray-600">Masuk ke dashboard admin SistaBag</p>
+          <h1 className="text-3xl font-bold text-theme-primary mb-2">Admin Login</h1>
+          <p className="text-theme-primary opacity-75">Masuk ke dashboard admin SistaBag</p>
         </div>
 
         {/* Login Form */}
-        <div className="bg-white rounded-2xl shadow-xl p-8">
+        <div className="card-theme p-8">
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Username Field */}
             <div>
-              <label htmlFor="username" className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="username" className="block text-sm font-medium text-theme-primary mb-2">
                 Username
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Shield className="h-5 w-5 text-gray-400" />
+                  <Shield className="h-5 w-5 text-theme-primary opacity-50" />
                 </div>
                 <input
                   id="username"
                   type="text"
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
-                  className="block w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-400 focus:border-pink-400 transition-colors"
+                  className="block w-full pl-10 pr-4 py-3 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-header-color focus:border-header-color bg-white transition-all duration-300 text-theme-primary"
                   placeholder="Masukkan username admin"
                   required
+                  style={{ borderRadius: '16px' }}
                 />
               </div>
             </div>
 
             {/* Password Field */}
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="password" className="block text-sm font-medium text-theme-primary mb-2">
                 Password Admin
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Lock className="h-5 w-5 text-gray-400" />
+                  <Lock className="h-5 w-5 text-theme-primary opacity-50" />
                 </div>
                 <input
                   id="password"
                   type={showPassword ? 'text' : 'password'}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="block w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-400 focus:border-pink-400 transition-colors"
+                  className="block w-full pl-10 pr-12 py-3 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-header-color focus:border-header-color bg-white transition-all duration-300 text-theme-primary"
                   placeholder="Masukkan password admin"
                   required
+                  style={{ borderRadius: '16px' }}
                 />
                 <button
                   type="button"
@@ -102,9 +105,9 @@ export default function AdminLoginPage() {
                   className="absolute inset-y-0 right-0 pr-3 flex items-center"
                 >
                   {showPassword ? (
-                    <EyeOff className="h-5 w-5 text-gray-400 hover:text-gray-600" />
+                    <EyeOff className="h-5 w-5 text-theme-primary opacity-50 hover:opacity-75 transition-opacity" />
                   ) : (
-                    <Eye className="h-5 w-5 text-gray-400 hover:text-gray-600" />
+                    <Eye className="h-5 w-5 text-theme-primary opacity-50 hover:opacity-75 transition-opacity" />
                   )}
                 </button>
               </div>
@@ -112,7 +115,7 @@ export default function AdminLoginPage() {
 
             {/* Error Message */}
             {error && (
-              <div className="bg-red-50 border border-red-200 rounded-lg p-3">
+              <div className="bg-red-50 border border-red-200 rounded-2xl p-3" style={{ borderRadius: '16px' }}>
                 <p className="text-sm text-red-600">{error}</p>
               </div>
             )}
@@ -121,11 +124,11 @@ export default function AdminLoginPage() {
             <button
               type="submit"
               disabled={loading || !username || !password}
-              className="w-full bg-pink-400 text-white py-3 px-4 rounded-lg font-semibold hover:bg-pink-500 focus:ring-2 focus:ring-pink-400 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              className="btn-theme-primary w-full py-3 px-4 font-semibold disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
             >
               {loading ? (
                 <div className="flex items-center justify-center">
-                  <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
+                  <LoadingSpinner size="small" className="mr-2" />
                   Memproses...
                 </div>
               ) : (

@@ -201,28 +201,28 @@ export default function EditCategoryPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-600"></div>
+      <div className="min-h-screen bg-theme-main flex items-center justify-center">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-accent-mint"></div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-theme-main">
       {/* Header */}
-      <div className="bg-white shadow-sm border-b">
+      <div className="bg-theme-header shadow-soft border-b border-theme-primary border-opacity-10">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center space-x-4">
               <Link 
                 href="/admin/categories"
-                className="text-gray-600 hover:text-gray-900"
+                className="text-theme-primary hover:text-accent-peach transition-colors"
               >
                 ← Kembali ke Kelola Kategori
               </Link>
               <div className="flex items-center space-x-2">
-                <Folder className="h-6 w-6 text-green-600" />
-                <h1 className="text-xl font-semibold text-gray-900">Edit Kategori</h1>
+                <Folder className="h-6 w-6 text-accent-mint" />
+                <h1 className="text-xl font-semibold text-theme-primary">Edit Kategori</h1>
               </div>
             </div>
           </div>
@@ -232,13 +232,13 @@ export default function EditCategoryPage() {
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Basic Information */}
-          <div className="bg-white rounded-lg shadow-sm p-6">
-            <h2 className="text-lg font-medium text-gray-900 mb-4">Informasi Dasar</h2>
+          <div className="card-theme rounded-lg shadow-soft p-6">
+            <h2 className="text-lg font-medium text-theme-primary mb-4">Informasi Dasar</h2>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Category Name */}
               <div className="md:col-span-2">
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-theme-primary mb-2">
                   Nama Kategori *
                 </label>
                 <input
@@ -246,8 +246,8 @@ export default function EditCategoryPage() {
                   name="name"
                   value={formData.name}
                   onChange={handleInputChange}
-                  className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent ${
-                    errors.name ? 'border-red-500' : 'border-gray-300'
+                  className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-accent-mint focus:border-accent-mint transition-all duration-200 bg-theme-main text-theme-primary ${
+                    errors.name ? 'border-red-500' : 'border-theme-primary border-opacity-30'
                   }`}
                   placeholder="Masukkan nama kategori"
                 />
@@ -261,7 +261,7 @@ export default function EditCategoryPage() {
 
               {/* Slug */}
               <div className="md:col-span-2">
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-theme-primary mb-2">
                   Slug *
                 </label>
                 <input
@@ -269,8 +269,8 @@ export default function EditCategoryPage() {
                   name="slug"
                   value={formData.slug}
                   onChange={handleInputChange}
-                  className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent ${
-                    errors.slug ? 'border-red-500' : 'border-gray-300'
+                  className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-accent-mint focus:border-accent-mint transition-all duration-200 bg-theme-main text-theme-primary ${
+                    errors.slug ? 'border-red-500' : 'border-theme-primary border-opacity-30'
                   }`}
                   placeholder="kategori-slug"
                 />
@@ -280,14 +280,14 @@ export default function EditCategoryPage() {
                     {errors.slug}
                   </p>
                 )}
-                <p className="mt-1 text-xs text-gray-500">
+                <p className="mt-1 text-xs text-theme-primary opacity-60">
                   URL-friendly version dari nama kategori
                 </p>
               </div>
 
               {/* Description */}
               <div className="md:col-span-2">
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-theme-primary mb-2">
                   Deskripsi
                 </label>
                 <textarea
@@ -295,7 +295,7 @@ export default function EditCategoryPage() {
                   value={formData.description}
                   onChange={handleInputChange}
                   rows={4}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                  className="w-full px-3 py-2 border border-theme-primary border-opacity-30 rounded-lg focus:ring-2 focus:ring-accent-mint focus:border-accent-mint transition-all duration-200 bg-theme-main text-theme-primary"
                   placeholder="Deskripsi kategori..."
                 />
               </div>
@@ -303,16 +303,16 @@ export default function EditCategoryPage() {
           </div>
 
           {/* Image */}
-          <div className="bg-white rounded-lg shadow-sm p-6">
-            <h2 className="text-lg font-medium text-gray-900 mb-4">Gambar Kategori</h2>
+          <div className="card-theme rounded-lg shadow-soft p-6">
+            <h2 className="text-lg font-medium text-theme-primary mb-4">Gambar Kategori</h2>
             
             <div className="space-y-4">
               {/* Current Image */}
               {existingImage && !newImagePreview && (
                 <div className="space-y-3">
-                  <h3 className="text-sm font-medium text-gray-700">Gambar Saat Ini</h3>
+                  <h3 className="text-sm font-medium text-theme-primary">Gambar Saat Ini</h3>
                   <div className="relative w-full max-w-md">
-                    <div className="relative w-full h-48 rounded-lg overflow-hidden border-2 border-gray-200">
+                    <div className="relative w-full h-48 rounded-lg overflow-hidden border-2 border-theme-primary border-opacity-20">
                       <Image
                         src={existingImage}
                         alt="Current category image"
@@ -334,9 +334,9 @@ export default function EditCategoryPage() {
               {/* New Image Preview */}
               {newImagePreview && (
                 <div className="space-y-3">
-                  <h3 className="text-sm font-medium text-gray-700">Gambar Baru</h3>
+                  <h3 className="text-sm font-medium text-theme-primary">Gambar Baru</h3>
                   <div className="relative w-full max-w-md">
-                    <div className="relative w-full h-48 rounded-lg overflow-hidden border-2 border-gray-200">
+                    <div className="relative w-full h-48 rounded-lg overflow-hidden border-2 border-theme-primary border-opacity-20">
                       <Image
                         src={newImagePreview}
                         alt="New category image preview"
@@ -357,11 +357,11 @@ export default function EditCategoryPage() {
 
               {/* Upload New Image */}
               {!newImagePreview && (
-                <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-green-400 transition-colors">
-                  <Upload className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+                <div className="border-2 border-dashed border-theme-primary border-opacity-30 rounded-lg p-6 text-center hover:border-accent-mint hover:bg-accent-mint hover:bg-opacity-5 transition-all duration-300">
+                  <Upload className="h-12 w-12 text-theme-primary opacity-60 mx-auto mb-4" />
                   <div className="space-y-2">
                     <label className="cursor-pointer">
-                      <span className="text-green-600 hover:text-green-700 font-medium">
+                      <span className="text-accent-mint hover:text-accent-blue font-medium transition-colors">
                         {existingImage ? 'Ganti gambar' : 'Upload gambar kategori'}
                       </span>
                       <input
@@ -371,7 +371,7 @@ export default function EditCategoryPage() {
                         className="hidden"
                       />
                     </label>
-                    <p className="text-sm text-gray-500">
+                    <p className="text-sm text-theme-primary opacity-60">
                       PNG, JPG, JPEG hingga 5MB
                     </p>
                   </div>
@@ -388,13 +388,13 @@ export default function EditCategoryPage() {
           </div>
 
           {/* SEO */}
-          <div className="bg-white rounded-lg shadow-sm p-6">
-            <h2 className="text-lg font-medium text-gray-900 mb-4">SEO</h2>
+          <div className="card-theme rounded-lg shadow-soft p-6">
+            <h2 className="text-lg font-medium text-theme-primary mb-4">SEO</h2>
             
             <div className="space-y-4">
               {/* Meta Title */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-theme-primary mb-2">
                   Meta Title
                 </label>
                 <input
@@ -402,17 +402,17 @@ export default function EditCategoryPage() {
                   name="metaTitle"
                   value={formData.metaTitle}
                   onChange={handleInputChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                  className="w-full px-3 py-2 border border-theme-primary border-opacity-30 rounded-lg focus:ring-2 focus:ring-accent-mint focus:border-accent-mint transition-all duration-200 bg-theme-main text-theme-primary"
                   placeholder="Judul untuk SEO"
                 />
-                <p className="mt-1 text-xs text-gray-500">
+                <p className="mt-1 text-xs text-theme-primary opacity-60">
                   Judul yang akan ditampilkan di hasil pencarian Google
                 </p>
               </div>
 
               {/* Meta Description */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-theme-primary mb-2">
                   Meta Description
                 </label>
                 <textarea
@@ -420,10 +420,10 @@ export default function EditCategoryPage() {
                   value={formData.metaDescription}
                   onChange={handleInputChange}
                   rows={3}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                  className="w-full px-3 py-2 border border-theme-primary border-opacity-30 rounded-lg focus:ring-2 focus:ring-accent-mint focus:border-accent-mint transition-all duration-200 bg-theme-main text-theme-primary"
                   placeholder="Deskripsi untuk SEO"
                 />
-                <p className="mt-1 text-xs text-gray-500">
+                <p className="mt-1 text-xs text-theme-primary opacity-60">
                   Deskripsi yang akan ditampilkan di hasil pencarian Google (maksimal 160 karakter)
                 </p>
               </div>
@@ -431,8 +431,8 @@ export default function EditCategoryPage() {
           </div>
 
           {/* Status */}
-          <div className="bg-white rounded-lg shadow-sm p-6">
-            <h2 className="text-lg font-medium text-gray-900 mb-4">Status</h2>
+          <div className="card-theme rounded-lg shadow-soft p-6">
+            <h2 className="text-lg font-medium text-theme-primary mb-4">Status</h2>
             
             <div className="flex items-center">
               <input
@@ -440,13 +440,13 @@ export default function EditCategoryPage() {
                 name="isActive"
                 checked={formData.isActive}
                 onChange={handleInputChange}
-                className="h-4 w-4 text-green-600 focus:ring-green-500 border-gray-300 rounded"
+                className="h-4 w-4 text-accent-mint focus:ring-accent-mint border-theme-primary border-opacity-30 rounded"
               />
-              <label className="ml-2 text-sm text-gray-700">
+              <label className="ml-2 text-sm text-theme-primary">
                 Aktifkan kategori
               </label>
             </div>
-            <p className="mt-1 text-xs text-gray-500">
+            <p className="mt-1 text-xs text-theme-primary opacity-60">
               Kategori yang tidak aktif tidak akan ditampilkan di website
             </p>
           </div>
@@ -455,18 +455,18 @@ export default function EditCategoryPage() {
           <div className="flex items-center justify-end space-x-4 pt-6">
             <Link
               href="/admin/categories"
-              className="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+              className="px-6 py-2 bg-theme-primary bg-opacity-10 text-theme-primary border border-theme-primary border-opacity-50 rounded-lg hover:bg-theme-primary hover:bg-opacity-20 transition-all duration-200"
             >
               Batal
             </Link>
             <button
               type="submit"
               disabled={saving}
-              className="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center space-x-2"
+              className="px-6 py-2 bg-gradient-to-r from-accent-mint to-accent-blue text-on-accent rounded-lg hover:shadow-lg hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 transition-all duration-200 flex items-center space-x-2"
             >
               {saving ? (
                 <>
-                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-on-accent"></div>
                   <span>Menyimpan...</span>
                 </>
               ) : (

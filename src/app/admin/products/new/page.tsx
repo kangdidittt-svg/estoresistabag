@@ -149,21 +149,21 @@ export default function NewProductPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-theme-main">
       {/* Header */}
-      <div className="bg-white shadow-sm border-b">
+      <div className="bg-theme-header shadow-soft border-b border-theme-primary border-opacity-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center space-x-4">
               <Link 
                 href="/admin/products"
-                className="text-gray-600 hover:text-gray-900"
+                className="text-theme-primary hover:text-accent-peach transition-colors"
               >
                 ← Kembali ke Produk
               </Link>
               <div className="flex items-center space-x-2">
-                <Package className="h-6 w-6 text-blue-600" />
-                <h1 className="text-xl font-semibold text-gray-900">Tambah Produk Baru</h1>
+                <Package className="h-6 w-6 text-accent-peach" />
+                <h1 className="text-xl font-semibold text-theme-primary">Tambah Produk Baru</h1>
               </div>
             </div>
           </div>
@@ -173,12 +173,12 @@ export default function NewProductPage() {
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Basic Information */}
-          <div className="bg-white rounded-lg shadow-sm p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">Informasi Dasar</h2>
+          <div className="card-theme rounded-lg shadow-soft p-6">
+            <h2 className="text-lg font-semibold text-theme-primary mb-4">Informasi Dasar</h2>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-theme-primary mb-2">
                   Nama Produk *
                 </label>
                 <input
@@ -186,21 +186,21 @@ export default function NewProductPage() {
                   name="name"
                   value={formData.name}
                   onChange={handleInputChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-3 py-2 border border-theme-primary border-opacity-30 rounded-lg focus:ring-2 focus:ring-accent-peach focus:border-accent-peach transition-all duration-200 bg-theme-main text-theme-primary"
                   placeholder="Masukkan nama produk"
                   required
                 />
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-theme-primary mb-2">
                   Kategori *
                 </label>
                 <select
                   name="category"
                   value={formData.category}
                   onChange={handleInputChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-3 py-2 border border-theme-primary border-opacity-30 rounded-lg focus:ring-2 focus:ring-accent-peach focus:border-accent-peach transition-all duration-200 bg-theme-main text-theme-primary"
                   required
                 >
                   <option value="">Pilih Kategori</option>
@@ -214,7 +214,7 @@ export default function NewProductPage() {
             </div>
 
             <div className="mt-6">
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-theme-primary mb-2">
                 Deskripsi *
               </label>
               <textarea
@@ -222,14 +222,14 @@ export default function NewProductPage() {
                 value={formData.description}
                 onChange={handleInputChange}
                 rows={4}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-3 py-2 border border-theme-primary border-opacity-30 rounded-lg focus:ring-2 focus:ring-accent-peach focus:border-accent-peach transition-all duration-200 bg-theme-main text-theme-primary"
                 placeholder="Masukkan deskripsi produk"
                 required
               />
             </div>
 
             <div className="mt-6">
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-theme-primary mb-2">
                 Tags (pisahkan dengan koma)
               </label>
               <input
@@ -237,19 +237,19 @@ export default function NewProductPage() {
                 name="tags"
                 value={formData.tags}
                 onChange={handleInputChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-3 py-2 border border-theme-primary border-opacity-30 rounded-lg focus:ring-2 focus:ring-accent-peach focus:border-accent-peach transition-all duration-200 bg-theme-main text-theme-primary"
                 placeholder="tas, fashion, wanita"
               />
             </div>
           </div>
 
           {/* Pricing */}
-          <div className="bg-white rounded-lg shadow-sm p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">Harga & Stok</h2>
+          <div className="card-theme rounded-lg shadow-soft p-6">
+            <h2 className="text-lg font-semibold text-theme-primary mb-4">Harga & Stok</h2>
             
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-theme-primary mb-2">
                   Harga Normal *
                 </label>
                 <input
@@ -257,7 +257,7 @@ export default function NewProductPage() {
                   name="price"
                   value={formData.price}
                   onChange={handleInputChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-3 py-2 border border-theme-primary border-opacity-30 rounded-lg focus:ring-2 focus:ring-accent-peach focus:border-accent-peach transition-all duration-200 bg-theme-main text-theme-primary"
                   placeholder="0"
                   min="0"
                   required
@@ -265,7 +265,7 @@ export default function NewProductPage() {
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-theme-primary mb-2">
                   Harga Setelah Diskon
                 </label>
                 <input
@@ -273,14 +273,14 @@ export default function NewProductPage() {
                   name="priceAfterDiscount"
                   value={formData.priceAfterDiscount}
                   onChange={handleInputChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-3 py-2 border border-theme-primary border-opacity-30 rounded-lg focus:ring-2 focus:ring-accent-peach focus:border-accent-peach transition-all duration-200 bg-theme-main text-theme-primary"
                   placeholder="0"
                   min="0"
                 />
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-theme-primary mb-2">
                   Stok
                 </label>
                 <input
@@ -288,7 +288,7 @@ export default function NewProductPage() {
                   name="stock"
                   value={formData.stock}
                   onChange={handleInputChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-3 py-2 border border-theme-primary border-opacity-30 rounded-lg focus:ring-2 focus:ring-accent-peach focus:border-accent-peach transition-all duration-200 bg-theme-main text-theme-primary"
                   placeholder="0"
                   min="0"
                 />
@@ -296,14 +296,14 @@ export default function NewProductPage() {
             </div>
 
             <div className="mt-6">
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-theme-primary mb-2">
                 Promo (Opsional)
               </label>
               <select
                 name="promo"
                 value={formData.promo}
                 onChange={handleInputChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-3 py-2 border border-theme-primary border-opacity-30 rounded-lg focus:ring-2 focus:ring-accent-peach focus:border-accent-peach transition-all duration-200 bg-theme-main text-theme-primary"
               >
                 <option value="">Tidak ada promo</option>
                 {promos.map((promo) => (
@@ -316,17 +316,17 @@ export default function NewProductPage() {
           </div>
 
           {/* Images */}
-          <div className="bg-white rounded-lg shadow-sm p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">Gambar Produk *</h2>
+          <div className="card-theme rounded-lg shadow-soft p-6">
+            <h2 className="text-lg font-semibold text-theme-primary mb-4">Gambar Produk *</h2>
             
             <div className="mb-4">
-              <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100">
+              <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-theme-primary border-opacity-30 border-dashed rounded-lg cursor-pointer bg-theme-main hover:bg-theme-primary hover:bg-opacity-5 transition-all duration-200">
                 <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                  <Upload className="w-8 h-8 mb-2 text-gray-500" />
-                  <p className="mb-2 text-sm text-gray-500">
+                  <Upload className="w-8 h-8 mb-2 text-theme-primary opacity-60" />
+                  <p className="mb-2 text-sm text-theme-primary opacity-75">
                     <span className="font-semibold">Klik untuk upload</span> atau drag and drop
                   </p>
-                  <p className="text-xs text-gray-500">PNG, JPG atau JPEG (MAX. 5MB)</p>
+                  <p className="text-xs text-theme-primary opacity-60">PNG, JPG atau JPEG (MAX. 5MB)</p>
                 </div>
                 <input
                   type="file"
@@ -341,8 +341,8 @@ export default function NewProductPage() {
 
             {imageLoading && (
               <div className="flex items-center justify-center py-4">
-                <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600"></div>
-                <span className="ml-2 text-sm text-gray-600">Mengupload gambar...</span>
+                <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-accent-peach"></div>
+                <span className="ml-2 text-sm text-theme-primary opacity-75">Mengupload gambar...</span>
               </div>
             )}
 
@@ -369,8 +369,8 @@ export default function NewProductPage() {
           </div>
 
           {/* Settings */}
-          <div className="bg-white rounded-lg shadow-sm p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">Pengaturan</h2>
+          <div className="card-theme rounded-lg shadow-soft p-6">
+            <h2 className="text-lg font-semibold text-theme-primary mb-4">Pengaturan</h2>
             
             <div className="flex items-center">
               <input
@@ -378,9 +378,9 @@ export default function NewProductPage() {
                 name="isPublished"
                 checked={formData.isPublished}
                 onChange={handleInputChange}
-                className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                className="h-4 w-4 text-accent-peach focus:ring-accent-peach border-theme-primary border-opacity-30 rounded"
               />
-              <label className="ml-2 block text-sm text-gray-900">
+              <label className="ml-2 block text-sm text-theme-primary">
                 Publikasikan produk sekarang
               </label>
             </div>
@@ -390,14 +390,14 @@ export default function NewProductPage() {
           <div className="flex items-center justify-end space-x-4">
             <Link
               href="/admin/products"
-              className="px-6 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50"
+              className="px-6 py-2 bg-theme-primary bg-opacity-10 text-theme-primary border border-theme-primary border-opacity-50 rounded-lg hover:bg-theme-primary hover:bg-opacity-20 transition-all duration-200"
             >
               Batal
             </Link>
             <button
               type="submit"
               disabled={loading || imageLoading}
-              className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2"
+              className="px-6 py-2 bg-gradient-to-r from-accent-peach to-accent-mint text-on-accent rounded-lg hover:from-accent-mint hover:to-accent-yellow disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2 transition-all duration-300 shadow-soft hover:shadow-medium"
             >
               {loading ? (
                 <>

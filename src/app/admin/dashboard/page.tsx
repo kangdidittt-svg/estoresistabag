@@ -17,6 +17,7 @@ import {
   DollarSign
 } from 'lucide-react';
 import { formatCurrency } from '@/lib/utils';
+import LoadingSpinner from '@/components/LoadingSpinner';
 
 interface DashboardStats {
   totalProducts: number;
@@ -30,6 +31,13 @@ interface DashboardStats {
     stock: number;
     views: number;
     createdAt: string;
+  }[];
+  stockData: {
+    _id: string;
+    name: string;
+    stock: number;
+    category: string;
+    price: number;
   }[];
 }
 
@@ -45,16 +53,18 @@ export default function AdminDashboard() {
   const fetchDashboardData = async () => {
     try {
       // Fetch dashboard statistics
-      const [productsRes, categoriesRes, promosRes] = await Promise.all([
+      const [productsRes, categoriesRes, promosRes, allProductsRes] = await Promise.all([
         fetch('/api/admin/products?limit=5'),
         fetch('/api/admin/categories'),
-        fetch('/api/admin/promos')
+        fetch('/api/admin/promos'),
+        fetch('/api/admin/products') // Fetch all products for stock data
       ]);
 
-      const [productsData, categoriesData, promosData] = await Promise.all([
+      const [productsData, categoriesData, promosData, allProductsData] = await Promise.all([
         productsRes.json(),
         categoriesRes.json(),
-        promosRes.json()
+        promosRes.json(),
+        allProductsRes.json()
       ]);
 
       if (productsData.success && categoriesData.success) {
@@ -63,12 +73,22 @@ export default function AdminDashboard() {
           0
         );
 
+        // Prepare stock data
+        const stockData = allProductsData.success ? allProductsData.data.products.map((product: any) => ({
+          _id: product._id,
+          name: product.name,
+          stock: product.stock,
+          category: product.category?.name || 'Tanpa Kategori',
+          price: product.price
+        })) : [];
+
         setStats({
           totalProducts: productsData.data.pagination?.totalProducts || productsData.data.products.length,
           totalCategories: categoriesData.data.length,
           totalPromos: promosData.success ? promosData.data.length : 0,
           totalViews,
-          recentProducts: productsData.data.products.slice(0, 5)
+          recentProducts: productsData.data.products.slice(0, 5),
+          stockData
         });
       }
     } catch (error) {
@@ -91,32 +111,34 @@ export default function AdminDashboard() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+      <div className="min-h-screen bg-theme-main flex items-center justify-center">
+        <LoadingSpinner overlay={true} />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-theme-main">
       {/* Header */}
-      <header className="bg-white shadow-sm border-b">
+      <header className="bg-theme-header shadow-lg">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center">
-              <ShoppingBag className="h-8 w-8 text-blue-600 mr-3" />
-              <h1 className="text-2xl font-bold text-gray-900">SistaBag Admin</h1>
+              <div className="p-2 bg-accent-peach rounded-xl mr-3">
+                <ShoppingBag className="h-6 w-6 text-on-accent" />
+              </div>
+              <h1 className="text-2xl font-bold text-on-accent">SistaBag Admin</h1>
             </div>
             <div className="flex items-center space-x-4">
               <button
                 onClick={() => router.push('/admin/settings')}
-                className="p-2 text-gray-400 hover:text-gray-600 transition-colors"
+                className="p-2 text-on-accent hover:bg-accent-peach rounded-xl transition-all duration-300"
               >
                 <Settings className="h-5 w-5" />
               </button>
               <button
                 onClick={handleLogout}
-                className="flex items-center px-4 py-2 text-sm text-red-600 hover:text-red-700 transition-colors"
+                className="flex items-center px-4 py-2 text-sm bg-red-500 text-white rounded-xl hover:bg-red-600 transition-all duration-300"
               >
                 <LogOut className="h-4 w-4 mr-2" />
                 Logout
@@ -129,56 +151,56 @@ export default function AdminDashboard() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Welcome Section */}
         <div className="mb-8">
-          <h2 className="text-3xl font-bold text-gray-900 mb-2">Dashboard</h2>
-          <p className="text-gray-600">Selamat datang di panel admin SistaBag</p>
+          <h2 className="text-3xl font-bold text-theme-primary mb-2">Dashboard</h2>
+          <p className="text-theme-primary opacity-75">Selamat datang di panel admin SistaBag</p>
         </div>
 
         {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          <div className="bg-white rounded-lg shadow p-6">
+          <div className="card-theme p-6">
             <div className="flex items-center">
-              <div className="p-2 bg-blue-100 rounded-lg">
-                <Package className="h-6 w-6 text-blue-600" />
+              <div className="p-3 bg-accent-blue rounded-2xl">
+                <Package className="h-6 w-6 text-on-accent" />
               </div>
               <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Total Produk</p>
-                <p className="text-2xl font-bold text-gray-900">{stats?.totalProducts || 0}</p>
+                <p className="text-sm font-medium text-theme-primary opacity-75">Total Produk</p>
+                <p className="text-2xl font-bold text-theme-primary">{stats?.totalProducts || 0}</p>
               </div>
             </div>
           </div>
 
-          <div className="bg-white rounded-lg shadow p-6">
+          <div className="card-theme p-6">
             <div className="flex items-center">
-              <div className="p-2 bg-green-100 rounded-lg">
-                <Tag className="h-6 w-6 text-green-600" />
+              <div className="p-3 bg-accent-mint rounded-2xl">
+                <Tag className="h-6 w-6 text-on-accent" />
               </div>
               <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Kategori</p>
-                <p className="text-2xl font-bold text-gray-900">{stats?.totalCategories || 0}</p>
+                <p className="text-sm font-medium text-theme-primary opacity-75">Kategori</p>
+                <p className="text-2xl font-bold text-theme-primary">{stats?.totalCategories || 0}</p>
               </div>
             </div>
           </div>
 
-          <div className="bg-white rounded-lg shadow p-6">
+          <div className="card-theme p-6">
             <div className="flex items-center">
-              <div className="p-2 bg-orange-100 rounded-lg">
-                  <DollarSign className="h-6 w-6 text-orange-600" />
+              <div className="p-3 bg-accent-yellow rounded-2xl">
+                  <DollarSign className="h-6 w-6 text-theme-primary" />
               </div>
               <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Promosi</p>
-                <p className="text-2xl font-bold text-gray-900">{stats?.totalPromos || 0}</p>
+                <p className="text-sm font-medium text-theme-primary opacity-75">Promosi</p>
+                <p className="text-2xl font-bold text-theme-primary">{stats?.totalPromos || 0}</p>
               </div>
             </div>
           </div>
 
-          <div className="bg-white rounded-lg shadow p-6">
+          <div className="card-theme p-6">
             <div className="flex items-center">
-              <div className="p-2 bg-orange-100 rounded-lg">
-                <Eye className="h-6 w-6 text-orange-600" />
+              <div className="p-3 bg-accent-lavender rounded-2xl">
+                <Eye className="h-6 w-6 text-on-accent" />
               </div>
               <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Total Views</p>
-                <p className="text-2xl font-bold text-gray-900">{stats?.totalViews || 0}</p>
+                <p className="text-sm font-medium text-theme-primary opacity-75">Total Views</p>
+                <p className="text-2xl font-bold text-theme-primary">{stats?.totalViews || 0}</p>
               </div>
             </div>
           </div>
@@ -186,93 +208,134 @@ export default function AdminDashboard() {
 
         {/* Quick Actions */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-          <div className="bg-white rounded-lg shadow p-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Aksi Cepat</h3>
+          <div className="card-theme p-6">
+            <h3 className="text-lg font-semibold text-theme-primary mb-4">Aksi Cepat</h3>
             <div className="grid grid-cols-2 gap-4">
               <button
                 onClick={() => router.push('/admin/products/new')}
-                className="flex items-center justify-center p-4 border-2 border-dashed border-gray-300 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-colors"
+                className="flex items-center justify-center p-4 bg-gradient-to-r from-accent-blue to-accent-mint text-theme-primary rounded-xl hover:from-accent-mint hover:to-accent-blue transition-all duration-300 shadow-soft hover:shadow-medium border-2 border-accent-blue hover:border-accent-mint"
               >
-                <Plus className="h-5 w-5 text-gray-400 mr-2" />
-                <span className="text-sm font-medium text-gray-600">Tambah Produk</span>
+                <Plus className="h-5 w-5 mr-2" />
+                <span className="text-sm font-medium">Tambah Produk</span>
               </button>
               <button
                 onClick={() => router.push('/admin/categories/new')}
-                className="flex items-center justify-center p-4 border-2 border-dashed border-gray-300 rounded-lg hover:border-green-500 hover:bg-green-50 transition-colors"
+                className="flex items-center justify-center p-4 bg-gradient-to-r from-accent-mint to-accent-yellow text-theme-primary rounded-xl hover:from-accent-yellow hover:to-accent-mint transition-all duration-300 shadow-soft hover:shadow-medium border-2 border-accent-mint hover:border-accent-yellow"
               >
-                <Plus className="h-5 w-5 text-gray-400 mr-2" />
-                <span className="text-sm font-medium text-gray-600">Tambah Kategori</span>
+                <Plus className="h-5 w-5 mr-2" />
+                <span className="text-sm font-medium">Tambah Kategori</span>
               </button>
               <button
                 onClick={() => router.push('/admin/promos/new')}
-                className="flex items-center justify-center p-4 border-2 border-dashed border-gray-300 rounded-lg hover:border-orange-500 hover:bg-orange-50 transition-colors"
+                className="flex items-center justify-center p-4 bg-gradient-to-r from-accent-yellow to-accent-peach text-theme-primary rounded-xl hover:from-accent-peach hover:to-accent-yellow transition-all duration-300 shadow-soft hover:shadow-medium border-2 border-accent-yellow hover:border-accent-peach"
               >
-                <Plus className="h-5 w-5 text-gray-400 mr-2" />
-                <span className="text-sm font-medium text-gray-600">Tambah Promo</span>
+                <Plus className="h-5 w-5 mr-2" />
+                <span className="text-sm font-medium">Tambah Promo</span>
               </button>
               <button
                 onClick={() => window.open('/', '_blank')}
-                className="flex items-center justify-center p-4 border-2 border-dashed border-gray-300 rounded-lg hover:border-orange-500 hover:bg-orange-50 transition-colors"
+                className="flex items-center justify-center p-4 bg-gradient-to-r from-accent-peach to-accent-mint text-theme-primary rounded-xl hover:from-accent-mint hover:to-accent-peach transition-all duration-300 shadow-soft hover:shadow-medium border-2 border-accent-peach hover:border-accent-mint"
               >
-                <Eye className="h-5 w-5 text-gray-400 mr-2" />
-                <span className="text-sm font-medium text-gray-600">Lihat Toko</span>
+                <Eye className="h-5 w-5 mr-2" />
+                <span className="text-sm font-medium">Lihat Toko</span>
               </button>
             </div>
           </div>
 
           {/* Recent Products */}
-          <div className="bg-white rounded-lg shadow p-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Produk Terbaru</h3>
+          <div className="card-theme p-6">
+            <h3 className="text-lg font-semibold text-theme-primary mb-4">Produk Terbaru</h3>
             <div className="space-y-3">
               {stats?.recentProducts.map((product) => (
-                <div key={product._id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                <div key={product._id} className="flex items-center justify-between p-3 bg-theme-primary bg-opacity-5 rounded-xl">
                   <div>
-                    <p className="font-medium text-gray-900 truncate">{product.name}</p>
-                    <p className="text-sm text-gray-600">{formatCurrency(product.price)}</p>
+                    <p className="font-medium text-theme-primary truncate">{product.name}</p>
+                    <p className="text-sm text-theme-primary opacity-75">{formatCurrency(product.price)}</p>
                   </div>
                   <div className="text-right">
-                    <p className="text-sm text-gray-600">Stok: {product.stock}</p>
-                    <p className="text-sm text-gray-500">{product.views} views</p>
+                    <p className="text-sm text-theme-primary opacity-75">Stok: {product.stock}</p>
+                    <p className="text-sm text-theme-primary opacity-60">{product.views} views</p>
                   </div>
                 </div>
               )) || (
-                <p className="text-gray-500 text-center py-4">Belum ada produk</p>
+                <p className="text-theme-primary opacity-75 text-center py-4">Belum ada produk</p>
+              )}
+            </div>
+          </div>
+        </div>
+
+        {/* Stock Overview */}
+        <div className="card-theme p-6 mb-8">
+          <h3 className="text-lg font-semibold text-theme-primary mb-4">Data Stok Produk</h3>
+          <div className="overflow-x-auto">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {stats?.stockData.map((product) => (
+                <div key={product._id} className="flex items-center justify-between p-4 bg-theme-primary bg-opacity-5 rounded-xl border border-theme-primary border-opacity-10">
+                  <div className="flex-1">
+                    <p className="font-medium text-theme-primary truncate">{product.name}</p>
+                    <p className="text-sm text-theme-primary opacity-75">{product.category}</p>
+                    <p className="text-sm text-theme-primary opacity-60">{formatCurrency(product.price)}</p>
+                  </div>
+                  <div className="text-right ml-4">
+                    <div className={`px-3 py-1 rounded-full text-sm font-medium ${
+                      product.stock > 10 
+                        ? 'bg-accent-mint text-theme-primary' 
+                        : product.stock > 0 
+                        ? 'bg-accent-yellow text-theme-primary' 
+                        : 'bg-red-100 text-red-800'
+                    }`}>
+                      Stok: {product.stock}
+                    </div>
+                  </div>
+                </div>
+              )) || (
+                <div className="col-span-full text-center py-8">
+                  <p className="text-theme-primary opacity-75">Belum ada data stok</p>
+                </div>
               )}
             </div>
           </div>
         </div>
 
         {/* Navigation Menu */}
-        <div className="bg-white rounded-lg shadow p-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">Menu Navigasi</h3>
+        <div className="card-theme p-6">
+          <h3 className="text-lg font-semibold text-theme-primary mb-4">Menu Navigasi</h3>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <button
               onClick={() => router.push('/admin/products')}
-              className="flex flex-col items-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
+              className="flex flex-col items-center p-4 border border-theme-primary border-opacity-20 rounded-xl hover:bg-accent-blue hover:bg-opacity-10 hover:border-accent-blue transition-all duration-300"
             >
-              <Package className="h-8 w-8 text-blue-600 mb-2" />
-              <span className="text-sm font-medium text-gray-900">Kelola Produk</span>
+              <div className="p-2 bg-accent-blue rounded-xl mb-2">
+                <Package className="h-6 w-6 text-on-accent" />
+              </div>
+              <span className="text-sm font-medium text-theme-primary">Kelola Produk</span>
             </button>
             <button
               onClick={() => router.push('/admin/categories')}
-              className="flex flex-col items-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
+              className="flex flex-col items-center p-4 border border-theme-primary border-opacity-20 rounded-xl hover:bg-accent-mint hover:bg-opacity-10 hover:border-accent-mint transition-all duration-300"
             >
-              <Tag className="h-8 w-8 text-green-600 mb-2" />
-              <span className="text-sm font-medium text-gray-900">Kelola Kategori</span>
+              <div className="p-2 bg-accent-mint rounded-xl mb-2">
+                <Tag className="h-6 w-6 text-on-accent" />
+              </div>
+              <span className="text-sm font-medium text-theme-primary">Kelola Kategori</span>
             </button>
             <button
               onClick={() => router.push('/admin/promos')}
-              className="flex flex-col items-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
+              className="flex flex-col items-center p-4 border border-theme-primary border-opacity-20 rounded-xl hover:bg-accent-yellow hover:bg-opacity-10 hover:border-accent-yellow transition-all duration-300"
             >
-              <DollarSign className="h-8 w-8 text-orange-600 mb-2" />
-              <span className="text-sm font-medium text-gray-900">Kelola Promo</span>
+              <div className="p-2 bg-accent-yellow rounded-xl mb-2">
+                <DollarSign className="h-6 w-6 text-theme-primary" />
+              </div>
+              <span className="text-sm font-medium text-theme-primary">Kelola Promo</span>
             </button>
             <button
               onClick={() => router.push('/admin/settings')}
-              className="flex flex-col items-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
+              className="flex flex-col items-center p-4 border border-theme-primary border-opacity-20 rounded-xl hover:bg-accent-lavender hover:bg-opacity-10 hover:border-accent-lavender transition-all duration-300"
             >
-              <Settings className="h-8 w-8 text-orange-600 mb-2" />
-              <span className="text-sm font-medium text-gray-900">Pengaturan</span>
+              <div className="p-2 bg-accent-lavender rounded-xl mb-2">
+                <Settings className="h-6 w-6 text-on-accent" />
+              </div>
+              <span className="text-sm font-medium text-theme-primary">Pengaturan</span>
             </button>
           </div>
         </div>

@@ -85,21 +85,21 @@ export default function NewCategoryPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-theme-main">
       {/* Header */}
-      <div className="bg-white shadow-sm border-b">
+      <div className="bg-theme-header shadow-soft border-b border-theme-primary border-opacity-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center space-x-4">
               <Link 
                 href="/admin/categories"
-                className="text-gray-600 hover:text-gray-900"
+                className="text-theme-primary hover:text-accent-peach transition-colors"
               >
                 ← Kembali ke Kategori
               </Link>
               <div className="flex items-center space-x-2">
-                <Tag className="h-6 w-6 text-green-600" />
-                <h1 className="text-xl font-semibold text-gray-900">Tambah Kategori Baru</h1>
+                <Tag className="h-6 w-6 text-accent-mint" />
+                <h1 className="text-xl font-semibold text-theme-primary">Tambah Kategori Baru</h1>
               </div>
             </div>
           </div>
@@ -109,12 +109,12 @@ export default function NewCategoryPage() {
       <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Basic Information */}
-          <div className="bg-white rounded-lg shadow-sm p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">Informasi Kategori</h2>
+          <div className="card-theme rounded-lg shadow-soft p-6">
+            <h2 className="text-lg font-semibold text-theme-primary mb-4">Informasi Kategori</h2>
             
             <div className="space-y-6">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-theme-primary mb-2">
                   Nama Kategori *
                 </label>
                 <input
@@ -122,17 +122,17 @@ export default function NewCategoryPage() {
                   name="name"
                   value={formData.name}
                   onChange={handleInputChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                  className="w-full px-3 py-2 border border-theme-primary border-opacity-30 rounded-lg focus:ring-2 focus:ring-accent-mint focus:border-accent-mint transition-all duration-200 bg-theme-main text-theme-primary"
                   placeholder="Masukkan nama kategori"
                   required
                 />
-                <p className="mt-1 text-xs text-gray-500">
+                <p className="mt-1 text-xs text-theme-primary opacity-60">
                   Slug akan dibuat otomatis berdasarkan nama kategori
                 </p>
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-theme-primary mb-2">
                   Deskripsi
                 </label>
                 <textarea
@@ -140,7 +140,7 @@ export default function NewCategoryPage() {
                   value={formData.description}
                   onChange={handleInputChange}
                   rows={4}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                  className="w-full px-3 py-2 border border-theme-primary border-opacity-30 rounded-lg focus:ring-2 focus:ring-accent-mint focus:border-accent-mint transition-all duration-200 bg-theme-main text-theme-primary"
                   placeholder="Masukkan deskripsi kategori (opsional)"
                 />
               </div>
@@ -148,18 +148,18 @@ export default function NewCategoryPage() {
           </div>
 
           {/* Category Image */}
-          <div className="bg-white rounded-lg shadow-sm p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">Gambar Kategori</h2>
+          <div className="card-theme rounded-lg shadow-soft p-6">
+            <h2 className="text-lg font-semibold text-theme-primary mb-4">Gambar Kategori</h2>
             
             {!image ? (
               <div className="mb-4">
-                <label className="flex flex-col items-center justify-center w-full h-48 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100">
+                <label className="flex flex-col items-center justify-center w-full h-48 border-2 border-theme-primary border-opacity-30 border-dashed rounded-lg cursor-pointer bg-theme-main hover:bg-accent-mint hover:bg-opacity-5 transition-all duration-300">
                   <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                    <Upload className="w-10 h-10 mb-3 text-gray-400" />
-                    <p className="mb-2 text-sm text-gray-500">
+                    <Upload className="w-10 h-10 mb-3 text-theme-primary opacity-60" />
+                    <p className="mb-2 text-sm text-theme-primary opacity-75">
                       <span className="font-semibold">Klik untuk upload</span> atau drag and drop
                     </p>
-                    <p className="text-xs text-gray-500">PNG, JPG atau JPEG (MAX. 5MB)</p>
+                    <p className="text-xs text-theme-primary opacity-50">PNG, JPG atau JPEG (MAX. 5MB)</p>
                   </div>
                   <input
                     type="file"
@@ -189,12 +189,12 @@ export default function NewCategoryPage() {
 
             {imageLoading && (
               <div className="flex items-center justify-center py-4">
-                <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-green-600"></div>
-                <span className="ml-2 text-sm text-gray-600">Mengupload gambar...</span>
+                <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-accent-mint"></div>
+                <span className="ml-2 text-sm text-theme-primary opacity-75">Mengupload gambar...</span>
               </div>
             )}
 
-            <p className="mt-2 text-xs text-gray-500">
+            <p className="mt-2 text-xs text-theme-primary opacity-60">
               Gambar kategori akan ditampilkan di halaman kategori. Ukuran yang disarankan: 400x300 piksel.
             </p>
           </div>
@@ -203,18 +203,18 @@ export default function NewCategoryPage() {
           <div className="flex items-center justify-end space-x-4">
             <Link
               href="/admin/categories"
-              className="px-6 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50"
+              className="px-6 py-2 bg-theme-primary bg-opacity-10 text-theme-primary border border-theme-primary border-opacity-50 rounded-lg hover:bg-theme-primary hover:bg-opacity-20 transition-all duration-200"
             >
               Batal
             </Link>
             <button
               type="submit"
               disabled={loading || imageLoading}
-              className="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2"
+              className="px-6 py-2 bg-gradient-to-r from-accent-mint to-accent-blue text-on-accent rounded-lg hover:shadow-lg hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 flex items-center space-x-2 transition-all duration-200"
             >
               {loading ? (
                 <>
-                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-on-accent"></div>
                   <span>Menyimpan...</span>
                 </>
               ) : (

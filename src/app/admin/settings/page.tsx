@@ -221,20 +221,20 @@ export default function AdminSettingsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-theme-main">
       {/* Header */}
-      <header className="bg-white shadow-sm border-b">
+      <header className="bg-theme-header shadow-soft border-b border-theme-primary border-opacity-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center">
               <button
                 onClick={() => router.back()}
-                className="mr-4 p-2 text-gray-400 hover:text-gray-600 transition-colors"
+                className="mr-4 p-2 text-on-accent text-opacity-60 hover:text-accent-peach transition-colors"
               >
                 <ArrowLeft className="h-5 w-5" />
               </button>
-              <Settings className="h-6 w-6 text-blue-600 mr-3" />
-              <h1 className="text-xl font-semibold text-gray-900">Pengaturan Admin</h1>
+              <Settings className="h-6 w-6 text-accent-peach mr-3" />
+              <h1 className="text-xl font-semibold text-on-accent">Pengaturan Admin</h1>
             </div>
           </div>
         </div>
@@ -245,8 +245,8 @@ export default function AdminSettingsPage() {
         {message && (
           <div className={`mb-6 p-4 rounded-lg flex items-center ${
             message.type === 'success' 
-              ? 'bg-green-50 text-green-800 border border-green-200' 
-              : 'bg-red-50 text-red-800 border border-red-200'
+              ? 'bg-accent-mint bg-opacity-20 text-accent-mint border border-accent-mint border-opacity-30' 
+              : 'bg-red-100 text-red-700 border border-red-200'
           }`}>
             {message.type === 'success' ? (
               <CheckCircle className="h-5 w-5 mr-2" />
@@ -258,15 +258,15 @@ export default function AdminSettingsPage() {
         )}
 
         {/* Tabs */}
-        <div className="bg-white rounded-lg shadow">
-          <div className="border-b border-gray-200">
+        <div className="card-theme rounded-lg shadow-soft">
+          <div className="border-b border-theme-primary border-opacity-10">
             <nav className="-mb-px flex">
               <button
                 onClick={() => setActiveTab('password')}
                 className={`py-4 px-6 text-sm font-medium border-b-2 transition-colors ${
                   activeTab === 'password'
-                    ? 'border-blue-500 text-blue-600'
-                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                    ? 'border-accent-peach text-accent-peach'
+                    : 'border-transparent text-theme-primary text-opacity-60 hover:text-accent-peach hover:border-accent-peach hover:border-opacity-50'
                 }`}
               >
                 <Lock className="h-4 w-4 inline mr-2" />
@@ -276,8 +276,8 @@ export default function AdminSettingsPage() {
                 onClick={() => setActiveTab('admins')}
                 className={`py-4 px-6 text-sm font-medium border-b-2 transition-colors ${
                   activeTab === 'admins'
-                    ? 'border-blue-500 text-blue-600'
-                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                    ? 'border-accent-peach text-accent-peach'
+                    : 'border-transparent text-theme-primary text-opacity-60 hover:text-accent-peach hover:border-accent-peach hover:border-opacity-50'
                 }`}
               >
                 <User className="h-4 w-4 inline mr-2" />
@@ -290,11 +290,11 @@ export default function AdminSettingsPage() {
             {/* Password Change Tab */}
             {activeTab === 'password' && (
               <div className="max-w-md">
-                <h3 className="text-lg font-medium text-gray-900 mb-4">Ubah Password Admin</h3>
+                <h3 className="text-lg font-medium text-theme-primary mb-4">Ubah Password Admin</h3>
                 <form onSubmit={handlePasswordChange} className="space-y-4">
                   {/* Current Password */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-theme-primary mb-2">
                       Password Saat Ini
                     </label>
                     <div className="relative">
@@ -302,8 +302,8 @@ export default function AdminSettingsPage() {
                         type={showPasswords.current ? 'text' : 'password'}
                         value={passwordForm.currentPassword}
                         onChange={(e) => setPasswordForm(prev => ({ ...prev, currentPassword: e.target.value }))}
-                        className={`block w-full pr-10 px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
-                          passwordErrors.currentPassword ? 'border-red-500' : 'border-gray-300'
+                        className={`block w-full pr-10 px-3 py-2 border rounded-lg focus:ring-2 focus:ring-accent-peach focus:border-accent-peach bg-theme-main ${
+                          passwordErrors.currentPassword ? 'border-red-500' : 'border-theme-primary border-opacity-20'
                         }`}
                         placeholder="Masukkan password saat ini"
                       />
@@ -313,9 +313,9 @@ export default function AdminSettingsPage() {
                         className="absolute inset-y-0 right-0 pr-3 flex items-center"
                       >
                         {showPasswords.current ? (
-                          <EyeOff className="h-4 w-4 text-gray-400" />
+                          <EyeOff className="h-4 w-4 text-theme-primary text-opacity-50" />
                         ) : (
-                          <Eye className="h-4 w-4 text-gray-400" />
+                          <Eye className="h-4 w-4 text-theme-primary text-opacity-50" />
                         )}
                       </button>
                     </div>
@@ -326,7 +326,7 @@ export default function AdminSettingsPage() {
 
                   {/* New Password */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-theme-primary mb-2">
                       Password Baru
                     </label>
                     <div className="relative">
@@ -334,8 +334,8 @@ export default function AdminSettingsPage() {
                         type={showPasswords.new ? 'text' : 'password'}
                         value={passwordForm.newPassword}
                         onChange={(e) => setPasswordForm(prev => ({ ...prev, newPassword: e.target.value }))}
-                        className={`block w-full pr-10 px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
-                          passwordErrors.newPassword ? 'border-red-500' : 'border-gray-300'
+                        className={`block w-full pr-10 px-3 py-2 border rounded-lg focus:ring-2 focus:ring-accent-peach focus:border-accent-peach bg-theme-main ${
+                          passwordErrors.newPassword ? 'border-red-500' : 'border-theme-primary border-opacity-20'
                         }`}
                         placeholder="Masukkan password baru"
                       />
@@ -345,9 +345,9 @@ export default function AdminSettingsPage() {
                         className="absolute inset-y-0 right-0 pr-3 flex items-center"
                       >
                         {showPasswords.new ? (
-                          <EyeOff className="h-4 w-4 text-gray-400" />
+                          <EyeOff className="h-4 w-4 text-theme-primary text-opacity-50" />
                         ) : (
-                          <Eye className="h-4 w-4 text-gray-400" />
+                          <Eye className="h-4 w-4 text-theme-primary text-opacity-50" />
                         )}
                       </button>
                     </div>
@@ -358,7 +358,7 @@ export default function AdminSettingsPage() {
 
                   {/* Confirm Password */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-theme-primary mb-2">
                       Konfirmasi Password Baru
                     </label>
                     <div className="relative">
@@ -366,8 +366,8 @@ export default function AdminSettingsPage() {
                         type={showPasswords.confirm ? 'text' : 'password'}
                         value={passwordForm.confirmPassword}
                         onChange={(e) => setPasswordForm(prev => ({ ...prev, confirmPassword: e.target.value }))}
-                        className={`block w-full pr-10 px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
-                          passwordErrors.confirmPassword ? 'border-red-500' : 'border-gray-300'
+                        className={`block w-full pr-10 px-3 py-2 border rounded-lg focus:ring-2 focus:ring-accent-peach focus:border-accent-peach bg-theme-main ${
+                          passwordErrors.confirmPassword ? 'border-red-500' : 'border-theme-primary border-opacity-20'
                         }`}
                         placeholder="Konfirmasi password baru"
                       />
@@ -377,9 +377,9 @@ export default function AdminSettingsPage() {
                         className="absolute inset-y-0 right-0 pr-3 flex items-center"
                       >
                         {showPasswords.confirm ? (
-                          <EyeOff className="h-4 w-4 text-gray-400" />
+                          <EyeOff className="h-4 w-4 text-theme-primary text-opacity-50" />
                         ) : (
-                          <Eye className="h-4 w-4 text-gray-400" />
+                          <Eye className="h-4 w-4 text-theme-primary text-opacity-50" />
                         )}
                       </button>
                     </div>
@@ -391,7 +391,7 @@ export default function AdminSettingsPage() {
                   <button
                     type="submit"
                     disabled={loading}
-                    className="w-full flex items-center justify-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                    className="w-full flex items-center justify-center px-4 py-2 bg-gradient-to-r from-accent-peach to-accent-mint text-on-accent rounded-lg hover:from-accent-mint hover:to-accent-yellow disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 shadow-soft hover:shadow-medium"
                   >
                     {loading ? (
                       <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
@@ -408,10 +408,10 @@ export default function AdminSettingsPage() {
             {activeTab === 'admins' && (
               <div>
                 <div className="flex items-center justify-between mb-6">
-                  <h3 className="text-lg font-medium text-gray-900">Kelola Admin</h3>
+                  <h3 className="text-lg font-medium text-theme-primary">Kelola Admin</h3>
                   <button
                     onClick={() => setShowNewAdminForm(!showNewAdminForm)}
-                    className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                    className="flex items-center px-4 py-2 bg-gradient-to-r from-accent-peach to-accent-mint text-on-accent rounded-lg hover:from-accent-mint hover:to-accent-yellow transition-all duration-300 shadow-soft hover:shadow-medium"
                   >
                     <Plus className="h-4 w-4 mr-2" />
                     Tambah Admin
@@ -420,19 +420,19 @@ export default function AdminSettingsPage() {
 
                 {/* New Admin Form */}
                 {showNewAdminForm && (
-                  <div className="bg-gray-50 rounded-lg p-6 mb-6">
-                    <h4 className="text-md font-medium text-gray-900 mb-4">Tambah Admin Baru</h4>
+                  <div className="card-theme rounded-lg p-6 mb-6 shadow-soft">
+                    <h4 className="text-md font-medium text-theme-primary mb-4">Tambah Admin Baru</h4>
                     <form onSubmit={handleCreateAdmin} className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                        <label className="block text-sm font-medium text-theme-primary mb-2">
                           Username *
                         </label>
                         <input
                           type="text"
                           value={newAdminForm.username}
                           onChange={(e) => setNewAdminForm(prev => ({ ...prev, username: e.target.value }))}
-                          className={`block w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
-                            newAdminErrors.username ? 'border-red-500' : 'border-gray-300'
+                          className={`block w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-accent-peach focus:border-accent-peach bg-theme-main ${
+                            newAdminErrors.username ? 'border-red-500' : 'border-theme-primary border-opacity-20'
                           }`}
                           placeholder="Username admin"
                         />
@@ -442,15 +442,15 @@ export default function AdminSettingsPage() {
                       </div>
 
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                        <label className="block text-sm font-medium text-theme-primary mb-2">
                           Email
                         </label>
                         <input
                           type="email"
                           value={newAdminForm.email}
                           onChange={(e) => setNewAdminForm(prev => ({ ...prev, email: e.target.value }))}
-                          className={`block w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
-                            newAdminErrors.email ? 'border-red-500' : 'border-gray-300'
+                          className={`block w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-accent-peach focus:border-accent-peach bg-theme-main ${
+                            newAdminErrors.email ? 'border-red-500' : 'border-theme-primary border-opacity-20'
                           }`}
                           placeholder="email@example.com (opsional)"
                         />
@@ -460,7 +460,7 @@ export default function AdminSettingsPage() {
                       </div>
 
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                        <label className="block text-sm font-medium text-theme-primary mb-2">
                           Password *
                         </label>
                         <div className="relative">
@@ -468,8 +468,8 @@ export default function AdminSettingsPage() {
                             type={showPasswords.newAdmin ? 'text' : 'password'}
                             value={newAdminForm.password}
                             onChange={(e) => setNewAdminForm(prev => ({ ...prev, password: e.target.value }))}
-                            className={`block w-full pr-10 px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
-                              newAdminErrors.password ? 'border-red-500' : 'border-gray-300'
+                            className={`block w-full pr-10 px-3 py-2 border rounded-lg focus:ring-2 focus:ring-accent-peach focus:border-accent-peach bg-theme-main ${
+                              newAdminErrors.password ? 'border-red-500' : 'border-theme-primary border-opacity-20'
                             }`}
                             placeholder="Password admin"
                           />
@@ -479,9 +479,9 @@ export default function AdminSettingsPage() {
                             className="absolute inset-y-0 right-0 pr-3 flex items-center"
                           >
                             {showPasswords.newAdmin ? (
-                              <EyeOff className="h-4 w-4 text-gray-400" />
+                              <EyeOff className="h-4 w-4 text-theme-primary text-opacity-50" />
                             ) : (
-                              <Eye className="h-4 w-4 text-gray-400" />
+                              <Eye className="h-4 w-4 text-theme-primary text-opacity-50" />
                             )}
                           </button>
                         </div>
@@ -491,7 +491,7 @@ export default function AdminSettingsPage() {
                       </div>
 
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                        <label className="block text-sm font-medium text-theme-primary mb-2">
                           Konfirmasi Password *
                         </label>
                         <div className="relative">
@@ -499,8 +499,8 @@ export default function AdminSettingsPage() {
                             type={showPasswords.confirmNewAdmin ? 'text' : 'password'}
                             value={newAdminForm.confirmPassword}
                             onChange={(e) => setNewAdminForm(prev => ({ ...prev, confirmPassword: e.target.value }))}
-                            className={`block w-full pr-10 px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
-                              newAdminErrors.confirmPassword ? 'border-red-500' : 'border-gray-300'
+                            className={`block w-full pr-10 px-3 py-2 border rounded-lg focus:ring-2 focus:ring-accent-peach focus:border-accent-peach bg-theme-main ${
+                              newAdminErrors.confirmPassword ? 'border-red-500' : 'border-theme-primary border-opacity-20'
                             }`}
                             placeholder="Konfirmasi password"
                           />
@@ -510,9 +510,9 @@ export default function AdminSettingsPage() {
                             className="absolute inset-y-0 right-0 pr-3 flex items-center"
                           >
                             {showPasswords.confirmNewAdmin ? (
-                              <EyeOff className="h-4 w-4 text-gray-400" />
+                              <EyeOff className="h-4 w-4 text-theme-primary text-opacity-50" />
                             ) : (
-                              <Eye className="h-4 w-4 text-gray-400" />
+                              <Eye className="h-4 w-4 text-theme-primary text-opacity-50" />
                             )}
                           </button>
                         </div>
@@ -525,7 +525,7 @@ export default function AdminSettingsPage() {
                         <button
                           type="submit"
                           disabled={loading}
-                          className="flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                          className="flex items-center px-4 py-2 bg-gradient-to-r from-accent-mint to-accent-yellow text-on-accent rounded-lg hover:from-accent-yellow hover:to-accent-peach disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 shadow-soft hover:shadow-medium"
                         >
                           {loading ? (
                             <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
@@ -541,7 +541,7 @@ export default function AdminSettingsPage() {
                             setNewAdminForm({ username: '', password: '', confirmPassword: '', email: '' });
                             setNewAdminErrors({});
                           }}
-                          className="px-4 py-2 text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+                          className="px-4 py-2 bg-theme-primary bg-opacity-10 text-theme-primary border border-theme-primary border-opacity-50 rounded-lg hover:bg-theme-primary hover:bg-opacity-20 transition-colors"
                         >
                           Batal
                         </button>
@@ -551,14 +551,14 @@ export default function AdminSettingsPage() {
                 )}
 
                 {/* Admin List */}
-                <div className="bg-white border border-gray-200 rounded-lg overflow-hidden">
-                  <div className="px-6 py-4 border-b border-gray-200 bg-gray-50">
-                    <h4 className="text-sm font-medium text-gray-900">Daftar Admin</h4>
+                <div className="card-theme border border-theme-primary border-opacity-10 rounded-lg overflow-hidden shadow-soft">
+                  <div className="px-6 py-4 border-b border-theme-primary border-opacity-10 bg-theme-primary bg-opacity-5">
+                    <h4 className="text-sm font-medium text-theme-primary">Daftar Admin</h4>
                   </div>
-                  <div className="divide-y divide-gray-200">
+                  <div className="divide-y divide-theme-primary divide-opacity-10">
                     {admins.length === 0 ? (
-                      <div className="px-6 py-8 text-center text-gray-500">
-                        <Shield className="h-12 w-12 mx-auto text-gray-300 mb-4" />
+                      <div className="px-6 py-8 text-center text-theme-primary text-opacity-60">
+                        <Shield className="h-12 w-12 mx-auto text-theme-primary text-opacity-30 mb-4" />
                         <p>Belum ada admin yang terdaftar</p>
                       </div>
                     ) : (
@@ -566,13 +566,13 @@ export default function AdminSettingsPage() {
                         <div key={admin._id} className="px-6 py-4 flex items-center justify-between">
                           <div className="flex items-center">
                             <div className="flex-shrink-0">
-                              <div className="h-10 w-10 bg-blue-100 rounded-full flex items-center justify-center">
-                                <User className="h-5 w-5 text-blue-600" />
+                              <div className="h-10 w-10 bg-accent-peach bg-opacity-20 rounded-full flex items-center justify-center">
+                                <User className="h-5 w-5 text-accent-peach" />
                               </div>
                             </div>
                             <div className="ml-4">
                               <div className="flex items-center">
-                                <p className="text-sm font-medium text-gray-900">{admin.username}</p>
+                                <p className="text-sm font-medium text-theme-primary">{admin.username}</p>
                                 {!admin.isActive && (
                                   <span className="ml-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
                                     Nonaktif
@@ -580,9 +580,9 @@ export default function AdminSettingsPage() {
                                 )}
                               </div>
                               {admin.email && (
-                                <p className="text-sm text-gray-500">{admin.email}</p>
+                                <p className="text-sm text-theme-primary text-opacity-60">{admin.email}</p>
                               )}
-                              <p className="text-xs text-gray-400">
+                              <p className="text-xs text-theme-primary text-opacity-40">
                                 Dibuat: {new Date(admin.createdAt).toLocaleDateString('id-ID')}
                                 {admin.lastLogin && (
                                   <span className="ml-2">
@@ -595,7 +595,7 @@ export default function AdminSettingsPage() {
                           <div className="flex items-center space-x-2">
                             <button
                               onClick={() => handleDeleteAdmin(admin._id, admin.username)}
-                              className="p-2 text-red-600 hover:text-red-700 hover:bg-red-50 rounded-lg transition-colors"
+                              className="p-2 text-red-600 hover:text-red-700 hover:bg-red-50 rounded-lg transition-colors shadow-soft hover:shadow-medium"
                               title="Hapus admin"
                             >
                               <Trash2 className="h-4 w-4" />

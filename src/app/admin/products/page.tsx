@@ -158,26 +158,26 @@ export default function AdminProductsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-theme-main">
       {/* Header */}
-      <div className="bg-white shadow-sm border-b">
+      <div className="bg-theme-header shadow-soft border-b border-theme-primary border-opacity-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center space-x-4">
               <Link 
                 href="/admin/dashboard"
-                className="text-gray-600 hover:text-gray-900"
+                className="text-on-accent hover:text-accent-peach transition-colors"
               >
                 ← Kembali ke Dashboard
               </Link>
               <div className="flex items-center space-x-2">
-                <Package className="h-6 w-6 text-blue-600" />
-                <h1 className="text-xl font-semibold text-gray-900">Kelola Produk</h1>
+                <Package className="h-6 w-6 text-accent-peach" />
+                <h1 className="text-xl font-semibold text-on-accent">Kelola Produk</h1>
               </div>
             </div>
             <Link
               href="/admin/products/new"
-              className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 flex items-center space-x-2"
+              className="bg-gradient-to-r from-accent-peach to-accent-mint text-on-accent px-4 py-2 rounded-lg hover:from-accent-mint hover:to-accent-yellow transition-all duration-300 flex items-center space-x-2 shadow-soft hover:shadow-medium"
             >
               <Plus className="h-4 w-4" />
               <span>Tambah Produk</span>
@@ -188,17 +188,17 @@ export default function AdminProductsPage() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Filters */}
-        <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
+        <div className="card-theme rounded-lg shadow-soft p-6 mb-6">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             {/* Search */}
             <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-theme-primary text-opacity-50 h-4 w-4" />
               <input
                 type="text"
                 placeholder="Cari produk..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10 pr-4 py-2 w-full border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="pl-10 pr-4 py-2 w-full border border-theme-primary border-opacity-20 rounded-lg focus:ring-2 focus:ring-accent-peach focus:border-accent-peach bg-theme-main text-theme-primary transition-all duration-200"
               />
             </div>
 
@@ -206,7 +206,7 @@ export default function AdminProductsPage() {
             <select
               value={selectedCategory}
               onChange={(e) => setSelectedCategory(e.target.value)}
-              className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="px-4 py-2 border border-theme-primary border-opacity-20 rounded-lg focus:ring-2 focus:ring-accent-peach focus:border-accent-peach bg-theme-main text-theme-primary transition-all duration-200"
             >
               <option value="">Semua Kategori</option>
               {categories.map((category) => (
@@ -220,7 +220,7 @@ export default function AdminProductsPage() {
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
-              className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="px-4 py-2 border border-theme-primary border-opacity-20 rounded-lg focus:ring-2 focus:ring-accent-peach focus:border-accent-peach bg-theme-main text-theme-primary transition-all duration-200"
             >
               <option value="all">Semua Status</option>
               <option value="published">Dipublikasi</option>
@@ -235,7 +235,7 @@ export default function AdminProductsPage() {
                 setStatusFilter('all');
                 setCurrentPage(1);
               }}
-              className="px-4 py-2 text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50"
+              className="px-4 py-2 text-theme-primary border border-theme-primary border-opacity-20 rounded-lg hover:bg-theme-primary hover:bg-opacity-5 transition-colors"
             >
               Reset Filter
             </button>
@@ -243,43 +243,43 @@ export default function AdminProductsPage() {
         </div>
 
         {/* Products Table */}
-        <div className="bg-white rounded-lg shadow-sm overflow-hidden">
+        <div className="card-theme rounded-lg shadow-soft overflow-hidden">
           {loading ? (
             <div className="flex items-center justify-center py-12">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-accent-peach"></div>
             </div>
           ) : (
             <>
               <div className="overflow-x-auto">
-                <table className="min-w-full divide-y divide-gray-200">
-                  <thead className="bg-gray-50">
+                <table className="min-w-full divide-y divide-theme-primary divide-opacity-10">
+                  <thead className="bg-theme-primary bg-opacity-5">
                     <tr>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th className="px-6 py-3 text-left text-xs font-medium text-theme-primary text-opacity-60 uppercase tracking-wider">
                         Produk
                       </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th className="px-6 py-3 text-left text-xs font-medium text-theme-primary text-opacity-60 uppercase tracking-wider">
                         Kategori
                       </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th className="px-6 py-3 text-left text-xs font-medium text-theme-primary text-opacity-60 uppercase tracking-wider">
                         Harga
                       </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th className="px-6 py-3 text-left text-xs font-medium text-theme-primary text-opacity-60 uppercase tracking-wider">
                         Stok
                       </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th className="px-6 py-3 text-left text-xs font-medium text-theme-primary text-opacity-60 uppercase tracking-wider">
                         Views
                       </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th className="px-6 py-3 text-left text-xs font-medium text-theme-primary text-opacity-60 uppercase tracking-wider">
                         Status
                       </th>
-                      <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th className="px-6 py-3 text-right text-xs font-medium text-theme-primary text-opacity-60 uppercase tracking-wider">
                         Aksi
                       </th>
                     </tr>
                   </thead>
-                  <tbody className="bg-white divide-y divide-gray-200">
+                  <tbody className="divide-y divide-theme-primary divide-opacity-10">
                     {products.map((product) => (
-                      <tr key={product._id} className="hover:bg-gray-50">
+                      <tr key={product._id} className="hover:bg-theme-primary hover:bg-opacity-5 transition-colors">
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div className="flex items-center">
                             <div className="flex-shrink-0 h-12 w-12">
@@ -290,25 +290,25 @@ export default function AdminProductsPage() {
                               />
                             </div>
                             <div className="ml-4">
-                              <div className="text-sm font-medium text-gray-900">
+                              <div className="text-sm font-medium text-theme-primary">
                                 {product.name}
                               </div>
-                              <div className="text-sm text-gray-500">
+                              <div className="text-sm text-theme-primary text-opacity-60">
                                 SKU: {product.sku}
                               </div>
                             </div>
                           </div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <span className="text-sm text-gray-900">
+                          <span className="text-sm text-theme-primary">
                             {product.category.name}
                           </span>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="text-sm text-gray-900">
+                          <div className="text-sm text-theme-primary">
                             {formatPrice(product.price)}
                             {product.priceAfterDiscount && (
-                              <div className="text-xs text-green-600">
+                              <div className="text-xs text-accent-mint">
                                 Diskon: {formatPrice(product.priceAfterDiscount)}
                               </div>
                             )}
@@ -316,21 +316,21 @@ export default function AdminProductsPage() {
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
                           <span className={`text-sm ${
-                            product.stock < 5 ? 'text-red-600' : 'text-gray-900'
+                            product.stock < 5 ? 'text-red-500' : 'text-theme-primary'
                           }`}>
                             {product.stock}
                           </span>
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-theme-primary">
                           {product.views}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
                           <button
                             onClick={() => togglePublishStatus(product._id, product.isPublished)}
-                            className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                            className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium transition-colors ${
                               product.isPublished
-                                ? 'bg-green-100 text-green-800'
-                                : 'bg-gray-100 text-gray-800'
+                                ? 'bg-accent-mint bg-opacity-20 text-accent-mint'
+                                : 'bg-theme-primary bg-opacity-10 text-theme-primary text-opacity-60'
                             }`}
                           >
                             {product.isPublished ? (
@@ -344,13 +344,13 @@ export default function AdminProductsPage() {
                           <div className="flex items-center justify-end space-x-2">
                             <Link
                               href={`/admin/products/${product._id}/edit`}
-                              className="text-blue-600 hover:text-blue-900"
+                              className="text-accent-peach hover:text-accent-yellow transition-colors p-1 rounded"
                             >
                               <Edit className="h-4 w-4" />
                             </Link>
                             <button
                               onClick={() => handleDelete(product._id)}
-                              className="text-red-600 hover:text-red-900"
+                              className="text-red-500 hover:text-red-700 transition-colors p-1 rounded"
                             >
                               <Trash2 className="h-4 w-4" />
                             </button>
@@ -364,45 +364,45 @@ export default function AdminProductsPage() {
 
               {/* Pagination */}
               {pagination && pagination.totalPages > 1 && (
-                <div className="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6">
+                <div className="bg-theme-main px-4 py-3 flex items-center justify-between border-t border-theme-primary border-opacity-10 sm:px-6">
                   <div className="flex-1 flex justify-between sm:hidden">
                     <button
                       onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
                       disabled={currentPage === 1}
-                      className="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50"
+                      className="relative inline-flex items-center px-4 py-2 border border-theme-primary border-opacity-20 text-sm font-medium rounded-md text-theme-primary bg-theme-main hover:bg-theme-primary hover:bg-opacity-5 disabled:opacity-50 transition-colors"
                     >
                       Previous
                     </button>
                     <button
                       onClick={() => setCurrentPage(Math.min(pagination.totalPages, currentPage + 1))}
                       disabled={currentPage === pagination.totalPages}
-                      className="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50"
+                      className="ml-3 relative inline-flex items-center px-4 py-2 border border-theme-primary border-opacity-20 text-sm font-medium rounded-md text-theme-primary bg-theme-main hover:bg-theme-primary hover:bg-opacity-5 disabled:opacity-50 transition-colors"
                     >
                       Next
                     </button>
                   </div>
                   <div className="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
                     <div>
-                      <p className="text-sm text-gray-700">
+                      <p className="text-sm text-theme-primary text-opacity-75">
                         Menampilkan{' '}
-                        <span className="font-medium">
+                        <span className="font-medium text-theme-primary">
                           {(currentPage - 1) * 10 + 1}
                         </span>{' '}
                         sampai{' '}
-                        <span className="font-medium">
+                        <span className="font-medium text-theme-primary">
                           {Math.min(currentPage * 10, pagination.totalProducts)}
                         </span>{' '}
                         dari{' '}
-                        <span className="font-medium">{pagination.totalProducts}</span>{' '}
+                        <span className="font-medium text-theme-primary">{pagination.totalProducts}</span>{' '}
                         produk
                       </p>
                     </div>
                     <div>
-                      <nav className="relative z-0 inline-flex rounded-md shadow-sm -space-x-px">
+                      <nav className="relative z-0 inline-flex rounded-md shadow-soft -space-x-px">
                         <button
                           onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
                           disabled={currentPage === 1}
-                          className="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50"
+                          className="relative inline-flex items-center px-2 py-2 rounded-l-md border border-theme-primary border-opacity-20 bg-theme-main text-sm font-medium text-theme-primary text-opacity-60 hover:bg-theme-primary hover:bg-opacity-5 disabled:opacity-50 transition-colors"
                         >
                           <ChevronLeft className="h-5 w-5" />
                         </button>
@@ -415,16 +415,16 @@ export default function AdminProductsPage() {
                           .map((page, index, array) => (
                             <div key={page}>
                               {index > 0 && array[index - 1] !== page - 1 && (
-                                <span className="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700">
+                                <span className="relative inline-flex items-center px-4 py-2 border border-theme-primary border-opacity-20 bg-theme-main text-sm font-medium text-theme-primary text-opacity-60">
                                   ...
                                 </span>
                               )}
                               <button
                                 onClick={() => setCurrentPage(page)}
-                                className={`relative inline-flex items-center px-4 py-2 border text-sm font-medium ${
+                                className={`relative inline-flex items-center px-4 py-2 border text-sm font-medium transition-colors ${
                                   currentPage === page
-                                    ? 'z-10 bg-blue-50 border-blue-500 text-blue-600'
-                                    : 'bg-white border-gray-300 text-gray-500 hover:bg-gray-50'
+                                    ? 'z-10 bg-accent-peach bg-opacity-10 border-accent-peach text-accent-peach'
+                                    : 'bg-theme-main border-theme-primary border-opacity-20 text-theme-primary text-opacity-60 hover:bg-theme-primary hover:bg-opacity-5'
                                 }`}
                               >
                                 {page}
@@ -435,7 +435,7 @@ export default function AdminProductsPage() {
                         <button
                           onClick={() => setCurrentPage(Math.min(pagination.totalPages, currentPage + 1))}
                           disabled={currentPage === pagination.totalPages}
-                          className="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50"
+                          className="relative inline-flex items-center px-2 py-2 rounded-r-md border border-theme-primary border-opacity-20 bg-theme-main text-sm font-medium text-theme-primary text-opacity-60 hover:bg-theme-primary hover:bg-opacity-5 disabled:opacity-50 transition-colors"
                         >
                           <ChevronRight className="h-5 w-5" />
                         </button>

@@ -144,26 +144,27 @@ export default function AdminPromosPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-theme-main">
       {/* Header */}
-      <div className="bg-white shadow-sm border-b">
+      <div className="bg-theme-header shadow-soft border-b border-theme-primary border-opacity-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center space-x-4">
               <Link 
                 href="/admin/dashboard"
-                className="text-gray-600 hover:text-gray-900"
+                className="text-on-accent hover:text-accent-peach transition-colors duration-200 flex items-center space-x-2"
               >
-                ← Kembali ke Dashboard
+                <ChevronLeft className="h-4 w-4" />
+                <span>Kembali ke Dashboard</span>
               </Link>
               <div className="flex items-center space-x-2">
-                <DollarSign className="h-6 w-6 text-orange-600" />
-                <h1 className="text-xl font-semibold text-gray-900">Kelola Promo</h1>
+                <DollarSign className="h-6 w-6 text-accent-peach" />
+                <h1 className="text-xl font-semibold text-on-accent">Kelola Promo</h1>
               </div>
             </div>
             <Link
               href="/admin/promos/new"
-              className="bg-orange-600 text-white px-4 py-2 rounded-lg hover:bg-orange-700 flex items-center space-x-2"
+              className="bg-gradient-to-r from-accent-peach to-accent-mint text-on-accent px-4 py-2 rounded-lg hover:from-accent-mint hover:to-accent-yellow flex items-center space-x-2 transition-all duration-300 shadow-soft hover:shadow-medium"
             >
               <Plus className="h-4 w-4" />
               <span>Tambah Promo</span>
@@ -174,17 +175,17 @@ export default function AdminPromosPage() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Filters */}
-        <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
+        <div className="card-theme rounded-lg shadow-soft p-6 mb-6 border border-theme-primary border-opacity-10">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {/* Search */}
             <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-theme-primary text-opacity-50 h-4 w-4" />
               <input
                 type="text"
                 placeholder="Cari promo..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10 pr-4 py-2 w-full border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                className="pl-10 pr-4 py-2 w-full border border-theme-primary border-opacity-20 rounded-lg focus:ring-2 focus:ring-accent-peach focus:border-accent-peach bg-theme-main text-theme-primary"
               />
             </div>
 
@@ -192,7 +193,7 @@ export default function AdminPromosPage() {
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
-              className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+              className="px-4 py-2 border border-theme-primary border-opacity-20 rounded-lg focus:ring-2 focus:ring-accent-peach focus:border-accent-peach bg-theme-main text-theme-primary"
             >
               <option value="all">Semua Status</option>
               <option value="active">Aktif</option>
@@ -207,7 +208,7 @@ export default function AdminPromosPage() {
                 setStatusFilter('all');
                 setCurrentPage(1);
               }}
-              className="px-4 py-2 text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50"
+              className="px-4 py-2 text-theme-primary border border-theme-primary border-opacity-20 rounded-lg hover:bg-theme-primary hover:bg-opacity-5 transition-colors duration-200"
             >
               Reset Filter
             </button>

@@ -87,26 +87,26 @@ export default function AdminCategoriesPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-theme-main">
       {/* Header */}
-      <div className="bg-white shadow-sm border-b">
+      <div className="bg-theme-header shadow-soft border-b border-theme-primary border-opacity-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center space-x-4">
               <Link 
                 href="/admin/dashboard"
-                className="text-gray-600 hover:text-gray-900"
+                className="text-on-accent hover:text-accent-peach transition-colors"
               >
                 ← Kembali ke Dashboard
               </Link>
               <div className="flex items-center space-x-2">
-                <Tag className="h-6 w-6 text-green-600" />
-                <h1 className="text-xl font-semibold text-gray-900">Kelola Kategori</h1>
+                <Tag className="h-6 w-6 text-accent-mint" />
+                <h1 className="text-xl font-semibold text-on-accent">Kelola Kategori</h1>
               </div>
             </div>
             <Link
               href="/admin/categories/new"
-              className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 flex items-center space-x-2"
+              className="bg-gradient-to-r from-accent-mint to-accent-peach text-on-accent px-4 py-2 rounded-lg shadow-medium hover:shadow-lg transition-all duration-200 flex items-center space-x-2"
             >
               <Plus className="h-4 w-4" />
               <span>Tambah Kategori</span>
@@ -117,21 +117,21 @@ export default function AdminCategoriesPage() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Search */}
-        <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
+        <div className="card-theme shadow-soft p-6 mb-6">
           <div className="flex items-center space-x-4">
             <div className="flex-1 relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-theme-primary text-opacity-50 h-4 w-4" />
               <input
                 type="text"
                 placeholder="Cari kategori..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10 pr-4 py-2 w-full border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                className="pl-10 pr-4 py-2 w-full border border-theme-primary border-opacity-20 rounded-lg focus:ring-2 focus:ring-accent-mint focus:border-accent-mint bg-theme-main text-theme-primary transition-all duration-200"
               />
             </div>
             <button
               onClick={() => setSearchQuery('')}
-              className="px-4 py-2 text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50"
+              className="px-4 py-2 text-theme-primary border border-theme-primary border-opacity-20 rounded-lg hover:bg-theme-primary hover:bg-opacity-5 transition-colors"
             >
               Reset
             </button>
@@ -141,14 +141,14 @@ export default function AdminCategoriesPage() {
         {/* Categories Grid */}
         {loading ? (
           <div className="flex items-center justify-center py-12">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-600"></div>
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-accent-mint"></div>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {categories.map((category) => (
-              <div key={category._id} className="bg-white rounded-lg shadow-sm overflow-hidden hover:shadow-md transition-shadow">
+              <div key={category._id} className="card-theme shadow-soft overflow-hidden hover:shadow-medium transition-all duration-200">
                 {/* Category Image */}
-                <div className="h-48 bg-gradient-to-br from-green-400 to-green-600 relative">
+                <div className="h-48 bg-gradient-to-br from-accent-mint to-accent-peach relative">
                   {category.image ? (
                     <img
                       src={category.image}
@@ -157,14 +157,14 @@ export default function AdminCategoriesPage() {
                     />
                   ) : (
                     <div className="flex items-center justify-center h-full">
-                      <Tag className="h-16 w-16 text-white opacity-50" />
+                      <Tag className="h-16 w-16 text-on-accent opacity-50" />
                     </div>
                   )}
                   
                   {/* Product Count Badge */}
-                  <div className="absolute top-4 right-4 bg-white bg-opacity-90 rounded-full px-3 py-1 flex items-center space-x-1">
-                    <Package className="h-4 w-4 text-gray-600" />
-                    <span className="text-sm font-medium text-gray-900">
+                  <div className="absolute top-4 right-4 bg-theme-main bg-opacity-90 rounded-full px-3 py-1 flex items-center space-x-1">
+                    <Package className="h-4 w-4 text-theme-primary text-opacity-75" />
+                    <span className="text-sm font-medium text-theme-primary">
                       {category.productCount || 0}
                     </span>
                   </div>
@@ -174,37 +174,37 @@ export default function AdminCategoriesPage() {
                 <div className="p-6">
                   <div className="flex items-start justify-between mb-3">
                     <div className="flex-1">
-                      <h3 className="text-lg font-semibold text-gray-900 mb-1">
+                      <h3 className="text-lg font-semibold text-theme-primary mb-1">
                         {category.name}
                       </h3>
-                      <p className="text-sm text-gray-500">
+                      <p className="text-sm text-theme-primary text-opacity-60">
                         /{category.slug}
                       </p>
                     </div>
                   </div>
 
                   {category.description && (
-                    <p className="text-sm text-gray-600 mb-4 line-clamp-2">
+                    <p className="text-sm text-theme-primary text-opacity-75 mb-4 line-clamp-2">
                       {category.description}
                     </p>
                   )}
 
                   <div className="flex items-center justify-between">
-                    <div className="text-xs text-gray-500">
+                    <div className="text-xs text-theme-primary text-opacity-50">
                       Dibuat: {new Date(category.createdAt).toLocaleDateString('id-ID')}
                     </div>
                     
                     <div className="flex items-center space-x-2">
                       <Link
                         href={`/admin/categories/${category._id}/edit`}
-                        className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                        className="p-2 text-accent-peach hover:bg-accent-peach hover:bg-opacity-10 rounded-lg transition-colors"
                         title="Edit kategori"
                       >
                         <Edit className="h-4 w-4" />
                       </Link>
                       <button
                         onClick={() => handleDelete(category._id, category.name, category.productCount || 0)}
-                        className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                        className="p-2 text-red-500 hover:bg-red-500 hover:bg-opacity-10 rounded-lg transition-colors disabled:opacity-50"
                         title="Hapus kategori"
                         disabled={Boolean(category.productCount && category.productCount > 0)}
                       >
@@ -221,11 +221,11 @@ export default function AdminCategoriesPage() {
         {/* Empty State */}
         {!loading && categories.length === 0 && (
           <div className="text-center py-12">
-            <Tag className="h-16 w-16 text-gray-300 mx-auto mb-4" />
-            <h3 className="text-lg font-medium text-gray-900 mb-2">
+            <Tag className="h-16 w-16 text-theme-primary text-opacity-30 mx-auto mb-4" />
+            <h3 className="text-lg font-medium text-theme-primary mb-2">
               {searchQuery ? 'Kategori tidak ditemukan' : 'Belum ada kategori'}
             </h3>
-            <p className="text-gray-500 mb-6">
+            <p className="text-theme-primary text-opacity-60 mb-6">
               {searchQuery 
                 ? `Tidak ada kategori yang cocok dengan "${searchQuery}"`
                 : 'Mulai dengan menambahkan kategori pertama Anda'
@@ -234,7 +234,7 @@ export default function AdminCategoriesPage() {
             {!searchQuery && (
               <Link
                 href="/admin/categories/new"
-                className="inline-flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
+                className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-accent-mint to-accent-peach text-on-accent rounded-lg shadow-medium hover:shadow-lg transition-all duration-200"
               >
                 <Plus className="h-4 w-4 mr-2" />
                 Tambah Kategori

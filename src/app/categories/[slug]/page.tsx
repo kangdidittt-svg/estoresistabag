@@ -13,7 +13,12 @@ import {
   ChevronDown,
   Star,
   Eye,
-  ArrowRight
+  ArrowRight,
+  Menu,
+  X,
+  Grid,
+  Tag,
+  Package
 } from 'lucide-react';
 import { formatCurrency, calculateDiscountPercentage } from '@/lib/utils';
 
@@ -79,6 +84,7 @@ export default function CategoryDetailPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [totalProducts, setTotalProducts] = useState(0);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     if (slug) {
@@ -164,21 +170,21 @@ export default function CategoryDetailPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600"></div>
+      <div className="min-h-screen bg-theme-main flex items-center justify-center">
+        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-accent-peach"></div>
       </div>
     );
   }
 
   if (!category) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-screen bg-theme-main flex items-center justify-center">
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-gray-900 mb-4">Kategori Tidak Ditemukan</h1>
-          <p className="text-gray-600 mb-8">Kategori yang Anda cari tidak tersedia.</p>
+          <h1 className="text-2xl font-bold text-theme-primary mb-4">Kategori Tidak Ditemukan</h1>
+          <p className="text-theme-primary text-opacity-60 mb-8">Kategori yang Anda cari tidak tersedia.</p>
           <Link 
             href="/categories" 
-            className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors"
+            className="bg-accent-peach text-on-accent px-6 py-3 rounded-2xl hover:bg-accent-yellow transition-colors duration-200"
           >
             Kembali ke Kategori
           </Link>
@@ -188,31 +194,83 @@ export default function CategoryDetailPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-theme-main">
       {/* Header */}
-      <header className="bg-white shadow-sm border-b">
+      <header className="bg-theme-header shadow-sm sticky top-0 z-50 border-b border-theme-primary border-opacity-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
-            <Link href="/" className="flex items-center space-x-2">
-              <ShoppingBag className="h-8 w-8 text-blue-600" />
-              <span className="text-xl font-bold text-gray-900">SistaBag</span>
+            <Link href="/" className="flex items-center space-x-2 group">
+              <div className="bg-accent-peach p-3 rounded-2xl group-hover:scale-105 transition-all duration-200">
+                <ShoppingBag className="h-6 w-6 text-on-accent" />
+              </div>
+              <span className="text-xl font-bold text-theme-primary">SistaBag</span>
             </Link>
             
-            <nav className="flex space-x-6">
-              <Link href="/" className="text-gray-700 hover:text-blue-600 font-medium">
-                Beranda
+            {/* Desktop Navigation */}
+            <nav className="hidden md:flex items-center space-x-6">
+              <Link href="/" className="text-theme-primary hover:text-accent-peach font-medium transition-colors duration-200 flex items-center space-x-1">
+                <span>Beranda</span>
               </Link>
-              <Link href="/products" className="text-gray-700 hover:text-blue-600 font-medium">
-                Produk
+              <Link href="/products" className="text-theme-primary hover:text-accent-peach font-medium transition-colors duration-200 flex items-center space-x-1">
+                <ShoppingBag className="h-4 w-4" />
+                <span>Produk</span>
               </Link>
-              <Link href="/categories" className="text-blue-600 font-medium">
-                Kategori
+              <Link href="/categories" className="text-accent-peach font-medium flex items-center space-x-1">
+                <span>Kategori</span>
               </Link>
-              <Link href="/promos" className="text-gray-700 hover:text-blue-600 font-medium">
-                Promo
+              <Link href="/promos" className="text-theme-primary hover:text-accent-peach font-medium transition-colors duration-200 flex items-center space-x-1">
+                <span>Promo</span>
               </Link>
             </nav>
+
+            {/* Mobile Menu Button */}
+            <button
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              className="md:hidden p-2 rounded-lg text-theme-primary hover:bg-theme-primary hover:bg-opacity-10 transition-colors duration-200"
+            >
+              {isMobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+            </button>
           </div>
+
+          {/* Mobile Menu */}
+          {isMobileMenuOpen && (
+            <div className="md:hidden border-t border-theme-primary border-opacity-20 py-4">
+              <div className="flex flex-col space-y-4">
+                <Link 
+                  href="/" 
+                  className="flex items-center space-x-3 text-theme-primary hover:text-accent-peach transition-colors duration-200 px-2 py-2 rounded-lg hover:bg-theme-primary hover:bg-opacity-5"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  <ShoppingBag className="h-5 w-5" />
+                  <span>Beranda</span>
+                </Link>
+                <Link 
+                  href="/products" 
+                  className="flex items-center space-x-3 text-theme-primary hover:text-accent-peach transition-colors duration-200 px-2 py-2 rounded-lg hover:bg-theme-primary hover:bg-opacity-5"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  <Package className="h-5 w-5" />
+                  <span>Produk</span>
+                </Link>
+                <Link 
+                  href="/categories" 
+                  className="flex items-center space-x-3 text-accent-peach px-2 py-2 rounded-lg bg-accent-peach bg-opacity-10"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  <Grid className="h-5 w-5" />
+                  <span>Kategori</span>
+                </Link>
+                <Link 
+                  href="/promos" 
+                  className="flex items-center space-x-3 text-theme-primary hover:text-accent-peach transition-colors duration-200 px-2 py-2 rounded-lg hover:bg-theme-primary hover:bg-opacity-5"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  <Tag className="h-5 w-5" />
+                  <span>Promo</span>
+                </Link>
+              </div>
+            </div>
+          )}
         </div>
       </header>
 
