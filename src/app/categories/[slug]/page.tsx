@@ -200,8 +200,14 @@ export default function CategoryDetailPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <Link href="/" className="flex items-center space-x-2 group">
-              <div className="bg-accent-peach p-3 rounded-2xl group-hover:scale-105 transition-all duration-200">
-                <ShoppingBag className="h-6 w-6 text-on-accent" />
+              <div className="bg-accent-peach p-2 rounded-2xl group-hover:scale-105 transition-all duration-200 overflow-hidden">
+                <Image 
+                  src="/logo-sis.png" 
+                  alt="SistaBag Logo" 
+                  width={32} 
+                  height={32} 
+                  className="object-contain"
+                />
               </div>
               <span className="text-xl font-bold text-theme-primary">SistaBag</span>
             </Link>

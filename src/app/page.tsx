@@ -214,8 +214,14 @@ export default function HomePage() {
                   href={`/products?category=${category.slug}`}
                   className="group card-theme rounded-3xl p-5 shadow-soft hover:shadow-medium transition-all duration-200 border border-theme-primary border-opacity-10 hover:border-opacity-20 text-center"
                 >
-                  <div className="bg-accent-yellow w-12 h-12 rounded-2xl mx-auto mb-3 flex items-center justify-center">
-                    <ShoppingBag className="h-6 w-6 text-on-accent" />
+                  <div className="bg-accent-yellow w-12 h-12 rounded-2xl mx-auto mb-3 flex items-center justify-center overflow-hidden">
+                    <Image 
+                      src="/logo-sis.png" 
+                      alt="SistaBag Logo" 
+                      width={24} 
+                      height={24} 
+                      className="object-contain"
+                    />
                   </div>
                   <h3 className="font-bold text-theme-primary mb-2 text-base">{category.name}</h3>
                   <p className="text-theme-primary text-opacity-60 text-xs mb-3">{category.productCount} produk</p>

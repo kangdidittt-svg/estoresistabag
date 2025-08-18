@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { ShoppingBag, Grid3X3, Star, Menu, X, ShoppingCart } from 'lucide-react';
 import { useCart } from '@/contexts/CartContext';
@@ -50,8 +51,14 @@ export default function Navigation({ className = '' }: NavigationProps) {
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center">
             <Link href="/" className="flex items-center space-x-2 group">
-              <div className="bg-accent-peach p-3 rounded-2xl group-hover:scale-105 transition-all duration-200">
-                <ShoppingBag className="h-6 w-6 text-on-accent" />
+              <div className="bg-accent-peach p-2 rounded-2xl group-hover:scale-105 transition-all duration-200 overflow-hidden">
+                <Image 
+                  src="/logo-sis.png" 
+                  alt="SistaBag Logo" 
+                  width={32} 
+                  height={32} 
+                  className="object-contain"
+                />
               </div>
               <span className="text-xl font-bold text-accent-peach animate-fade-in">SistaBag</span>
             </Link>

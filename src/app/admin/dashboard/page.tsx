@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 import {
   Package,
   ShoppingBag,
@@ -124,8 +125,14 @@ export default function AdminDashboard() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center">
-              <div className="p-2 bg-accent-peach rounded-xl mr-3">
-                <ShoppingBag className="h-6 w-6 text-on-accent" />
+              <div className="p-2 bg-accent-peach rounded-xl mr-3 overflow-hidden">
+                <Image 
+                  src="/logo-sis.png" 
+                  alt="SistaBag Logo" 
+                  width={24} 
+                  height={24} 
+                  className="object-contain"
+                />
               </div>
               <h1 className="text-2xl font-bold text-on-accent">SistaBag Admin</h1>
             </div>
@@ -213,14 +220,14 @@ export default function AdminDashboard() {
             <div className="grid grid-cols-2 gap-4">
               <button
                 onClick={() => router.push('/admin/products/new')}
-                className="flex items-center justify-center p-4 bg-gradient-to-r from-accent-blue to-accent-mint text-theme-primary rounded-xl hover:from-accent-mint hover:to-accent-blue transition-all duration-300 shadow-soft hover:shadow-medium border-2 border-accent-blue hover:border-accent-mint"
+                className="flex items-center justify-center p-4 bg-gradient-to-r from-green-600 to-green-500 text-white rounded-xl hover:from-green-700 hover:to-green-600 transition-all duration-300 shadow-soft hover:shadow-medium border-2 border-green-600 hover:border-green-700"
               >
                 <Plus className="h-5 w-5 mr-2" />
                 <span className="text-sm font-medium">Tambah Produk</span>
               </button>
               <button
                 onClick={() => router.push('/admin/categories/new')}
-                className="flex items-center justify-center p-4 bg-gradient-to-r from-accent-mint to-accent-yellow text-theme-primary rounded-xl hover:from-accent-yellow hover:to-accent-mint transition-all duration-300 shadow-soft hover:shadow-medium border-2 border-accent-mint hover:border-accent-yellow"
+                className="flex items-center justify-center p-4 bg-gradient-to-r from-green-600 to-green-500 text-white rounded-xl hover:from-green-700 hover:to-green-600 transition-all duration-300 shadow-soft hover:shadow-medium border-2 border-green-600 hover:border-green-700"
               >
                 <Plus className="h-5 w-5 mr-2" />
                 <span className="text-sm font-medium">Tambah Kategori</span>

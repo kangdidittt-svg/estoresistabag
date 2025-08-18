@@ -6,12 +6,14 @@ interface LoadingSpinnerProps {
   size?: 'small' | 'medium' | 'large';
   overlay?: boolean;
   className?: string;
+  color?: 'white' | 'primary' | 'accent';
 }
 
 const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({ 
   size = 'medium', 
   overlay = false,
-  className = '' 
+  className = '',
+  color = 'white'
 }) => {
   const getSizeClasses = () => {
     switch (size) {
@@ -24,19 +26,28 @@ const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
     }
   };
 
+  const getColorClasses = () => {
+    switch (color) {
+      case 'primary':
+        return 'border-theme-primary border-opacity-20 border-t-theme-primary';
+      case 'accent':
+        return 'border-accent-mint border-opacity-20 border-t-accent-mint';
+      default:
+        return 'border-white border-opacity-20 border-t-white';
+    }
+  };
+
   const spinner = (
     <div 
       className={`
         ${getSizeClasses()}
-        border-pink-200 
-        border-t-pink-500 
+        ${getColorClasses()}
         rounded-full 
         animate-spin
         ${className}
       `}
       style={{
-        borderColor: 'rgba(255, 158, 158, 0.2)',
-        borderTopColor: '#FF9E9E'
+        animation: 'spin 1s linear infinite'
       }}
     />
   );
@@ -45,8 +56,8 @@ const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
     return (
       <div className="fixed inset-0 bg-theme-main bg-opacity-80 flex items-center justify-center z-50">
         <div className="flex flex-col items-center space-y-4">
-          <div className="w-12 h-12 border-4 border-accent-peach border-opacity-20 border-t-accent-peach rounded-full animate-spin"></div>
-          <p className="text-theme-primary text-sm font-medium animate-pulse">Memuat...</p>
+          <div className="w-12 h-12 border-4 border-white border-opacity-20 border-t-white rounded-full animate-spin" style={{ animation: 'spin 1s linear infinite' }}></div>
+          <p className="text-white text-sm font-medium animate-pulse">Memuat...</p>
         </div>
       </div>
     );
