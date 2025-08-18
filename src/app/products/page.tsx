@@ -476,7 +476,8 @@ function ProductCard({ product, viewMode }: { product: Product; viewMode: 'grid'
         name: product.name,
         price: product.priceAfterDiscount || product.price,
         image: product.images[0] || '/placeholder-bag.jpg',
-        slug: product.slug
+        slug: product.slug,
+        stock: product.stock
       }
     });
   };
