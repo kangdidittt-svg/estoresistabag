@@ -14,7 +14,9 @@ import {
   Settings,
   Shield,
   AlertCircle,
-  CheckCircle
+  CheckCircle,
+  Phone,
+  Database
 } from 'lucide-react';
 
 interface Admin {
@@ -39,9 +41,16 @@ interface NewAdminForm {
   email: string;
 }
 
+interface AppConfig {
+  _id: string;
+  whatsappNumber: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export default function AdminSettingsPage() {
   const router = useRouter();
-  const [activeTab, setActiveTab] = useState<'password' | 'admins'>('password');
+  const [activeTab, setActiveTab] = useState<'password' | 'admins' | 'whatsapp' | 'data'>('password');
   const [loading, setLoading] = useState(false);
   const [admins, setAdmins] = useState<Admin[]>([]);
   const [showPasswords, setShowPasswords] = useState<Record<string, boolean>>({});
@@ -65,9 +74,20 @@ export default function AdminSettingsPage() {
   const [newAdminErrors, setNewAdminErrors] = useState<Record<string, string>>({});
   const [showNewAdminForm, setShowNewAdminForm] = useState(false);
 
+  // WhatsApp settings
+  const [appConfig, setAppConfig] = useState<AppConfig | null>(null);
+  const [whatsappNumber, setWhatsappNumber] = useState('');
+  const [whatsappError, setWhatsappError] = useState('');
+
+  // Clear data
+  const [showClearDataConfirm, setShowClearDataConfirm] = useState(false);
+  const [clearDataLoading, setClearDataLoading] = useState(false);
+
   useEffect(() => {
     if (activeTab === 'admins') {
       fetchAdmins();
+    } else if (activeTab === 'whatsapp') {
+      fetchAppConfig();
     }
   }, [activeTab]);
 
@@ -80,6 +100,83 @@ export default function AdminSettingsPage() {
       }
     } catch (error) {
       console.error('Error fetching admins:', error);
+    }
+  };
+
+  const fetchAppConfig = async () => {
+    try {
+      const response = await fetch('/api/admin/config');
+      const data = await response.json();
+      if (data.success) {
+        setAppConfig(data.data);
+        setWhatsappNumber(data.data.whatsappNumber);
+      }
+    } catch (error) {
+      console.error('Error fetching app config:', error);
+    }
+  };
+
+  const handleWhatsAppUpdate = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setWhatsappError('');
+    setMessage(null);
+
+    // Validasi
+    if (!whatsappNumber) {
+      setWhatsappError('Nomor WhatsApp wajib diisi');
+      return;
+    }
+
+    const phoneRegex = /^62\d{8,13}$/;
+    if (!phoneRegex.test(whatsappNumber)) {
+      setWhatsappError('Format nomor tidak valid. Gunakan format: 62xxxxxxxxx');
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const response = await fetch('/api/admin/config', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ whatsappNumber })
+      });
+
+      const data = await response.json();
+      if (data.success) {
+        setMessage({ type: 'success', text: 'Nomor WhatsApp berhasil diperbarui' });
+        setAppConfig(data.data);
+      } else {
+        setMessage({ type: 'error', text: data.error || 'Gagal memperbarui nomor WhatsApp' });
+      }
+    } catch (error) {
+      setMessage({ type: 'error', text: 'Terjadi kesalahan saat memperbarui nomor WhatsApp' });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleClearData = async () => {
+    setClearDataLoading(true);
+    setMessage(null);
+
+    try {
+      const response = await fetch('/api/admin/clear-data', {
+        method: 'DELETE'
+      });
+
+      const data = await response.json();
+      if (data.success) {
+        setMessage({ type: 'success', text: data.message });
+        setShowClearDataConfirm(false);
+      } else {
+        setMessage({ type: 'error', text: data.error || 'Gagal menghapus data' });
+      }
+    } catch (error) {
+      setMessage({ type: 'error', text: 'Terjadi kesalahan saat menghapus data' });
+    } finally {
+      setClearDataLoading(false);
     }
   };
 
@@ -282,6 +379,28 @@ export default function AdminSettingsPage() {
               >
                 <User className="h-4 w-4 inline mr-2" />
                 Kelola Admin
+              </button>
+              <button
+                onClick={() => setActiveTab('whatsapp')}
+                className={`py-4 px-6 text-sm font-medium border-b-2 transition-colors ${
+                  activeTab === 'whatsapp'
+                    ? 'border-accent-peach text-accent-peach'
+                    : 'border-transparent text-theme-primary text-opacity-60 hover:text-accent-peach hover:border-accent-peach hover:border-opacity-50'
+                }`}
+              >
+                <Phone className="h-4 w-4 inline mr-2" />
+                WhatsApp
+              </button>
+              <button
+                onClick={() => setActiveTab('data')}
+                className={`py-4 px-6 text-sm font-medium border-b-2 transition-colors ${
+                  activeTab === 'data'
+                    ? 'border-accent-peach text-accent-peach'
+                    : 'border-transparent text-theme-primary text-opacity-60 hover:text-accent-peach hover:border-accent-peach hover:border-opacity-50'
+                }`}
+              >
+                <Database className="h-4 w-4 inline mr-2" />
+                Data Management
               </button>
             </nav>
           </div>
@@ -604,6 +723,140 @@ export default function AdminSettingsPage() {
                         </div>
                       ))
                     )}
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* WhatsApp Settings Tab */}
+            {activeTab === 'whatsapp' && (
+              <div className="max-w-md">
+                <h3 className="text-lg font-medium text-theme-primary mb-4">Pengaturan WhatsApp</h3>
+                <p className="text-sm text-theme-primary text-opacity-60 mb-6">
+                  Atur nomor WhatsApp yang akan digunakan untuk tombol "Pesan via WhatsApp" di seluruh aplikasi.
+                </p>
+                
+                <form onSubmit={handleWhatsAppUpdate} className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-theme-primary mb-2">
+                      Nomor WhatsApp *
+                    </label>
+                    <input
+                      type="text"
+                      value={whatsappNumber}
+                      onChange={(e) => setWhatsappNumber(e.target.value)}
+                      className={`block w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-accent-peach focus:border-accent-peach bg-theme-main ${
+                        whatsappError ? 'border-red-500' : 'border-theme-primary border-opacity-20'
+                      }`}
+                      placeholder="62812345678901"
+                    />
+                    {whatsappError && (
+                      <p className="mt-1 text-sm text-red-600">{whatsappError}</p>
+                    )}
+                    <p className="mt-1 text-xs text-theme-primary text-opacity-50">
+                      Format: 62xxxxxxxxx (dimulai dengan 62, tanpa tanda +)
+                    </p>
+                  </div>
+
+                  <button
+                    type="submit"
+                    disabled={loading}
+                    className="flex items-center px-4 py-2 bg-gradient-to-r from-accent-peach to-accent-mint text-on-accent rounded-lg hover:from-accent-mint hover:to-accent-yellow transition-all duration-300 shadow-soft hover:shadow-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    <Save className="h-4 w-4 mr-2" />
+                    {loading ? 'Menyimpan...' : 'Simpan Nomor WhatsApp'}
+                  </button>
+                </form>
+
+                {appConfig && (
+                  <div className="mt-6 p-4 bg-theme-secondary bg-opacity-50 rounded-lg">
+                    <h4 className="text-sm font-medium text-theme-primary mb-2">Nomor Saat Ini:</h4>
+                    <p className="text-sm text-theme-primary text-opacity-80">+{appConfig.whatsappNumber}</p>
+                    <p className="text-xs text-theme-primary text-opacity-50 mt-1">
+                      Terakhir diperbarui: {new Date(appConfig.updatedAt).toLocaleDateString('id-ID', {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit'
+                      })}
+                    </p>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* Data Management Tab */}
+            {activeTab === 'data' && (
+              <div>
+                <h3 className="text-lg font-medium text-theme-primary mb-4">Manajemen Data</h3>
+                <p className="text-sm text-theme-primary text-opacity-60 mb-6">
+                  Kelola data aplikasi dengan hati-hati. Tindakan ini tidak dapat dibatalkan.
+                </p>
+
+                <div className="space-y-6">
+                  {/* Clear All Data */}
+                  <div className="card-theme rounded-lg p-6 border border-red-200">
+                    <div className="flex items-start space-x-4">
+                      <div className="flex-shrink-0">
+                        <div className="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center">
+                          <Database className="h-5 w-5 text-red-600" />
+                        </div>
+                      </div>
+                      <div className="flex-1">
+                        <h4 className="text-md font-medium text-theme-primary mb-2">Bersihkan Semua Data</h4>
+                        <p className="text-sm text-theme-primary text-opacity-60 mb-4">
+                          Hapus semua produk dan promo beserta file gambarnya. Kategori dan data admin tidak akan terhapus.
+                        </p>
+                        
+                        {!showClearDataConfirm ? (
+                          <button
+                            onClick={() => setShowClearDataConfirm(true)}
+                            className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors shadow-soft hover:shadow-medium"
+                          >
+                            <Trash2 className="h-4 w-4 inline mr-2" />
+                            Bersihkan Data
+                          </button>
+                        ) : (
+                          <div className="space-y-3">
+                            <div className="p-3 bg-red-50 border border-red-200 rounded-lg">
+                              <p className="text-sm text-red-800 font-medium mb-2">
+                                ⚠️ Peringatan: Tindakan ini akan menghapus SEMUA data produk dan promo!
+                              </p>
+                              <p className="text-xs text-red-700">
+                                Data yang akan dihapus: Semua produk, semua promo, dan file gambar terkait.
+                              </p>
+                            </div>
+                            <div className="flex space-x-3">
+                              <button
+                                onClick={handleClearData}
+                                disabled={clearDataLoading}
+                                className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors shadow-soft hover:shadow-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                              >
+                                {clearDataLoading ? (
+                                  <>
+                                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white inline mr-2"></div>
+                                    Menghapus...
+                                  </>
+                                ) : (
+                                  <>
+                                    <Trash2 className="h-4 w-4 inline mr-2" />
+                                    Ya, Hapus Semua Data
+                                  </>
+                                )}
+                              </button>
+                              <button
+                                onClick={() => setShowClearDataConfirm(false)}
+                                disabled={clearDataLoading}
+                                className="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 transition-colors shadow-soft hover:shadow-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                              >
+                                Batal
+                              </button>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>

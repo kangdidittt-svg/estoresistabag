@@ -25,6 +25,7 @@ import {
 import { formatCurrency, calculateDiscountPercentage } from '@/lib/utils';
 import LoadingSpinner from '@/components/LoadingSpinner';
 import { useCart } from '@/contexts/CartContext';
+import { getWhatsAppUrl, formatWhatsAppMessage } from '@/lib/whatsapp';
 
 interface Product {
   _id: string;
@@ -121,19 +122,17 @@ export default function ProductDetailPage() {
     });
   };
 
-  const handleWhatsAppOrder = () => {
+  const handleWhatsAppOrder = async () => {
     if (!product) return;
     
-    const productUrl = window.location.href;
-    const message = `Halo, saya tertarik dengan produk:\n\n` +
-      `*${product.name}*\n` +
-      `SKU: ${product.sku}\n` +
-      `Harga: ${product.priceAfterDiscount ? formatCurrency(product.priceAfterDiscount) : formatCurrency(product.price)}\n` +
-      `Jumlah: ${quantity}\n\n` +
-      `Link Produk: ${productUrl}\n\n` +
-      `Apakah produk ini masih tersedia?`;
+    const message = formatWhatsAppMessage(
+      product.name,
+      product.priceAfterDiscount || product.price,
+      product.slug,
+      quantity
+    );
     
-    const whatsappUrl = `https://wa.me/6281351990003?text=${encodeURIComponent(message)}`;
+    const whatsappUrl = await getWhatsAppUrl(message);
     window.open(whatsappUrl, '_blank');
   };
 

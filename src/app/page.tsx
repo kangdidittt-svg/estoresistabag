@@ -7,6 +7,7 @@ import { Search, ShoppingBag, Star, Eye, Tag, Menu, User, Heart, ShoppingCart, C
 import { formatCurrency, calculateDiscountPercentage } from '@/lib/utils';
 import { useCart } from '@/contexts/CartContext';
 import Navigation from '@/components/Navigation';
+import { getWhatsAppNumber } from '@/lib/whatsapp';
 
 interface Product {
   _id: string;
@@ -56,10 +57,21 @@ export default function HomePage() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const itemsPerSlide = 4;
   const [searchQuery, setSearchQuery] = useState('');
+  const [whatsappNumber, setWhatsappNumber] = useState('6281234567890');
 
   useEffect(() => {
     fetchData();
+    fetchWhatsAppNumber();
   }, []);
+
+  const fetchWhatsAppNumber = async () => {
+    try {
+      const number = await getWhatsAppNumber();
+      setWhatsappNumber(number);
+    } catch (error) {
+      console.error('Error fetching WhatsApp number:', error);
+    }
+  };
 
   const fetchData = async () => {
     try {
@@ -398,7 +410,7 @@ export default function HomePage() {
               <h3 className="font-bold mb-4 text-lg text-accent-mint">Kontak</h3>
               <ul className="space-y-2 text-theme-primary text-opacity-70">
                 <li className="text-sm">
-                  WhatsApp: +62 812-3456-7890
+                  WhatsApp: +{whatsappNumber}
                 </li>
                 <li className="text-sm">
                   Email: info@sistabag.com

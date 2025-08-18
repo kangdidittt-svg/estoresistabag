@@ -14,6 +14,7 @@ import {
 } from 'lucide-react';
 import { useCart } from '@/contexts/CartContext';
 import { formatCurrency } from '@/lib/utils';
+import { getWhatsAppUrl, formatCartMessage } from '@/lib/whatsapp';
 
 export default function FloatingCart() {
   const { state, dispatch } = useCart();
@@ -34,16 +35,11 @@ export default function FloatingCart() {
     dispatch({ type: 'REMOVE_ITEM', payload: id });
   };
 
-  const handleWhatsAppCheckout = () => {
+  const handleWhatsAppCheckout = async () => {
     if (state.items.length === 0) return;
 
-    const orderDetails = state.items.map(item => 
-      `• ${item.name}\n  Qty: ${item.quantity}\n  Harga: ${formatCurrency(item.priceAfterDiscount || item.price)}\n  Subtotal: ${formatCurrency((item.priceAfterDiscount || item.price) * item.quantity)}`
-    ).join('\n\n');
-
-    const message = `Halo, saya ingin memesan:\n\n${orderDetails}\n\n*Total: ${formatCurrency(state.totalPrice)}*\n\nApakah semua produk masih tersedia?`;
-    
-    const whatsappUrl = `https://wa.me/6281351990003?text=${encodeURIComponent(message)}`;
+    const message = formatCartMessage(state.items);
+    const whatsappUrl = await getWhatsAppUrl(message);
     window.open(whatsappUrl, '_blank');
     
     // Clear cart after checkout

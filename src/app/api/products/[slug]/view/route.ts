@@ -3,6 +3,7 @@ import dbConnect from '@/lib/mongodb';
 import Product from '@/models/Product';
 import Lead from '@/models/Lead';
 import Category from '@/models/Category';
+import AppConfig from '@/models/AppConfig';
 import { getClientIP } from '@/lib/utils';
 
 export async function POST(
@@ -36,23 +37,26 @@ export async function POST(
       const userAgent = request.headers.get('user-agent') || '';
       const referrer = request.headers.get('referer') || '';
 
-      // Get WhatsApp template from environment or default
-      const waTemplate = process.env.WA_TEMPLATE || 
-        'Halo, saya tertarik dengan produk {productName} seharga {price}.\n\nLink Produk: {productUrl}\n\nApakah masih tersedia?';
-
-      // Get product URL from referrer or construct it
-      const productUrl = referrer || `${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/products/${product.slug}`;
-
+      // Get WhatsApp number from app config
+      let appConfig;
+      try {
+        appConfig = await AppConfig.findOne();
+      } catch (error) {
+        console.error('Error fetching app config:', error);
+      }
+      
+      const waNumber = appConfig?.whatsappNumber || '6281234567890';
+      const waTemplate = process.env.WHATSAPP_TEMPLATE || 
+        `Halo, saya tertarik dengan produk:\n\n*{productName}*\nHarga: {productPrice}\nLink: {productUrl}\n\nBisakah saya mendapatkan informasi lebih lanjut?`;
+      
+      // Get product URL
+      const productUrl = `${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/products/${product.slug}`;
+      
       // Format WhatsApp message
       const waPrefillMessage = waTemplate
         .replace('{productName}', product.name)
-        .replace('{price}', new Intl.NumberFormat('id-ID', {
-          style: 'currency',
-          currency: 'IDR',
-          minimumFractionDigits: 0,
-        }).format(product.priceAfterDiscount || product.price))
-        .replace('{productUrl}', productUrl)
-        .replace('{storeName}', process.env.APP_NAME || 'SistaBag');
+        .replace('{productPrice}', `Rp ${(product.priceAfterDiscount || product.price).toLocaleString('id-ID')}`)
+        .replace('{productUrl}', productUrl);
 
       // Create lead record
       await Lead.create({
@@ -70,7 +74,6 @@ export async function POST(
       });
 
       // Return WhatsApp URL
-      const waNumber = process.env.WA_NUMBER || '6281234567890';
       const waUrl = `https://wa.me/${waNumber}?text=${encodeURIComponent(waPrefillMessage)}`;
 
       return NextResponse.json({

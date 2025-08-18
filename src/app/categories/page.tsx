@@ -5,6 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { ShoppingBag, Package, Grid3X3, Menu, User, Heart, ShoppingCart, Search, X, Grid, Tag } from 'lucide-react';
 import { useCart } from '@/contexts/CartContext';
+import { getWhatsAppUrl } from '@/lib/whatsapp';
 import Navigation from '@/components/Navigation';
 
 interface Category {
@@ -110,17 +111,19 @@ export default function CategoriesPage() {
               <p className="text-xl mb-8 opacity-90 max-w-2xl mx-auto leading-relaxed">
                 Hubungi kami untuk mendapatkan rekomendasi produk yang sesuai dengan kebutuhan Anda
               </p>
-              <a
-                href="https://wa.me/6281351990003?text=Halo,%20saya%20ingin%20bertanya%20tentang%20produk%20tas"
-                target="_blank"
-                rel="noopener noreferrer"
+              <button
+                onClick={async () => {
+                  const message = 'Halo, saya ingin bertanya tentang produk tas';
+                  const whatsappUrl = await getWhatsAppUrl(message);
+                  window.open(whatsappUrl, '_blank');
+                }}
                 className="inline-flex items-center space-x-2 bg-theme-main text-accent-peach px-8 py-4 rounded-xl font-bold hover:bg-opacity-90 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105"
               >
                 <span>Hubungi Kami</span>
                 <div className="w-6 h-6 bg-accent-peach rounded-full flex items-center justify-center text-on-accent text-sm">
                   →
                 </div>
-              </a>
+              </button>
             </div>
           </div>
         </div>
