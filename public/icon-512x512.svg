@@ -1,0 +1,19 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="512" height="512" rx="64" fill="#FF9E9E"/>
+  <rect x="32" y="32" width="448" height="448" rx="32" fill="#FFE7E7"/>
+  
+  <!-- Shopping bag icon -->
+  <path d="M128 192h256l-24 224H152l-24-224z" fill="#FF9E9E" stroke="#444444" stroke-width="6"/>
+  <path d="M192 192V144c0-35 29-64 64-64h32c35 0 64 29 64 64v48" fill="none" stroke="#444444" stroke-width="6"/>
+  
+  <!-- Decorative elements -->
+  <circle cx="176" cy="320" r="12" fill="#FFB6A5"/>
+  <circle cx="336" cy="320" r="12" fill="#FFB6A5"/>
+  <circle cx="256" cy="280" r="16" fill="#FFE27A"/>
+  <circle cx="200" cy="260" r="8" fill="#B2E6C5"/>
+  <circle cx="312" cy="260" r="8" fill="#B2E6C5"/>
+  
+  <!-- Text -->
+  <text x="256" y="450" text-anchor="middle" fill="#444444" font-family="Arial, sans-serif" font-size="36" font-weight="bold">E-Store</text>
+  <text x="256" y="480" text-anchor="middle" fill="#666666" font-family="Arial, sans-serif" font-size="20">Siska</text>
+</svg>

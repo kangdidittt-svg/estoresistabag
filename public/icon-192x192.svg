@@ -1,0 +1,16 @@
+<svg width="192" height="192" viewBox="0 0 192 192" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="192" height="192" rx="24" fill="#FF9E9E"/>
+  <rect x="16" y="16" width="160" height="160" rx="16" fill="#FFE7E7"/>
+  
+  <!-- Shopping bag icon -->
+  <path d="M48 72h96l-8 80H56l-8-80z" fill="#FF9E9E" stroke="#444444" stroke-width="2"/>
+  <path d="M72 72V56c0-11 9-20 20-20h8c11 0 20 9 20 20v16" fill="none" stroke="#444444" stroke-width="2"/>
+  
+  <!-- Decorative elements -->
+  <circle cx="64" cy="120" r="4" fill="#FFB6A5"/>
+  <circle cx="128" cy="120" r="4" fill="#FFB6A5"/>
+  <circle cx="96" cy="104" r="6" fill="#FFE27A"/>
+  
+  <!-- Text -->
+  <text x="96" y="170" text-anchor="middle" fill="#444444" font-family="Arial, sans-serif" font-size="14" font-weight="bold">E-Store</text>
+</svg>

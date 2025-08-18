@@ -362,8 +362,8 @@ export default function AdminSettingsPage() {
                 onClick={() => setActiveTab('password')}
                 className={`py-4 px-6 text-sm font-medium border-b-2 transition-colors ${
                   activeTab === 'password'
-                    ? 'border-accent-peach text-accent-peach'
-                    : 'border-transparent text-theme-primary text-opacity-60 hover:text-accent-peach hover:border-accent-peach hover:border-opacity-50'
+                    ? 'border-blue-600 text-blue-600 font-semibold'
+                    : 'border-transparent text-theme-primary text-opacity-60 hover:text-blue-600 hover:border-blue-600 hover:border-opacity-50'
                 }`}
               >
                 <Lock className="h-4 w-4 inline mr-2" />
@@ -373,8 +373,8 @@ export default function AdminSettingsPage() {
                 onClick={() => setActiveTab('admins')}
                 className={`py-4 px-6 text-sm font-medium border-b-2 transition-colors ${
                   activeTab === 'admins'
-                    ? 'border-accent-peach text-accent-peach'
-                    : 'border-transparent text-theme-primary text-opacity-60 hover:text-accent-peach hover:border-accent-peach hover:border-opacity-50'
+                    ? 'border-blue-600 text-blue-600 font-semibold'
+                    : 'border-transparent text-theme-primary text-opacity-60 hover:text-blue-600 hover:border-blue-600 hover:border-opacity-50'
                 }`}
               >
                 <User className="h-4 w-4 inline mr-2" />
@@ -384,8 +384,8 @@ export default function AdminSettingsPage() {
                 onClick={() => setActiveTab('whatsapp')}
                 className={`py-4 px-6 text-sm font-medium border-b-2 transition-colors ${
                   activeTab === 'whatsapp'
-                    ? 'border-accent-peach text-accent-peach'
-                    : 'border-transparent text-theme-primary text-opacity-60 hover:text-accent-peach hover:border-accent-peach hover:border-opacity-50'
+                    ? 'border-blue-600 text-blue-600 font-semibold'
+                    : 'border-transparent text-theme-primary text-opacity-60 hover:text-blue-600 hover:border-blue-600 hover:border-opacity-50'
                 }`}
               >
                 <Phone className="h-4 w-4 inline mr-2" />
@@ -395,8 +395,8 @@ export default function AdminSettingsPage() {
                 onClick={() => setActiveTab('data')}
                 className={`py-4 px-6 text-sm font-medium border-b-2 transition-colors ${
                   activeTab === 'data'
-                    ? 'border-accent-peach text-accent-peach'
-                    : 'border-transparent text-theme-primary text-opacity-60 hover:text-accent-peach hover:border-accent-peach hover:border-opacity-50'
+                    ? 'border-blue-600 text-blue-600 font-semibold'
+                    : 'border-transparent text-theme-primary text-opacity-60 hover:text-blue-600 hover:border-blue-600 hover:border-opacity-50'
                 }`}
               >
                 <Database className="h-4 w-4 inline mr-2" />
@@ -421,7 +421,7 @@ export default function AdminSettingsPage() {
                         type={showPasswords.current ? 'text' : 'password'}
                         value={passwordForm.currentPassword}
                         onChange={(e) => setPasswordForm(prev => ({ ...prev, currentPassword: e.target.value }))}
-                        className={`block w-full pr-10 px-3 py-2 border rounded-lg focus:ring-2 focus:ring-accent-peach focus:border-accent-peach bg-theme-main ${
+                        className={`block w-full pr-10 px-3 py-2 border rounded-lg focus:ring-2 focus:ring-accent-peach focus:border-accent-peach bg-white text-theme-primary ${
                           passwordErrors.currentPassword ? 'border-red-500' : 'border-theme-primary border-opacity-20'
                         }`}
                         placeholder="Masukkan password saat ini"
@@ -453,7 +453,7 @@ export default function AdminSettingsPage() {
                         type={showPasswords.new ? 'text' : 'password'}
                         value={passwordForm.newPassword}
                         onChange={(e) => setPasswordForm(prev => ({ ...prev, newPassword: e.target.value }))}
-                        className={`block w-full pr-10 px-3 py-2 border rounded-lg focus:ring-2 focus:ring-accent-peach focus:border-accent-peach bg-theme-main ${
+                        className={`block w-full pr-10 px-3 py-2 border rounded-lg focus:ring-2 focus:ring-accent-peach focus:border-accent-peach bg-white text-theme-primary ${
                           passwordErrors.newPassword ? 'border-red-500' : 'border-theme-primary border-opacity-20'
                         }`}
                         placeholder="Masukkan password baru"
@@ -485,7 +485,7 @@ export default function AdminSettingsPage() {
                         type={showPasswords.confirm ? 'text' : 'password'}
                         value={passwordForm.confirmPassword}
                         onChange={(e) => setPasswordForm(prev => ({ ...prev, confirmPassword: e.target.value }))}
-                        className={`block w-full pr-10 px-3 py-2 border rounded-lg focus:ring-2 focus:ring-accent-peach focus:border-accent-peach bg-theme-main ${
+                        className={`block w-full pr-10 px-3 py-2 border rounded-lg focus:ring-2 focus:ring-accent-peach focus:border-accent-peach bg-white text-theme-primary ${
                           passwordErrors.confirmPassword ? 'border-red-500' : 'border-theme-primary border-opacity-20'
                         }`}
                         placeholder="Konfirmasi password baru"
@@ -550,7 +550,7 @@ export default function AdminSettingsPage() {
                           type="text"
                           value={newAdminForm.username}
                           onChange={(e) => setNewAdminForm(prev => ({ ...prev, username: e.target.value }))}
-                          className={`block w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-accent-peach focus:border-accent-peach bg-theme-main ${
+                          className={`block w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-accent-peach focus:border-accent-peach bg-white text-theme-primary ${
                             newAdminErrors.username ? 'border-red-500' : 'border-theme-primary border-opacity-20'
                           }`}
                           placeholder="Username admin"
@@ -568,7 +568,7 @@ export default function AdminSettingsPage() {
                           type="email"
                           value={newAdminForm.email}
                           onChange={(e) => setNewAdminForm(prev => ({ ...prev, email: e.target.value }))}
-                          className={`block w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-accent-peach focus:border-accent-peach bg-theme-main ${
+                          className={`block w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-accent-peach focus:border-accent-peach bg-white text-theme-primary ${
                             newAdminErrors.email ? 'border-red-500' : 'border-theme-primary border-opacity-20'
                           }`}
                           placeholder="email@example.com (opsional)"
@@ -587,7 +587,7 @@ export default function AdminSettingsPage() {
                             type={showPasswords.newAdmin ? 'text' : 'password'}
                             value={newAdminForm.password}
                             onChange={(e) => setNewAdminForm(prev => ({ ...prev, password: e.target.value }))}
-                            className={`block w-full pr-10 px-3 py-2 border rounded-lg focus:ring-2 focus:ring-accent-peach focus:border-accent-peach bg-theme-main ${
+                            className={`block w-full pr-10 px-3 py-2 border rounded-lg focus:ring-2 focus:ring-accent-peach focus:border-accent-peach bg-white text-theme-primary ${
                               newAdminErrors.password ? 'border-red-500' : 'border-theme-primary border-opacity-20'
                             }`}
                             placeholder="Password admin"
@@ -618,7 +618,7 @@ export default function AdminSettingsPage() {
                             type={showPasswords.confirmNewAdmin ? 'text' : 'password'}
                             value={newAdminForm.confirmPassword}
                             onChange={(e) => setNewAdminForm(prev => ({ ...prev, confirmPassword: e.target.value }))}
-                            className={`block w-full pr-10 px-3 py-2 border rounded-lg focus:ring-2 focus:ring-accent-peach focus:border-accent-peach bg-theme-main ${
+                            className={`block w-full pr-10 px-3 py-2 border rounded-lg focus:ring-2 focus:ring-accent-peach focus:border-accent-peach bg-white text-theme-primary ${
                               newAdminErrors.confirmPassword ? 'border-red-500' : 'border-theme-primary border-opacity-20'
                             }`}
                             placeholder="Konfirmasi password"
@@ -745,7 +745,7 @@ export default function AdminSettingsPage() {
                       type="text"
                       value={whatsappNumber}
                       onChange={(e) => setWhatsappNumber(e.target.value)}
-                      className={`block w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-accent-peach focus:border-accent-peach bg-theme-main ${
+                      className={`block w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-accent-peach focus:border-accent-peach bg-white text-theme-primary ${
                         whatsappError ? 'border-red-500' : 'border-theme-primary border-opacity-20'
                       }`}
                       placeholder="62812345678901"
@@ -761,7 +761,7 @@ export default function AdminSettingsPage() {
                   <button
                     type="submit"
                     disabled={loading}
-                    className="flex items-center px-4 py-2 bg-gradient-to-r from-accent-peach to-accent-mint text-on-accent rounded-lg hover:from-accent-mint hover:to-accent-yellow transition-all duration-300 shadow-soft hover:shadow-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all duration-300 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-gray-400"
                   >
                     <Save className="h-4 w-4 mr-2" />
                     {loading ? 'Menyimpan...' : 'Simpan Nomor WhatsApp'}
