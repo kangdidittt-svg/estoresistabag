@@ -1,20 +1,20 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { connectDB } from '@/lib/mongodb';
+import dbConnect from '@/lib/mongodb';
 import Product from '@/models/Product';
-import { verifyAdminAuth } from '@/lib/auth';
+import { verifyAdminToken } from '@/lib/auth';
 
 export async function POST(request: NextRequest) {
   try {
     // Verify admin authentication
-    const authResult = await verifyAdminAuth(request);
-    if (!authResult.success) {
+    const authResult = await verifyAdminToken(request);
+    if (!authResult.valid) {
       return NextResponse.json(
-        { success: false, error: authResult.error },
+        { success: false, error: authResult.message || 'Unauthorized' },
         { status: 401 }
       );
     }
 
-    await connectDB();
+    await dbConnect();
 
     // Reset all product views to 0
     const result = await Product.updateMany(
