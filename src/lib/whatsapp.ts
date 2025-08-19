@@ -19,25 +19,43 @@ export async function getWhatsAppNumber(): Promise<string> {
   }
 }
 
+// Get WhatsApp template from app config
+export async function getWhatsAppTemplate(): Promise<string> {
+  try {
+    const response = await fetch('/api/admin/config');
+    const data = await response.json();
+    
+    if (data.success && data.data?.whatsappTemplate) {
+      return data.data.whatsappTemplate;
+    }
+    
+    // Fallback to default template if config not found
+    return 'Halo, saya tertarik dengan produk:\n\n*{productName}*\nHarga: {price}\nJumlah: {quantity}\n\nLink produk: {productUrl}\n\nBisakah saya mendapatkan informasi lebih lanjut?';
+  } catch (error) {
+    console.error('Error fetching WhatsApp template:', error);
+    // Fallback to default template on error
+    return 'Halo, saya tertarik dengan produk:\n\n*{productName}*\nHarga: {price}\nJumlah: {quantity}\n\nLink produk: {productUrl}\n\nBisakah saya mendapatkan informasi lebih lanjut?';
+  }
+}
+
 // Format WhatsApp message template
-export function formatWhatsAppMessage(
+export async function formatWhatsAppMessage(
   productName: string,
   productPrice: number,
   productSlug: string,
   quantity: number = 1
-): string {
+): Promise<string> {
   const baseUrl = typeof window !== 'undefined' ? window.location.origin : '';
   const productUrl = `${baseUrl}/products/${productSlug}`;
   
-  return `Halo, saya tertarik dengan produk:
-
-*${productName}*
-Harga: Rp ${productPrice.toLocaleString('id-ID')}
-Jumlah: ${quantity}
-
-Link produk: ${productUrl}
-
-Bisakah saya mendapatkan informasi lebih lanjut?`;
+  const template = await getWhatsAppTemplate();
+  
+  return template
+    .replace('{productName}', productName)
+    .replace('{price}', `Rp ${productPrice.toLocaleString('id-ID')}`)
+    .replace('{quantity}', quantity.toString())
+    .replace('{productUrl}', productUrl)
+    .replace(/\\n/g, '\n'); // Convert \n to actual newlines
 }
 
 // Format cart message for WhatsApp

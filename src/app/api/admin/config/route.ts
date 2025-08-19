@@ -49,7 +49,7 @@ export async function PUT(request: NextRequest) {
     }
 
     const body = await request.json();
-    const { whatsappNumber } = body;
+    const { whatsappNumber, whatsappTemplate } = body;
 
     // Validasi nomor WhatsApp
     if (!whatsappNumber) {
@@ -68,15 +68,30 @@ export async function PUT(request: NextRequest) {
       );
     }
 
+    // Validasi template WhatsApp
+    if (whatsappTemplate !== undefined && (!whatsappTemplate || whatsappTemplate.trim().length === 0)) {
+      return NextResponse.json(
+        { success: false, error: 'Template pesan WhatsApp tidak boleh kosong' },
+        { status: 400 }
+      );
+    }
+
     await dbConnect();
 
     // Update atau buat konfigurasi
     let config = await AppConfig.findOne();
     if (config) {
       config.whatsappNumber = whatsappNumber;
+      if (whatsappTemplate !== undefined) {
+        config.whatsappTemplate = whatsappTemplate;
+      }
       await config.save();
     } else {
-      config = await AppConfig.create({ whatsappNumber });
+      const configData: any = { whatsappNumber };
+      if (whatsappTemplate !== undefined) {
+        configData.whatsappTemplate = whatsappTemplate;
+      }
+      config = await AppConfig.create(configData);
     }
 
     return NextResponse.json({

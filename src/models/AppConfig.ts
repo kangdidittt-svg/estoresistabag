@@ -2,6 +2,7 @@ import mongoose from 'mongoose';
 
 interface IAppConfig {
   whatsappNumber: string;
+  whatsappTemplate: string;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -11,6 +12,11 @@ const AppConfigSchema = new mongoose.Schema<IAppConfig>({
     type: String,
     required: true,
     default: '6281234567890' // Default WhatsApp number
+  },
+  whatsappTemplate: {
+    type: String,
+    required: true,
+    default: 'Halo, saya tertarik dengan produk:\n\n*{productName}*\nHarga: {price}\nJumlah: {quantity}\n\nLink produk: {productUrl}\n\nBisakah saya mendapatkan informasi lebih lanjut?'
   }
 }, {
   timestamps: true

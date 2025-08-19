@@ -44,6 +44,7 @@ interface NewAdminForm {
 interface AppConfig {
   _id: string;
   whatsappNumber: string;
+  whatsappTemplate: string;
   createdAt: string;
   updatedAt: string;
 }
@@ -77,7 +78,9 @@ export default function AdminSettingsPage() {
   // WhatsApp settings
   const [appConfig, setAppConfig] = useState<AppConfig | null>(null);
   const [whatsappNumber, setWhatsappNumber] = useState('');
+  const [whatsappTemplate, setWhatsappTemplate] = useState('');
   const [whatsappError, setWhatsappError] = useState('');
+  const [templateError, setTemplateError] = useState('');
 
   // Clear data
   const [showClearDataConfirm, setShowClearDataConfirm] = useState(false);
@@ -109,7 +112,8 @@ export default function AdminSettingsPage() {
       const data = await response.json();
       if (data.success) {
         setAppConfig(data.data);
-        setWhatsappNumber(data.data.whatsappNumber);
+        setWhatsappNumber(data.data.whatsappNumber || '');
+        setWhatsappTemplate(data.data.whatsappTemplate || '');
       }
     } catch (error) {
       console.error('Error fetching app config:', error);
@@ -119,9 +123,10 @@ export default function AdminSettingsPage() {
   const handleWhatsAppUpdate = async (e: React.FormEvent) => {
     e.preventDefault();
     setWhatsappError('');
+    setTemplateError('');
     setMessage(null);
 
-    // Validasi
+    // Validasi nomor WhatsApp
     if (!whatsappNumber) {
       setWhatsappError('Nomor WhatsApp wajib diisi');
       return;
@@ -133,6 +138,12 @@ export default function AdminSettingsPage() {
       return;
     }
 
+    // Validasi template
+    if (!whatsappTemplate || whatsappTemplate.trim().length === 0) {
+      setTemplateError('Template pesan wajib diisi');
+      return;
+    }
+
     setLoading(true);
     try {
       const response = await fetch('/api/admin/config', {
@@ -140,18 +151,18 @@ export default function AdminSettingsPage() {
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ whatsappNumber })
+        body: JSON.stringify({ whatsappNumber, whatsappTemplate })
       });
 
       const data = await response.json();
       if (data.success) {
-        setMessage({ type: 'success', text: 'Nomor WhatsApp berhasil diperbarui' });
+        setMessage({ type: 'success', text: 'Konfigurasi WhatsApp berhasil diperbarui' });
         setAppConfig(data.data);
       } else {
-        setMessage({ type: 'error', text: data.error || 'Gagal memperbarui nomor WhatsApp' });
+        setMessage({ type: 'error', text: data.error || 'Gagal memperbarui konfigurasi WhatsApp' });
       }
     } catch (error) {
-      setMessage({ type: 'error', text: 'Terjadi kesalahan saat memperbarui nomor WhatsApp' });
+      setMessage({ type: 'error', text: 'Terjadi kesalahan saat memperbarui konfigurasi WhatsApp' });
     } finally {
       setLoading(false);
     }
@@ -730,13 +741,13 @@ export default function AdminSettingsPage() {
 
             {/* WhatsApp Settings Tab */}
             {activeTab === 'whatsapp' && (
-              <div className="max-w-md">
+              <div className="max-w-2xl">
                 <h3 className="text-lg font-medium text-theme-primary mb-4">Pengaturan WhatsApp</h3>
                 <p className="text-sm text-theme-primary text-opacity-60 mb-6">
-                  Atur nomor WhatsApp yang akan digunakan untuk tombol "Pesan via WhatsApp" di seluruh aplikasi.
+                  Atur nomor WhatsApp dan template pesan yang akan digunakan untuk tombol "Pesan via WhatsApp" di seluruh aplikasi.
                 </p>
                 
-                <form onSubmit={handleWhatsAppUpdate} className="space-y-4">
+                <form onSubmit={handleWhatsAppUpdate} className="space-y-6">
                   <div>
                     <label className="block text-sm font-medium text-theme-primary mb-2">
                       Nomor WhatsApp *
@@ -758,21 +769,62 @@ export default function AdminSettingsPage() {
                     </p>
                   </div>
 
+                  <div>
+                    <label className="block text-sm font-medium text-theme-primary mb-2">
+                      Template Pesan WhatsApp *
+                    </label>
+                    <textarea
+                      value={whatsappTemplate}
+                      onChange={(e) => setWhatsappTemplate(e.target.value)}
+                      rows={6}
+                      className={`block w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-accent-peach focus:border-accent-peach bg-white text-theme-primary resize-none ${
+                        templateError ? 'border-red-500' : 'border-theme-primary border-opacity-20'
+                      }`}
+                      placeholder="Halo, saya tertarik dengan produk:\n\n*{productName}*\nHarga: {price}\nJumlah: {quantity}\n\nLink produk: {productUrl}\n\nBisakah saya mendapatkan informasi lebih lanjut?"
+                    />
+                    {templateError && (
+                      <p className="mt-1 text-sm text-red-600">{templateError}</p>
+                    )}
+                    <div className="mt-2 text-xs text-theme-primary text-opacity-50">
+                      <p className="mb-1">Variabel yang tersedia:</p>
+                      <div className="grid grid-cols-2 gap-2">
+                        <span className="bg-gray-100 px-2 py-1 rounded text-gray-700">{'{productName}'}</span>
+                        <span className="bg-gray-100 px-2 py-1 rounded text-gray-700">{'{price}'}</span>
+                        <span className="bg-gray-100 px-2 py-1 rounded text-gray-700">{'{quantity}'}</span>
+                        <span className="bg-gray-100 px-2 py-1 rounded text-gray-700">{'{productUrl}'}</span>
+                      </div>
+                      <p className="mt-2">Gunakan \\n untuk baris baru</p>
+                    </div>
+                  </div>
+
                   <button
                     type="submit"
                     disabled={loading}
                     className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all duration-300 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-gray-400"
                   >
                     <Save className="h-4 w-4 mr-2" />
-                    {loading ? 'Menyimpan...' : 'Simpan Nomor WhatsApp'}
+                    {loading ? 'Menyimpan...' : 'Simpan Konfigurasi WhatsApp'}
                   </button>
                 </form>
 
                 {appConfig && (
                   <div className="mt-6 p-4 bg-theme-secondary bg-opacity-50 rounded-lg">
-                    <h4 className="text-sm font-medium text-theme-primary mb-2">Nomor Saat Ini:</h4>
-                    <p className="text-sm text-theme-primary text-opacity-80">+{appConfig.whatsappNumber}</p>
-                    <p className="text-xs text-theme-primary text-opacity-50 mt-1">
+                    <h4 className="text-sm font-medium text-theme-primary mb-3">Konfigurasi Saat Ini:</h4>
+                    <div className="space-y-3">
+                      <div>
+                        <p className="text-xs text-theme-primary text-opacity-60 mb-1">Nomor WhatsApp:</p>
+                        <p className="text-sm text-theme-primary text-opacity-80">+{appConfig.whatsappNumber}</p>
+                      </div>
+                      <div>
+                        <p className="text-xs text-theme-primary text-opacity-60 mb-1">Template Pesan:</p>
+                        <div className="bg-white p-2 rounded border text-xs text-theme-primary max-h-20 overflow-y-auto">
+                          {appConfig.whatsappTemplate?.split('\\n').map((line, index) => (
+                            <div key={index}>{line}</div>
+                          )) || 'Template tidak tersedia'}
+                        </div>
+                      </div>
+                    </div>
+                    <p className="text-xs text-theme-primary text-opacity-50 mt-3">
                       Terakhir diperbarui: {new Date(appConfig.updatedAt).toLocaleDateString('id-ID', {
                         year: 'numeric',
                         month: 'long',

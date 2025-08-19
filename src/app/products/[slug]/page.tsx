@@ -142,7 +142,7 @@ export default function ProductDetailPage() {
   const handleWhatsAppOrder = async () => {
     if (!product) return;
     
-    const message = formatWhatsAppMessage(
+    const message = await formatWhatsAppMessage(
       product.name,
       product.priceAfterDiscount || product.price,
       product.slug,
