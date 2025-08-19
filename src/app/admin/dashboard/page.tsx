@@ -213,6 +213,49 @@ export default function AdminDashboard() {
           </div>
         </div>
 
+        {/* Navigation Menu */}
+        <div className="card-theme p-6 mb-8">
+          <h3 className="text-lg font-semibold text-theme-primary mb-4">Menu Navigasi</h3>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <button
+              onClick={() => router.push('/admin/products')}
+              className="flex flex-col items-center p-4 bg-accent-blue text-white rounded-xl hover:bg-blue-600 transition-all duration-300 shadow-soft hover:shadow-medium"
+            >
+              <div className="p-2 bg-white bg-opacity-20 rounded-xl mb-2">
+                <Package className="h-6 w-6 text-white" />
+              </div>
+              <span className="text-sm font-medium text-white">Kelola Produk</span>
+            </button>
+            <button
+              onClick={() => router.push('/admin/categories')}
+              className="flex flex-col items-center p-4 bg-accent-mint text-white rounded-xl hover:bg-green-600 transition-all duration-300 shadow-soft hover:shadow-medium"
+            >
+              <div className="p-2 bg-white bg-opacity-20 rounded-xl mb-2">
+                <Tag className="h-6 w-6 text-white" />
+              </div>
+              <span className="text-sm font-medium text-white">Kelola Kategori</span>
+            </button>
+            <button
+              onClick={() => router.push('/admin/promos')}
+              className="flex flex-col items-center p-4 bg-accent-yellow text-white rounded-xl hover:bg-yellow-600 transition-all duration-300 shadow-soft hover:shadow-medium"
+            >
+              <div className="p-2 bg-white bg-opacity-20 rounded-xl mb-2">
+                <DollarSign className="h-6 w-6 text-white" />
+              </div>
+              <span className="text-sm font-medium text-white">Kelola Promo</span>
+            </button>
+            <button
+              onClick={() => router.push('/admin/settings')}
+              className="flex flex-col items-center p-4 bg-accent-lavender text-white rounded-xl hover:bg-purple-600 transition-all duration-300 shadow-soft hover:shadow-medium"
+            >
+              <div className="p-2 bg-white bg-opacity-20 rounded-xl mb-2">
+                <Settings className="h-6 w-6 text-white" />
+              </div>
+              <span className="text-sm font-medium text-white">Pengaturan</span>
+            </button>
+          </div>
+        </div>
+
         {/* Quick Actions */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
           <div className="card-theme p-6">
@@ -234,14 +277,14 @@ export default function AdminDashboard() {
               </button>
               <button
                 onClick={() => router.push('/admin/promos/new')}
-                className="flex items-center justify-center p-4 bg-gradient-to-r from-accent-yellow to-accent-peach text-theme-primary rounded-xl hover:from-accent-peach hover:to-accent-yellow transition-all duration-300 shadow-soft hover:shadow-medium border-2 border-accent-yellow hover:border-accent-peach"
+                className="flex items-center justify-center p-4 bg-gradient-to-r from-green-600 to-green-500 text-white rounded-xl hover:from-green-700 hover:to-green-600 transition-all duration-300 shadow-soft hover:shadow-medium border-2 border-green-600 hover:border-green-700"
               >
                 <Plus className="h-5 w-5 mr-2" />
                 <span className="text-sm font-medium">Tambah Promo</span>
               </button>
               <button
                 onClick={() => window.open('/', '_blank')}
-                className="flex items-center justify-center p-4 bg-gradient-to-r from-accent-peach to-accent-mint text-theme-primary rounded-xl hover:from-accent-mint hover:to-accent-peach transition-all duration-300 shadow-soft hover:shadow-medium border-2 border-accent-peach hover:border-accent-mint"
+                className="flex items-center justify-center p-4 bg-gradient-to-r from-green-600 to-green-500 text-white rounded-xl hover:from-green-700 hover:to-green-600 transition-all duration-300 shadow-soft hover:shadow-medium border-2 border-green-600 hover:border-green-700"
               >
                 <Eye className="h-5 w-5 mr-2" />
                 <span className="text-sm font-medium">Lihat Toko</span>
@@ -304,48 +347,7 @@ export default function AdminDashboard() {
           </div>
         </div>
 
-        {/* Navigation Menu */}
-        <div className="card-theme p-6">
-          <h3 className="text-lg font-semibold text-theme-primary mb-4">Menu Navigasi</h3>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <button
-              onClick={() => router.push('/admin/products')}
-              className="flex flex-col items-center p-4 border border-theme-primary border-opacity-20 rounded-xl hover:bg-accent-blue hover:bg-opacity-10 hover:border-accent-blue transition-all duration-300"
-            >
-              <div className="p-2 bg-accent-blue rounded-xl mb-2">
-                <Package className="h-6 w-6 text-on-accent" />
-              </div>
-              <span className="text-sm font-medium text-theme-primary">Kelola Produk</span>
-            </button>
-            <button
-              onClick={() => router.push('/admin/categories')}
-              className="flex flex-col items-center p-4 border border-theme-primary border-opacity-20 rounded-xl hover:bg-accent-mint hover:bg-opacity-10 hover:border-accent-mint transition-all duration-300"
-            >
-              <div className="p-2 bg-accent-mint rounded-xl mb-2">
-                <Tag className="h-6 w-6 text-on-accent" />
-              </div>
-              <span className="text-sm font-medium text-theme-primary">Kelola Kategori</span>
-            </button>
-            <button
-              onClick={() => router.push('/admin/promos')}
-              className="flex flex-col items-center p-4 border border-theme-primary border-opacity-20 rounded-xl hover:bg-accent-yellow hover:bg-opacity-10 hover:border-accent-yellow transition-all duration-300"
-            >
-              <div className="p-2 bg-accent-yellow rounded-xl mb-2">
-                <DollarSign className="h-6 w-6 text-theme-primary" />
-              </div>
-              <span className="text-sm font-medium text-theme-primary">Kelola Promo</span>
-            </button>
-            <button
-              onClick={() => router.push('/admin/settings')}
-              className="flex flex-col items-center p-4 border border-theme-primary border-opacity-20 rounded-xl hover:bg-accent-lavender hover:bg-opacity-10 hover:border-accent-lavender transition-all duration-300"
-            >
-              <div className="p-2 bg-accent-lavender rounded-xl mb-2">
-                <Settings className="h-6 w-6 text-on-accent" />
-              </div>
-              <span className="text-sm font-medium text-theme-primary">Pengaturan</span>
-            </button>
-          </div>
-        </div>
+
       </div>
     </div>
   );
