@@ -38,17 +38,9 @@ interface FormData {
   promo: string;
   stock: number;
   sku: string;
-  weight: number;
-  dimensions: {
-    length: number;
-    width: number;
-    height: number;
-  };
   tags: string[];
   isPublished: boolean;
   isFeatured: boolean;
-  metaTitle: string;
-  metaDescription: string;
 }
 
 interface ProductImage {
@@ -73,17 +65,9 @@ export default function EditProductPage() {
     promo: '',
     stock: 0,
     sku: '',
-    weight: 0,
-    dimensions: {
-      length: 0,
-      width: 0,
-      height: 0
-    },
     tags: [],
     isPublished: true,
-    isFeatured: false,
-    metaTitle: '',
-    metaDescription: ''
+    isFeatured: false
   });
   
   const [existingImages, setExistingImages] = useState<ProductImage[]>([]);
@@ -119,17 +103,9 @@ export default function EditProductPage() {
           promo: product.promo?._id || '',
           stock: product.stock || 0,
           sku: product.sku || '',
-          weight: product.weight || 0,
-          dimensions: {
-            length: product.dimensions?.length || 0,
-            width: product.dimensions?.width || 0,
-            height: product.dimensions?.height || 0
-          },
           tags: product.tags || [],
           isPublished: product.isPublished ?? true,
-          isFeatured: product.isFeatured ?? false,
-          metaTitle: product.metaTitle || '',
-          metaDescription: product.metaDescription || ''
+          isFeatured: product.isFeatured ?? false
         });
         setExistingImages(product.images || []);
       }
@@ -177,33 +153,21 @@ export default function EditProductPage() {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value, type } = e.target;
     
-    if (name.includes('.')) {
-      const [parent, child] = name.split('.');
+    setFormData(prev => ({
+      ...prev,
+      [name]: type === 'number' ? parseFloat(value) || 0 : 
+               type === 'checkbox' ? (e.target as HTMLInputElement).checked : value
+    }));
+    
+    // Auto-generate slug from name
+    if (name === 'name') {
       setFormData(prev => ({
         ...prev,
-        [parent]: {
-          ...prev[parent as keyof FormData] as any,
-          [child]: type === 'number' ? parseFloat(value) || 0 : value
-        }
+        slug: generateSlug(value)
       }));
-    } else {
-      setFormData(prev => ({
-        ...prev,
-        [name]: type === 'number' ? parseFloat(value) || 0 : 
-                 type === 'checkbox' ? (e.target as HTMLInputElement).checked : value
-      }));
-      
-      // Auto-generate slug from name
-      if (name === 'name') {
-        setFormData(prev => ({
-          ...prev,
-          slug: generateSlug(value),
-          metaTitle: value
-        }));
-      }
     }
     
-    // Clear error when user starts typing
+    // Clear errors when user starts typing
     if (errors[name]) {
       setErrors(prev => ({ ...prev, [name]: '' }));
     }
@@ -314,7 +278,7 @@ export default function EditProductPage() {
       
       // Add form data
       Object.entries(formData).forEach(([key, value]) => {
-        if (key === 'dimensions' || key === 'tags') {
+        if (key === 'tags') {
           submitData.append(key, JSON.stringify(value));
         } else {
           submitData.append(key, value.toString());
@@ -695,74 +659,7 @@ export default function EditProductPage() {
             </div>
           </div>
 
-          {/* Physical Properties */}
-          <div className="card-theme rounded-lg shadow-soft p-6">
-            <h2 className="text-lg font-semibold text-theme-primary mb-4">Properti Fisik</h2>
-            
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-              {/* Weight */}
-              <div>
-                <label className="block text-sm font-medium text-theme-primary mb-2">
-                  Berat (gram)
-                </label>
-                <input
-                  type="number"
-                  name="weight"
-                  value={formData.weight}
-                  onChange={handleInputChange}
-                  min="0"
-                  className="w-full px-3 py-2 border border-theme-primary border-opacity-30 rounded-lg focus:ring-2 focus:ring-accent-peach focus:border-accent-peach transition-all duration-200 bg-theme-main text-theme-primary"
-                  placeholder="0"
-                />
-              </div>
 
-              {/* Dimensions */}
-              <div>
-                <label className="block text-sm font-medium text-theme-primary mb-2">
-                  Panjang (cm)
-                </label>
-                <input
-                  type="number"
-                  name="dimensions.length"
-                  value={formData.dimensions.length}
-                  onChange={handleInputChange}
-                  min="0"
-                  className="w-full px-3 py-2 border border-theme-primary border-opacity-30 rounded-lg focus:ring-2 focus:ring-accent-peach focus:border-accent-peach transition-all duration-200 bg-theme-main text-theme-primary"
-                  placeholder="0"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-theme-primary mb-2">
-                  Lebar (cm)
-                </label>
-                <input
-                  type="number"
-                  name="dimensions.width"
-                  value={formData.dimensions.width}
-                  onChange={handleInputChange}
-                  min="0"
-                  className="w-full px-3 py-2 border border-theme-primary border-opacity-30 rounded-lg focus:ring-2 focus:ring-accent-peach focus:border-accent-peach transition-all duration-200 bg-theme-main text-theme-primary"
-                  placeholder="0"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-theme-primary mb-2">
-                  Tinggi (cm)
-                </label>
-                <input
-                  type="number"
-                  name="dimensions.height"
-                  value={formData.dimensions.height}
-                  onChange={handleInputChange}
-                  min="0"
-                  className="w-full px-3 py-2 border border-theme-primary border-opacity-30 rounded-lg focus:ring-2 focus:ring-accent-peach focus:border-accent-peach transition-all duration-200 bg-theme-main text-theme-primary"
-                  placeholder="0"
-                />
-              </div>
-            </div>
-          </div>
 
           {/* Tags */}
           <div className="card-theme rounded-lg shadow-soft p-6">
@@ -816,42 +713,7 @@ export default function EditProductPage() {
             </div>
           </div>
 
-          {/* SEO */}
-          <div className="card-theme rounded-lg shadow-soft p-6">
-            <h2 className="text-lg font-semibold text-theme-primary mb-4">SEO</h2>
-            
-            <div className="space-y-4">
-              {/* Meta Title */}
-              <div>
-                <label className="block text-sm font-medium text-theme-primary mb-2">
-                  Meta Title
-                </label>
-                <input
-                  type="text"
-                  name="metaTitle"
-                  value={formData.metaTitle}
-                  onChange={handleInputChange}
-                  className="w-full px-3 py-2 border border-theme-primary border-opacity-30 rounded-lg focus:ring-2 focus:ring-accent-peach focus:border-accent-peach transition-all duration-200 bg-theme-main text-theme-primary"
-                  placeholder="Judul untuk SEO"
-                />
-              </div>
 
-              {/* Meta Description */}
-              <div>
-                <label className="block text-sm font-medium text-theme-primary mb-2">
-                  Meta Description
-                </label>
-                <textarea
-                  name="metaDescription"
-                  value={formData.metaDescription}
-                  onChange={handleInputChange}
-                  rows={3}
-                  className="w-full px-3 py-2 border border-theme-primary border-opacity-30 rounded-lg focus:ring-2 focus:ring-accent-peach focus:border-accent-peach transition-all duration-200 bg-theme-main text-theme-primary"
-                  placeholder="Deskripsi untuk SEO"
-                />
-              </div>
-            </div>
-          </div>
 
           {/* Status */}
           <div className="card-theme rounded-lg shadow-soft p-6">

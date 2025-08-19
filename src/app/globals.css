@@ -40,6 +40,10 @@
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
+    --text-primary: #ededed;
+    --bg-main: #1a1a1a;
+    --header-color: #2a2a2a;
+    --card-color: #2a2a2a;
   }
 }
 

@@ -4,6 +4,9 @@ export interface ICategory extends Document {
   name: string;
   slug: string;
   description?: string;
+  metaTitle?: string;
+  metaDescription?: string;
+  isActive: boolean;
   image?: string;
   createdAt: Date;
   updatedAt: Date;
@@ -27,6 +30,20 @@ const CategorySchema = new Schema<ICategory>({
     type: String,
     trim: true,
     maxlength: [500, 'Description cannot exceed 500 characters']
+  },
+  metaTitle: {
+    type: String,
+    trim: true,
+    maxlength: [60, 'Meta title cannot exceed 60 characters']
+  },
+  metaDescription: {
+    type: String,
+    trim: true,
+    maxlength: [160, 'Meta description cannot exceed 160 characters']
+  },
+  isActive: {
+    type: Boolean,
+    default: true
   },
   image: {
     type: String,

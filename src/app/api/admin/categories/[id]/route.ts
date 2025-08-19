@@ -52,8 +52,16 @@ export async function PUT(
     await dbConnect();
 
     const { id } = await params;
-    const body = await request.json();
-    const { name, description, image } = body;
+    const formData = await request.formData();
+    
+    const name = formData.get('name') as string;
+    const slug = formData.get('slug') as string;
+    const description = formData.get('description') as string;
+    const metaTitle = formData.get('metaTitle') as string;
+    const metaDescription = formData.get('metaDescription') as string;
+    const isActive = formData.get('isActive') === 'true';
+    const existingImage = formData.get('existingImage') as string;
+    const newImageFile = formData.get('image') as File | null;
 
     // Check if category exists
     const existingCategory = await Category.findById(id);
@@ -72,17 +80,62 @@ export async function PUT(
       );
     }
 
-    // Generate new slug if name changed
-    let slug = existingCategory.slug;
-    if (name !== existingCategory.name) {
-      slug = generateSlug(name);
-      
-      // Check if new slug already exists (excluding current category)
-      const slugExists = await Category.findOne({ slug, _id: { $ne: id } });
+    // Validate slug if provided, otherwise generate from name
+    let finalSlug = slug;
+    if (!finalSlug && name !== existingCategory.name) {
+      finalSlug = generateSlug(name);
+    } else if (!finalSlug) {
+      finalSlug = existingCategory.slug;
+    }
+    
+    // Check if slug already exists (excluding current category)
+    if (finalSlug !== existingCategory.slug) {
+      const slugExists = await Category.findOne({ slug: finalSlug, _id: { $ne: id } });
       if (slugExists) {
         return NextResponse.json(
-          { success: false, error: 'Category with this name already exists' },
+          { success: false, error: 'Category with this slug already exists' },
           { status: 400 }
+        );
+      }
+    }
+    
+    // Handle image upload
+    let finalImage = existingImage || existingCategory.image || '';
+    
+    if (newImageFile && newImageFile.size > 0) {
+      try {
+        const fs = require('fs').promises;
+        const path = require('path');
+        
+        // Create upload directory if it doesn't exist
+        const uploadDir = path.join(process.cwd(), 'public', 'uploads', 'categories');
+        await fs.mkdir(uploadDir, { recursive: true });
+        
+        // Generate unique filename
+        const fileExtension = newImageFile.name.split('.').pop();
+        const fileName = `${Date.now()}-${Math.random().toString(36).substring(2)}.${fileExtension}`;
+        const filePath = path.join(uploadDir, fileName);
+        
+        // Save file
+        const buffer = Buffer.from(await newImageFile.arrayBuffer());
+        await fs.writeFile(filePath, buffer);
+        
+        finalImage = `/uploads/categories/${fileName}`;
+        
+        // Delete old image if it exists and is different
+        if (existingCategory.image && existingCategory.image !== finalImage) {
+          try {
+            const oldImagePath = path.join(process.cwd(), 'public', existingCategory.image);
+            await fs.unlink(oldImagePath);
+          } catch (error) {
+            console.log('Could not delete old image:', error);
+          }
+        }
+      } catch (error) {
+        console.error('Error uploading image:', error);
+        return NextResponse.json(
+          { success: false, error: 'Failed to upload image' },
+          { status: 500 }
         );
       }
     }
@@ -92,9 +145,12 @@ export async function PUT(
       id,
       {
         name,
-        slug,
+        slug: finalSlug,
         description: description || '',
-        image: image || ''
+        metaTitle: metaTitle || '',
+        metaDescription: metaDescription || '',
+        isActive,
+        image: finalImage
       },
       { new: true, runValidators: true }
     );

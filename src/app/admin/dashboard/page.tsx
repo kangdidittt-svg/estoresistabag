@@ -270,7 +270,7 @@ export default function AdminDashboard() {
               onClick={() => router.push('/admin/products')}
               className="flex flex-col items-center p-4 bg-accent-blue text-white rounded-xl hover:bg-blue-600 transition-all duration-300 shadow-soft hover:shadow-medium"
             >
-              <div className="p-2 bg-white bg-opacity-20 rounded-xl mb-2">
+              <div className="mb-2">
                 <Package className="h-6 w-6 text-white" aria-hidden="true" />
               </div>
               <span className="text-sm font-medium text-white">Kelola Produk</span>
@@ -279,7 +279,7 @@ export default function AdminDashboard() {
               onClick={() => router.push('/admin/categories')}
               className="flex flex-col items-center p-4 bg-accent-mint text-white rounded-xl hover:bg-green-600 transition-all duration-300 shadow-soft hover:shadow-medium"
             >
-              <div className="p-2 bg-white bg-opacity-20 rounded-xl mb-2">
+              <div className="mb-2">
                 <Tag className="h-6 w-6 text-white" aria-hidden="true" />
               </div>
               <span className="text-sm font-medium text-white">Kelola Kategori</span>
@@ -288,7 +288,7 @@ export default function AdminDashboard() {
               onClick={() => router.push('/admin/promos')}
               className="flex flex-col items-center p-4 bg-accent-yellow text-white rounded-xl hover:bg-yellow-600 transition-all duration-300 shadow-soft hover:shadow-medium"
             >
-              <div className="p-2 bg-white bg-opacity-20 rounded-xl mb-2">
+              <div className="mb-2">
                 <DollarSign className="h-6 w-6 text-white" aria-hidden="true" />
               </div>
               <span className="text-sm font-medium text-white">Kelola Promo</span>
@@ -297,7 +297,7 @@ export default function AdminDashboard() {
               onClick={() => router.push('/admin/settings')}
               className="flex flex-col items-center p-4 bg-accent-lavender text-white rounded-xl hover:bg-purple-600 transition-all duration-300 shadow-soft hover:shadow-medium"
             >
-              <div className="p-2 bg-white bg-opacity-20 rounded-xl mb-2">
+              <div className="mb-2">
                 <Settings className="h-6 w-6 text-white" aria-hidden="true" />
               </div>
               <span className="text-sm font-medium text-white">Pengaturan</span>
