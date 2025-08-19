@@ -390,7 +390,7 @@ export default function NewProductPage() {
           <div className="flex items-center justify-end space-x-4">
             <Link
               href="/admin/products"
-              className="px-6 py-2 bg-theme-primary bg-opacity-10 text-theme-primary border border-theme-primary border-opacity-50 rounded-lg hover:bg-theme-primary hover:bg-opacity-20 transition-all duration-200"
+              className="px-6 py-2 bg-gray-100 text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-200 transition-all duration-200"
             >
               Batal
             </Link>

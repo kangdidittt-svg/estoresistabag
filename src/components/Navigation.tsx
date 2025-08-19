@@ -51,7 +51,7 @@ export default function Navigation({ className = '' }: NavigationProps) {
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center">
             <Link href="/" className="flex items-center space-x-2 group">
-              <div className="bg-accent-peach p-2 rounded-2xl group-hover:scale-105 transition-all duration-200 overflow-hidden">
+              <div className="group-hover:scale-105 transition-all duration-200">
                 <Image 
                   src="/logo-sis.png" 
                   alt="SistaBag Logo" 

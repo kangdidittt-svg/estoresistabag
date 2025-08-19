@@ -263,28 +263,28 @@ export default function AdminDashboard() {
             <div className="grid grid-cols-2 gap-4">
               <button
                 onClick={() => router.push('/admin/products/new')}
-                className="flex items-center justify-center p-4 bg-gradient-to-r from-green-600 to-green-500 text-white rounded-xl hover:from-green-700 hover:to-green-600 transition-all duration-300 shadow-soft hover:shadow-medium border-2 border-green-600 hover:border-green-700"
+                className="flex items-center justify-center p-4 bg-accent-blue text-white rounded-xl hover:bg-blue-600 transition-all duration-300 shadow-soft hover:shadow-medium"
               >
                 <Plus className="h-5 w-5 mr-2" />
                 <span className="text-sm font-medium">Tambah Produk</span>
               </button>
               <button
                 onClick={() => router.push('/admin/categories/new')}
-                className="flex items-center justify-center p-4 bg-gradient-to-r from-green-600 to-green-500 text-white rounded-xl hover:from-green-700 hover:to-green-600 transition-all duration-300 shadow-soft hover:shadow-medium border-2 border-green-600 hover:border-green-700"
+                className="flex items-center justify-center p-4 bg-accent-mint text-white rounded-xl hover:bg-green-600 transition-all duration-300 shadow-soft hover:shadow-medium"
               >
                 <Plus className="h-5 w-5 mr-2" />
                 <span className="text-sm font-medium">Tambah Kategori</span>
               </button>
               <button
                 onClick={() => router.push('/admin/promos/new')}
-                className="flex items-center justify-center p-4 bg-gradient-to-r from-green-600 to-green-500 text-white rounded-xl hover:from-green-700 hover:to-green-600 transition-all duration-300 shadow-soft hover:shadow-medium border-2 border-green-600 hover:border-green-700"
+                className="flex items-center justify-center p-4 bg-accent-yellow text-white rounded-xl hover:bg-yellow-600 transition-all duration-300 shadow-soft hover:shadow-medium"
               >
                 <Plus className="h-5 w-5 mr-2" />
                 <span className="text-sm font-medium">Tambah Promo</span>
               </button>
               <button
                 onClick={() => window.open('/', '_blank')}
-                className="flex items-center justify-center p-4 bg-gradient-to-r from-green-600 to-green-500 text-white rounded-xl hover:from-green-700 hover:to-green-600 transition-all duration-300 shadow-soft hover:shadow-medium border-2 border-green-600 hover:border-green-700"
+                className="flex items-center justify-center p-4 bg-accent-lavender text-white rounded-xl hover:bg-purple-600 transition-all duration-300 shadow-soft hover:shadow-medium"
               >
                 <Eye className="h-5 w-5 mr-2" />
                 <span className="text-sm font-medium">Lihat Toko</span>

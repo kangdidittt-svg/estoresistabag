@@ -600,7 +600,7 @@ export default function EditPromoPage() {
           <div className="flex items-center justify-end space-x-4 pt-6">
             <Link
               href="/admin/promos"
-              className="px-6 py-2 bg-theme-primary bg-opacity-10 text-theme-primary border border-theme-primary border-opacity-50 rounded-lg hover:bg-theme-primary hover:bg-opacity-20 transition-colors"
+              className="px-6 py-2 bg-gray-100 text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-200 transition-colors"
             >
               Batal
             </Link>
