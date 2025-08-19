@@ -51,10 +51,13 @@ export function formatCartMessage(cartItems: any[]): string {
     const subtotal = itemTotal * item.quantity;
     total += subtotal;
     
+    const productUrl = `${baseUrl}/products/${item.slug}`;
+    
     message += `${index + 1}. *${item.name}*\n`;
     message += `   Harga: Rp ${itemTotal.toLocaleString('id-ID')}\n`;
     message += `   Jumlah: ${item.quantity}\n`;
-    message += `   Subtotal: Rp ${subtotal.toLocaleString('id-ID')}\n\n`;
+    message += `   Subtotal: Rp ${subtotal.toLocaleString('id-ID')}\n`;
+    message += `   Link: ${productUrl}\n\n`;
   });
   
   message += `*Total: Rp ${total.toLocaleString('id-ID')}*\n\n`;

@@ -418,18 +418,12 @@ export default function HomePage() {
                 <li className="text-sm">
                   WhatsApp: +{whatsappNumber}
                 </li>
-                <li className="text-sm">
-                  Email: info@sistabag.com
-                </li>
-                <li className="text-sm">
-                  Alamat: Jakarta, Indonesia
-                </li>
               </ul>
             </div>
           </div>
           
           <div className="border-t border-theme-primary border-opacity-20 pt-6 text-center">
-            <p className="text-theme-primary text-opacity-50 text-sm">&copy; 2024 SistaBag. All rights reserved. Made with ❤️ for fashion lovers.</p>
+            <p className="text-theme-primary text-opacity-50 text-sm">&copy; 2025 SistaBag. All rights reserved. Made with ❤️</p>
           </div>
         </div>
       </footer>

@@ -222,7 +222,7 @@ export default function AdminDashboard() {
               className="flex flex-col items-center p-4 bg-accent-blue text-white rounded-xl hover:bg-blue-600 transition-all duration-300 shadow-soft hover:shadow-medium"
             >
               <div className="p-2 bg-white bg-opacity-20 rounded-xl mb-2">
-                <Package className="h-6 w-6 text-white" />
+                <Package className="h-6 w-6 text-white" aria-hidden="true" />
               </div>
               <span className="text-sm font-medium text-white">Kelola Produk</span>
             </button>
@@ -231,7 +231,7 @@ export default function AdminDashboard() {
               className="flex flex-col items-center p-4 bg-accent-mint text-white rounded-xl hover:bg-green-600 transition-all duration-300 shadow-soft hover:shadow-medium"
             >
               <div className="p-2 bg-white bg-opacity-20 rounded-xl mb-2">
-                <Tag className="h-6 w-6 text-white" />
+                <Tag className="h-6 w-6 text-white" aria-hidden="true" />
               </div>
               <span className="text-sm font-medium text-white">Kelola Kategori</span>
             </button>
@@ -240,7 +240,7 @@ export default function AdminDashboard() {
               className="flex flex-col items-center p-4 bg-accent-yellow text-white rounded-xl hover:bg-yellow-600 transition-all duration-300 shadow-soft hover:shadow-medium"
             >
               <div className="p-2 bg-white bg-opacity-20 rounded-xl mb-2">
-                <DollarSign className="h-6 w-6 text-white" />
+                <DollarSign className="h-6 w-6 text-white" aria-hidden="true" />
               </div>
               <span className="text-sm font-medium text-white">Kelola Promo</span>
             </button>
@@ -249,7 +249,7 @@ export default function AdminDashboard() {
               className="flex flex-col items-center p-4 bg-accent-lavender text-white rounded-xl hover:bg-purple-600 transition-all duration-300 shadow-soft hover:shadow-medium"
             >
               <div className="p-2 bg-white bg-opacity-20 rounded-xl mb-2">
-                <Settings className="h-6 w-6 text-white" />
+                <Settings className="h-6 w-6 text-white" aria-hidden="true" />
               </div>
               <span className="text-sm font-medium text-white">Pengaturan</span>
             </button>
