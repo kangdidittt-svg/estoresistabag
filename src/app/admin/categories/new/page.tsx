@@ -210,11 +210,11 @@ export default function NewCategoryPage() {
             <button
               type="submit"
               disabled={loading || imageLoading}
-              className="px-6 py-2 bg-gradient-to-r from-accent-mint to-accent-blue text-on-accent rounded-lg hover:shadow-lg hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 flex items-center space-x-2 transition-all duration-200"
+              className="px-6 py-2 bg-gradient-to-r from-green-500 to-teal-600 text-white rounded-lg hover:from-green-600 hover:to-teal-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2 transition-all duration-300 shadow-soft hover:shadow-medium font-semibold"
             >
               {loading ? (
                 <>
-                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-on-accent"></div>
+                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
                   <span>Menyimpan...</span>
                 </>
               ) : (

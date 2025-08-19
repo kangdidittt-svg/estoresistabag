@@ -22,13 +22,19 @@ import {
 } from 'lucide-react';
 import { formatCurrency, calculateDiscountPercentage } from '@/lib/utils';
 
+interface ProductImage {
+  url: string;
+  alt: string;
+  isPrimary: boolean;
+}
+
 interface Product {
   _id: string;
   name: string;
   slug: string;
   price: number;
   priceAfterDiscount?: number;
-  images: string[];
+  images: ProductImage[];
   views: number;
   stock: number;
   promo?: {
@@ -564,7 +570,7 @@ function ProductCard({ product, viewMode }: { product: Product; viewMode: 'grid'
           <div className="flex">
             <div className="relative w-48 h-48 flex-shrink-0">
               <Image
-                src={product.images[0] || '/placeholder-bag.jpg'}
+                src={product.images[0]?.url || '/placeholder-bag.jpg'}
                 alt={product.name}
                 fill
                 className="object-cover group-hover:scale-105 transition-transform duration-300"
@@ -638,7 +644,7 @@ function ProductCard({ product, viewMode }: { product: Product; viewMode: 'grid'
       <div className="bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow border overflow-hidden">
         <div className="relative aspect-square">
           <Image
-            src={product.images[0] || '/placeholder-bag.jpg'}
+            src={product.images[0]?.url || '/placeholder-bag.jpg'}
             alt={product.name}
             fill
             className="object-cover group-hover:scale-105 transition-transform duration-300"

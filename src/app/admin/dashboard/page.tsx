@@ -19,6 +19,7 @@ import {
 } from 'lucide-react';
 import { formatCurrency } from '@/lib/utils';
 import LoadingSpinner from '@/components/LoadingSpinner';
+import Toast, { useToast } from '@/components/ui/Toast';
 
 interface DashboardStats {
   totalProducts: number;
@@ -47,6 +48,7 @@ export default function AdminDashboard() {
   const [loading, setLoading] = useState(true);
   const [resettingViews, setResettingViews] = useState(false);
   const router = useRouter();
+  const { toast, showToast, hideToast } = useToast();
 
   useEffect(() => {
     fetchDashboardData();
@@ -117,15 +119,15 @@ export default function AdminDashboard() {
       const data = await response.json();
 
       if (data.success) {
-        alert(`Berhasil mereset view count untuk ${data.data.modifiedCount} produk`);
+        showToast(`Berhasil mereset view count untuk ${data.data.modifiedCount} produk`, 'success');
         // Refresh dashboard data to show updated view counts
         fetchDashboardData();
       } else {
-        alert(data.error || 'Gagal mereset view count');
+        showToast(data.error || 'Gagal mereset view count', 'error');
       }
     } catch (error) {
       console.error('Error resetting views:', error);
-      alert('Terjadi kesalahan saat mereset view count');
+      showToast('Terjadi kesalahan saat mereset view count', 'error');
     } finally {
       setResettingViews(false);
     }
@@ -157,7 +159,7 @@ export default function AdminDashboard() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center">
-              <div className="p-2 bg-accent-peach rounded-xl mr-3 overflow-hidden">
+              <div className="p-2 bg-transparent rounded-xl mr-3 overflow-hidden">
                 <Image 
                   src="/logo-sis.png" 
                   alt="SistaBag Logo" 
@@ -312,28 +314,28 @@ export default function AdminDashboard() {
             <div className="grid grid-cols-2 gap-4">
               <button
                 onClick={() => router.push('/admin/products/new')}
-                className="flex items-center justify-center p-4 bg-accent-blue text-white rounded-xl hover:bg-blue-600 transition-all duration-300 shadow-soft hover:shadow-medium"
+                className="flex items-center justify-center p-4 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-xl hover:from-blue-600 hover:to-blue-700 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 font-semibold"
               >
                 <Plus className="h-5 w-5 mr-2" />
                 <span className="text-sm font-medium">Tambah Produk</span>
               </button>
               <button
                 onClick={() => router.push('/admin/categories/new')}
-                className="flex items-center justify-center p-4 bg-accent-mint text-white rounded-xl hover:bg-green-600 transition-all duration-300 shadow-soft hover:shadow-medium"
+                className="flex items-center justify-center p-4 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-xl hover:from-green-600 hover:to-green-700 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 font-semibold"
               >
                 <Plus className="h-5 w-5 mr-2" />
                 <span className="text-sm font-medium">Tambah Kategori</span>
               </button>
               <button
                 onClick={() => router.push('/admin/promos/new')}
-                className="flex items-center justify-center p-4 bg-accent-yellow text-white rounded-xl hover:bg-yellow-600 transition-all duration-300 shadow-soft hover:shadow-medium"
+                className="flex items-center justify-center p-4 bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-xl hover:from-orange-600 hover:to-orange-700 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 font-semibold"
               >
                 <Plus className="h-5 w-5 mr-2" />
                 <span className="text-sm font-medium">Tambah Promo</span>
               </button>
               <button
                 onClick={() => window.open('/', '_blank')}
-                className="flex items-center justify-center p-4 bg-accent-lavender text-white rounded-xl hover:bg-purple-600 transition-all duration-300 shadow-soft hover:shadow-medium"
+                className="flex items-center justify-center p-4 bg-gradient-to-r from-purple-500 to-purple-600 text-white rounded-xl hover:from-purple-600 hover:to-purple-700 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 font-semibold"
               >
                 <Eye className="h-5 w-5 mr-2" />
                 <span className="text-sm font-medium">Lihat Toko</span>
@@ -398,6 +400,14 @@ export default function AdminDashboard() {
 
 
       </div>
+      
+      {/* Toast Notification */}
+      <Toast
+        message={toast.message}
+        type={toast.type}
+        isVisible={toast.isVisible}
+        onClose={hideToast}
+      />
     </div>
   );
 }

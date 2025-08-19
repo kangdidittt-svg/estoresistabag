@@ -27,6 +27,12 @@ import LoadingSpinner from '@/components/LoadingSpinner';
 import { useCart } from '@/contexts/CartContext';
 import { getWhatsAppUrl, formatWhatsAppMessage } from '@/lib/whatsapp';
 
+interface ProductImage {
+  url: string;
+  alt: string;
+  isPrimary: boolean;
+}
+
 interface Product {
   _id: string;
   name: string;
@@ -34,7 +40,7 @@ interface Product {
   description: string;
   price: number;
   priceAfterDiscount?: number;
-  images: string[];
+  images: ProductImage[];
   category: {
     _id: string;
     name: string;
@@ -58,7 +64,7 @@ interface RelatedProduct {
   slug: string;
   price: number;
   priceAfterDiscount?: number;
-  images: string[];
+  images: ProductImage[];
   views: number;
   stock: number;
 }
@@ -133,7 +139,7 @@ export default function ProductDetailPage() {
         slug: product.slug,
         price: product.price,
         priceAfterDiscount: product.priceAfterDiscount,
-        image: product.images[0] || '/placeholder-bag.jpg',
+        image: product.images[0]?.url || '/placeholder-bag.jpg',
         stock: product.stock
       }
     });
@@ -335,8 +341,8 @@ export default function ProductDetailPage() {
           <div className="space-y-4">
             <div className="relative aspect-square bg-theme-card rounded-xl overflow-hidden border border-theme-primary border-opacity-20">
               <Image
-                src={product.images[currentImageIndex] || '/placeholder-bag.jpg'}
-                alt={product.name}
+                src={product.images[currentImageIndex]?.url || '/placeholder-bag.jpg'}
+                alt={product.images[currentImageIndex]?.alt || product.name}
                 fill
                 className="object-cover cursor-zoom-in"
                 onClick={() => setIsImageModalOpen(true)}
@@ -394,8 +400,8 @@ export default function ProductDetailPage() {
                     }`}
                   >
                     <Image
-                      src={image}
-                      alt={`${product.name} ${index + 1}`}
+                      src={image.url}
+                      alt={image.alt || `${product.name} ${index + 1}`}
                       fill
                       className="object-cover"
                     />
@@ -556,7 +562,7 @@ export default function ProductDetailPage() {
                   <div className="card-theme rounded-2xl shadow-soft hover:shadow-md transition-all duration-200 border border-theme-primary border-opacity-10 overflow-hidden">
                     <div className="relative aspect-square">
                       <Image
-                        src={relatedProduct.images[0] || '/placeholder-bag.jpg'}
+                        src={relatedProduct.images[0]?.url || '/placeholder-bag.jpg'}
                         alt={relatedProduct.name}
                         fill
                         className="object-cover group-hover:scale-105 transition-transform duration-300"
@@ -621,7 +627,7 @@ export default function ProductDetailPage() {
             
             <div className="relative aspect-square w-full max-w-2xl">
               <Image
-                src={product.images[currentImageIndex] || '/placeholder-bag.jpg'}
+                src={product.images[currentImageIndex]?.url || '/placeholder-bag.jpg'}
                 alt={product.name}
                 fill
                 className="object-contain"

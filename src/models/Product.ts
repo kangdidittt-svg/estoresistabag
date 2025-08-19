@@ -1,5 +1,11 @@
 import mongoose, { Document, Schema } from 'mongoose';
 
+export interface IProductImage {
+  url: string;
+  alt: string;
+  isPrimary?: boolean;
+}
+
 export interface IProduct extends Document {
   name: string;
   slug: string;
@@ -7,7 +13,7 @@ export interface IProduct extends Document {
   description: string;
   price: number;
   priceAfterDiscount?: number;
-  images: string[];
+  images: IProductImage[];
   category: mongoose.Types.ObjectId;
   tags: string[];
   stock: number;
@@ -55,8 +61,18 @@ const ProductSchema = new Schema<IProduct>({
     min: [0, 'Discounted price cannot be negative']
   },
   images: [{
-    type: String,
-    required: true
+    url: {
+      type: String,
+      required: [true, 'Image URL is required']
+    },
+    alt: {
+      type: String,
+      required: [true, 'Image alt text is required']
+    },
+    isPrimary: {
+      type: Boolean,
+      default: false
+    }
   }],
   category: {
     type: Schema.Types.ObjectId,

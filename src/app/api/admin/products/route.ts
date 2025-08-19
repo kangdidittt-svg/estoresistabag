@@ -168,6 +168,22 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Convert images to proper format if they're still strings
+    const formattedImages = images.map((image: any, index: number) => {
+      if (typeof image === 'string') {
+        return {
+          url: image,
+          alt: `${name} - Gambar ${index + 1}`,
+          isPrimary: index === 0
+        };
+      }
+      return {
+        url: image.url,
+        alt: image.alt || `${name} - Gambar ${index + 1}`,
+        isPrimary: image.isPrimary || index === 0
+      };
+    });
+
     // Check if category exists
     const categoryDoc = await Category.findById(category);
     if (!categoryDoc) {
@@ -198,7 +214,7 @@ export async function POST(request: NextRequest) {
       description,
       price,
       priceAfterDiscount: priceAfterDiscount || undefined,
-      images,
+      images: formattedImages,
       category,
       tags: tags || [],
       stock: stock || 0,

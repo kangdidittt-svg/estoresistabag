@@ -64,7 +64,7 @@ export async function POST(
         snapshot: {
           productName: product.name,
           productPrice: product.priceAfterDiscount || product.price,
-          productImage: product.images[0] || '',
+          productImage: product.images[0]?.url || '',
           categoryName: product.category.name
         },
         waPrefillMessage,

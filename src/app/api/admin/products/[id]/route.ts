@@ -125,15 +125,27 @@ export async function PUT(
       }
     }
 
-    // Handle image uploads
-    const finalImages = [...existingImages];
+    // Handle image uploads - convert existing images to new format if needed
+    const finalImages = existingImages.map((img: any) => {
+      if (typeof img === 'string') {
+        // Convert old format (string) to new format (object)
+        return {
+          url: img,
+          alt: name || 'Product Image',
+          isPrimary: existingImages.indexOf(img) === 0
+        };
+      }
+      // Already in new format
+      return img;
+    });
     
     if (newImageFiles.length > 0) {
       try {
         // Create uploads directory if it doesn't exist
         const uploadsDir = path.join(process.cwd(), 'public', 'uploads', 'products');
         
-        for (const file of newImageFiles) {
+        for (let i = 0; i < newImageFiles.length; i++) {
+          const file = newImageFiles[i];
           if (file.size > 0) {
             // Generate unique filename
             const timestamp = Date.now();
@@ -148,10 +160,13 @@ export async function PUT(
             
             await writeFile(filepath, buffer);
             
+            // Get alt text from form data or use default
+            const altText = formData.get(`newImageAlt_${i}`) as string || `${name} - Gambar ${finalImages.length + 1}`;
+            
             // Add to images array
             finalImages.push({
               url: `/uploads/products/${filename}`,
-              alt: name,
+              alt: altText,
               isPrimary: finalImages.length === 0
             });
           }

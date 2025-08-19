@@ -14,6 +14,7 @@ import {
   AlertCircle,
   X
 } from 'lucide-react';
+import Toast, { useToast } from '@/components/ui/Toast';
 
 interface FormData {
   title: string;
@@ -47,6 +48,7 @@ export default function NewPromoPage() {
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const router = useRouter();
+  const { toast, showToast, hideToast } = useToast();
 
   useEffect(() => {
     // Set default dates (today and 30 days from now)
@@ -172,14 +174,16 @@ export default function NewPromoPage() {
       const result = await response.json();
       
       if (result.success) {
-        alert('Promo berhasil ditambahkan!');
-        router.push('/admin/promos');
+        showToast('Promo berhasil ditambahkan!', 'success');
+        setTimeout(() => {
+          router.push('/admin/promos');
+        }, 1500);
       } else {
-        alert(result.message || 'Gagal menambahkan promo');
+        showToast(result.message || 'Gagal menambahkan promo', 'error');
       }
     } catch (error) {
       console.error('Error creating promo:', error);
-      alert('Terjadi kesalahan saat menambahkan promo');
+      showToast('Terjadi kesalahan saat menambahkan promo', 'error');
     } finally {
       setLoading(false);
     }
@@ -536,7 +540,7 @@ export default function NewPromoPage() {
             <button
               type="submit"
               disabled={loading}
-              className="px-6 py-2 bg-gradient-to-r from-accent-peach to-accent-mint text-on-accent rounded-lg hover:from-accent-mint hover:to-accent-yellow disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 shadow-soft hover:shadow-medium flex items-center space-x-2"
+              className="px-6 py-2 bg-gradient-to-r from-orange-500 to-red-600 text-white rounded-lg hover:from-orange-600 hover:to-red-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 shadow-soft hover:shadow-medium flex items-center space-x-2 font-semibold"
             >
               {loading ? (
                 <>
@@ -550,6 +554,14 @@ export default function NewPromoPage() {
           </div>
         </form>
       </div>
+      
+      {/* Toast Notification */}
+      <Toast
+        message={toast.message}
+        type={toast.type}
+        isVisible={toast.isVisible}
+        onClose={hideToast}
+      />
     </div>
   );
 }

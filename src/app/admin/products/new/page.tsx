@@ -3,7 +3,9 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import Image from 'next/image';
 import { Package, Upload, X, Plus } from 'lucide-react';
+import Toast, { useToast } from '@/components/ui/Toast';
 
 interface Category {
   _id: string;
@@ -36,6 +38,7 @@ export default function NewProductPage() {
   const [loading, setLoading] = useState(false);
   const [imageLoading, setImageLoading] = useState(false);
   const router = useRouter();
+  const { toast, showToast, hideToast } = useToast();
 
   useEffect(() => {
     fetchCategories();
@@ -107,7 +110,7 @@ export default function NewProductPage() {
     e.preventDefault();
     
     if (!formData.name || !formData.description || !formData.price || !formData.category || images.length === 0) {
-      alert('Mohon lengkapi semua field yang wajib diisi');
+      showToast('Mohon lengkapi semua field yang wajib diisi', 'error');
       return;
     }
 
@@ -135,14 +138,16 @@ export default function NewProductPage() {
       const data = await response.json();
       
       if (data.success) {
-        alert('Produk berhasil ditambahkan!');
-        router.push('/admin/products');
+        showToast('Produk berhasil ditambahkan!', 'success');
+        setTimeout(() => {
+          router.push('/admin/products');
+        }, 1500);
       } else {
-        alert(data.error || 'Gagal menambahkan produk');
+        showToast(data.error || 'Gagal menambahkan produk', 'error');
       }
     } catch (error) {
       console.error('Error creating product:', error);
-      alert('Terjadi kesalahan saat menambahkan produk');
+      showToast('Terjadi kesalahan saat menambahkan produk', 'error');
     } finally {
       setLoading(false);
     }
@@ -350,11 +355,14 @@ export default function NewProductPage() {
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 {images.map((image, index) => (
                   <div key={index} className="relative group">
-                    <img
-                      src={image}
-                      alt={`Product ${index + 1}`}
-                      className="w-full h-32 object-cover rounded-lg"
-                    />
+                    <div className="relative w-full h-32 rounded-lg overflow-hidden">
+                      <Image
+                        src={image}
+                        alt={`${formData.name || 'Produk'} - Gambar ${index + 1}`}
+                        fill
+                        className="object-cover"
+                      />
+                    </div>
                     <button
                       type="button"
                       onClick={() => removeImage(index)}
@@ -397,7 +405,7 @@ export default function NewProductPage() {
             <button
               type="submit"
               disabled={loading || imageLoading}
-              className="px-6 py-2 bg-gradient-to-r from-accent-peach to-accent-mint text-on-accent rounded-lg hover:from-accent-mint hover:to-accent-yellow disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2 transition-all duration-300 shadow-soft hover:shadow-medium"
+              className="px-6 py-2 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg hover:from-blue-600 hover:to-purple-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2 transition-all duration-300 shadow-soft hover:shadow-medium font-semibold"
             >
               {loading ? (
                 <>
@@ -414,6 +422,14 @@ export default function NewProductPage() {
           </div>
         </form>
       </div>
+      
+      {/* Toast Notification */}
+      <Toast
+        message={toast.message}
+        type={toast.type}
+        isVisible={toast.isVisible}
+        onClose={hideToast}
+      />
     </div>
   );
 }

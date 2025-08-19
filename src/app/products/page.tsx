@@ -24,13 +24,19 @@ import LoadingSpinner from '@/components/LoadingSpinner';
 import { useCart } from '@/contexts/CartContext';
 import Navigation from '@/components/Navigation';
 
+interface ProductImage {
+  url: string;
+  alt: string;
+  isPrimary: boolean;
+}
+
 interface Product {
   _id: string;
   name: string;
   slug: string;
   price: number;
   priceAfterDiscount?: number;
-  images: string[];
+  images: ProductImage[];
   category: {
     _id: string;
     name: string;
@@ -475,7 +481,7 @@ function ProductCard({ product, viewMode }: { product: Product; viewMode: 'grid'
         id: product._id,
         name: product.name,
         price: product.priceAfterDiscount || product.price,
-        image: product.images[0] || '/placeholder-bag.jpg',
+        image: product.images[0]?.url || '/placeholder-bag.jpg',
         slug: product.slug,
         stock: product.stock
       }
@@ -489,7 +495,7 @@ function ProductCard({ product, viewMode }: { product: Product; viewMode: 'grid'
           <div className="flex">
             <div className="relative w-48 h-48 flex-shrink-0">
               <Image
-                src={product.images[0] || '/placeholder-bag.jpg'}
+                src={product.images[0]?.url || '/placeholder-bag.jpg'}
                 alt={product.name}
                 fill
                 className="object-cover group-hover:scale-105 transition-transform duration-300"
@@ -576,7 +582,7 @@ function ProductCard({ product, viewMode }: { product: Product; viewMode: 'grid'
       <div className="bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow border overflow-hidden">
         <div className="relative aspect-square">
           <Image
-            src={product.images[0] || '/placeholder-bag.jpg'}
+            src={product.images[0]?.url || '/placeholder-bag.jpg'}
             alt={product.name}
             fill
             className="object-cover group-hover:scale-105 transition-transform duration-300"

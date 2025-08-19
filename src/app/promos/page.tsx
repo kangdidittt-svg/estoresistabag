@@ -65,7 +65,11 @@ interface Promo {
     _id: string;
     name: string;
     slug: string;
-    images: string[];
+    images: {
+      url: string;
+      alt: string;
+      isPrimary: boolean;
+    }[];
     price: number;
     priceAfterDiscount?: number;
   }[];
@@ -513,7 +517,7 @@ function PromoCard({ promo }: { promo: Promo }) {
                 >
                   <div className="relative aspect-square rounded-lg overflow-hidden">
                     <Image
-                      src={product.images[0] || '/placeholder-bag.jpg'}
+                      src={product.images[0]?.url || '/placeholder-bag.jpg'}
                       alt={product.name}
                       fill
                       className="object-cover group-hover:scale-105 transition-transform duration-300"

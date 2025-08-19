@@ -15,6 +15,13 @@ import {
   ChevronLeft,
   ChevronRight
 } from 'lucide-react';
+import Toast, { useToast } from '@/components/ui/Toast';
+
+interface ProductImage {
+  url: string;
+  alt: string;
+  isPrimary: boolean;
+}
 
 interface Product {
   _id: string;
@@ -26,7 +33,7 @@ interface Product {
   stock: number;
   views: number;
   isPublished: boolean;
-  images: string[];
+  images: ProductImage[];
   category: {
     _id: string;
     name: string;
@@ -64,6 +71,7 @@ export default function AdminProductsPage() {
   const [pagination, setPagination] = useState<Pagination | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const router = useRouter();
+  const { toast, showToast, hideToast } = useToast();
 
   useEffect(() => {
     fetchCategories();
@@ -118,13 +126,13 @@ export default function AdminProductsPage() {
       
       if (response.ok) {
         fetchProducts();
-        alert('Produk berhasil dihapus');
+        showToast('Produk berhasil dihapus', 'success');
       } else {
-        alert('Gagal menghapus produk');
+        showToast('Gagal menghapus produk', 'error');
       }
     } catch (error) {
       console.error('Error deleting product:', error);
-      alert('Terjadi kesalahan saat menghapus produk');
+      showToast('Terjadi kesalahan saat menghapus produk', 'error');
     }
   };
 
@@ -285,7 +293,7 @@ export default function AdminProductsPage() {
                             <div className="flex-shrink-0 h-12 w-12">
                               <img
                                 className="h-12 w-12 rounded-lg object-cover"
-                                src={product.images[0] || '/placeholder-bag.jpg'}
+                                src={product.images[0]?.url || '/placeholder-bag.jpg'}
                                 alt={product.name}
                               />
                             </div>
@@ -448,6 +456,14 @@ export default function AdminProductsPage() {
           )}
         </div>
       </div>
+      
+      {/* Toast Notification */}
+      <Toast
+        message={toast.message}
+        type={toast.type}
+        isVisible={toast.isVisible}
+        onClose={hideToast}
+      />
     </div>
   );
 }

@@ -9,13 +9,19 @@ import { useCart } from '@/contexts/CartContext';
 import Navigation from '@/components/Navigation';
 import { getWhatsAppNumber } from '@/lib/whatsapp';
 
+interface ProductImage {
+  url: string;
+  alt: string;
+  isPrimary: boolean;
+}
+
 interface Product {
   _id: string;
   name: string;
   slug: string;
   price: number;
   priceAfterDiscount?: number;
-  images: string[];
+  images: ProductImage[];
   category: {
     _id: string;
     name: string;
@@ -125,12 +131,12 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <div className="animate-fade-in-up">
             <h1 className="text-4xl lg:text-5xl font-bold mb-6 leading-tight text-theme-primary">
-              Koleksi Tas Terbaru
+              Koleksi Tas Kekinian,
               <br />
-              <span className="text-accent-mint">untuk Gaya Hidup Modern</span>
+              <span className="text-accent-mint">Teman Setia Gayamu</span>
             </h1>
             <p className="text-lg text-theme-primary text-opacity-80 mb-8 max-w-2xl mx-auto leading-relaxed">
-              Temukan tas impian kamu dari koleksi eksklusif kami. Kualitas premium dengan desain yang memukau.
+              Dari hangout santai sampai acara penting, ada tas kece yang siap nemenin. Stylish, ekonomis, dan pastinya bikin kamu jatuh cinta!
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
               <Link
@@ -194,46 +200,7 @@ export default function HomePage() {
         </section>
       )}
 
-      {/* Categories Section */}
-      {categories.length > 0 && (
-        <section className="py-16 bg-theme-main">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-12">
-              <div className="inline-flex items-center bg-accent-mint text-on-accent px-4 py-2 rounded-2xl text-sm font-semibold mb-4">
-                <Menu className="h-4 w-4 mr-2" />
-                KATEGORI PRODUK
-              </div>
-              <h2 className="text-3xl font-bold text-theme-primary mb-3">Jelajahi Kategori</h2>
-              <p className="text-theme-primary text-opacity-70 text-base">Temukan produk sesuai kebutuhan Anda</p>
-            </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {categories.slice(0, 6).map((category, index) => (
-                <Link
-                  key={category._id}
-                  href={`/products?category=${category.slug}`}
-                  className="group card-theme rounded-3xl p-5 shadow-soft hover:shadow-medium transition-all duration-200 border border-theme-primary border-opacity-10 hover:border-opacity-20 text-center"
-                >
-                  <div className="bg-accent-yellow w-12 h-12 rounded-2xl mx-auto mb-3 flex items-center justify-center overflow-hidden">
-                    <Image 
-                      src="/logo-sis.png" 
-                      alt="SistaBag Logo" 
-                      width={24} 
-                      height={24} 
-                      className="object-contain"
-                    />
-                  </div>
-                  <h3 className="font-bold text-theme-primary mb-2 text-base">{category.name}</h3>
-                  <p className="text-theme-primary text-opacity-60 text-xs mb-3">{category.productCount} produk</p>
-                  <div className="bg-accent-mint text-on-accent px-3 py-1 rounded-2xl text-xs font-semibold group-hover:bg-opacity-90 transition-all duration-200">
-                    Lihat Produk
-                  </div>
-                </Link>
-              ))}
-            </div>
-          </div>
-        </section>
-      )}
+
 
       {/* Popular Products Slider */}
       {popularProducts.length > 0 && (
@@ -342,6 +309,47 @@ export default function HomePage() {
 
 
 
+      {/* Categories Section */}
+      {categories.length > 0 && (
+        <section className="py-16 bg-theme-main">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-12">
+              <div className="inline-flex items-center bg-accent-mint text-on-accent px-4 py-2 rounded-2xl text-sm font-semibold mb-4">
+                <Menu className="h-4 w-4 mr-2" />
+                KATEGORI PRODUK
+              </div>
+              <h2 className="text-3xl font-bold text-theme-primary mb-3">Jelajahi Kategori</h2>
+              <p className="text-theme-primary text-opacity-70 text-base">Temukan produk sesuai kebutuhan Anda</p>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {categories.slice(0, 6).map((category, index) => (
+                <Link
+                  key={category._id}
+                  href={`/products?category=${category.slug}`}
+                  className="group card-theme rounded-3xl p-5 shadow-soft hover:shadow-medium transition-all duration-200 border border-theme-primary border-opacity-10 hover:border-opacity-20 text-center"
+                >
+                  <div className="bg-accent-yellow w-12 h-12 rounded-2xl mx-auto mb-3 flex items-center justify-center overflow-hidden">
+                    <Image 
+                      src="/logo-sis.png" 
+                      alt="SistaBag Logo" 
+                      width={24} 
+                      height={24} 
+                      className="object-contain"
+                    />
+                  </div>
+                  <h3 className="font-bold text-theme-primary mb-2 text-base">{category.name}</h3>
+                  <p className="text-theme-primary text-opacity-60 text-xs mb-3">{category.productCount} produk</p>
+                  <div className="bg-accent-mint text-on-accent px-3 py-1 rounded-2xl text-xs font-semibold group-hover:bg-opacity-90 transition-all duration-200">
+                    Lihat Produk
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* Newsletter */}
       <section className="py-16 bg-theme-main">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
@@ -444,7 +452,7 @@ function ProductCard({ product, showPopularBadge = false }: { product: Product; 
       <div className="card-theme rounded-3xl shadow-soft hover:shadow-medium transition-all duration-200 border border-theme-primary border-opacity-10 hover:border-opacity-20 overflow-hidden">
         <div className="relative aspect-square">
           <Image
-            src={product.images[0] || '/placeholder-bag.jpg'}
+            src={product.images[0]?.url || '/placeholder-bag.jpg'}
             alt={product.name}
             fill
             className="object-cover group-hover:scale-105 transition-all duration-200"

@@ -1,5 +1,10 @@
 import mongoose from 'mongoose';
 
+// Load environment variables from .env.local in development
+if (process.env.NODE_ENV === 'development') {
+  require('dotenv').config({ path: '.env.local' });
+}
+
 const MONGODB_URI = process.env.MONGODB_URI!;
 
 if (!MONGODB_URI) {

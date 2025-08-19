@@ -14,6 +14,7 @@ import {
   FileText,
   Image as ImageIcon
 } from 'lucide-react';
+import Toast, { useToast } from '@/components/ui/Toast';
 
 interface Category {
   _id: string;
@@ -77,6 +78,7 @@ export default function EditProductPage() {
   const [promos, setPromos] = useState<Promo[]>([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const { toast, showToast, hideToast } = useToast();
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [tagInput, setTagInput] = useState('');
 
@@ -107,7 +109,12 @@ export default function EditProductPage() {
           isPublished: product.isPublished ?? true,
           isFeatured: product.isFeatured ?? false
         });
-        setExistingImages(product.images || []);
+        // Ensure all images have alt text
+        const imagesWithAlt = (product.images || []).map((image: any, index: number) => ({
+          ...image,
+          alt: image.alt || `${product.name || 'Produk'} - Gambar ${index + 1}`
+        }));
+        setExistingImages(imagesWithAlt);
       }
     } catch (error) {
       console.error('Error fetching product:', error);
@@ -288,9 +295,11 @@ export default function EditProductPage() {
       // Add existing images data
       submitData.append('existingImages', JSON.stringify(existingImages));
       
-      // Add new images
+      // Add new images with alt text
       newImages.forEach((file, index) => {
         submitData.append('newImages', file);
+        // Add alt text for new images
+        submitData.append(`newImageAlt_${index}`, `${formData.name || 'Produk'} - Gambar ${existingImages.length + index + 1}`);
       });
       
       const response = await fetch(`/api/admin/products/${productId}`, {
@@ -301,14 +310,16 @@ export default function EditProductPage() {
       const result = await response.json();
       
       if (result.success) {
-        alert('Produk berhasil diperbarui!');
-        router.push('/admin/products');
+        showToast('Produk berhasil diperbarui!', 'success');
+        setTimeout(() => {
+          router.push('/admin/products');
+        }, 1500);
       } else {
-        alert(result.message || 'Gagal memperbarui produk');
+        showToast(result.message || 'Gagal memperbarui produk', 'error');
       }
     } catch (error) {
       console.error('Error updating product:', error);
-      alert('Terjadi kesalahan saat memperbarui produk');
+      showToast('Terjadi kesalahan saat memperbarui produk', 'error');
     } finally {
       setSaving(false);
     }
@@ -773,6 +784,14 @@ export default function EditProductPage() {
           </div>
         </form>
       </div>
+      
+      {/* Toast Notification */}
+      <Toast
+        message={toast.message}
+        type={toast.type}
+        isVisible={toast.isVisible}
+        onClose={hideToast}
+      />
     </div>
   );
 }

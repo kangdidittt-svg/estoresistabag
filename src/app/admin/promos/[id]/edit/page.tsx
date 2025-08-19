@@ -14,6 +14,7 @@ import {
   AlertCircle,
   X
 } from 'lucide-react';
+import Toast, { useToast } from '@/components/ui/Toast';
 
 interface FormData {
   title: string;
@@ -32,6 +33,7 @@ export default function EditPromoPage() {
   const params = useParams();
   const router = useRouter();
   const promoId = params.id as string;
+  const { toast, showToast, hideToast } = useToast();
   
   const [formData, setFormData] = useState<FormData>({
     title: '',
@@ -80,7 +82,7 @@ export default function EditPromoPage() {
       }
     } catch (error) {
       console.error('Error fetching promo:', error);
-      alert('Gagal memuat data promo');
+      showToast('Gagal memuat data promo', 'error');
     } finally {
       setLoading(false);
     }
@@ -204,14 +206,16 @@ export default function EditPromoPage() {
       const result = await response.json();
       
       if (result.success) {
-        alert('Promo berhasil diperbarui!');
-        router.push('/admin/promos');
+        showToast('Promo berhasil diperbarui!', 'success');
+        setTimeout(() => {
+          router.push('/admin/promos');
+        }, 1500);
       } else {
-        alert(result.message || 'Gagal memperbarui promo');
+        showToast(result.message || 'Gagal memperbarui promo', 'error');
       }
     } catch (error) {
       console.error('Error updating promo:', error);
-      alert('Terjadi kesalahan saat memperbarui promo');
+      showToast('Terjadi kesalahan saat memperbarui promo', 'error');
     } finally {
       setSaving(false);
     }
@@ -607,7 +611,7 @@ export default function EditPromoPage() {
             <button
               type="submit"
               disabled={saving}
-              className="px-6 py-2 bg-gradient-to-r from-accent-peach to-accent-peach-dark text-white rounded-lg hover:from-accent-peach-dark hover:to-accent-peach disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 shadow-soft flex items-center space-x-2"
+              className="px-6 py-2 bg-gradient-to-r from-orange-500 to-red-600 text-white rounded-lg hover:from-orange-600 hover:to-red-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 shadow-soft hover:shadow-medium flex items-center space-x-2 font-semibold"
             >
               {saving ? (
                 <>
@@ -621,6 +625,14 @@ export default function EditPromoPage() {
           </div>
         </form>
       </div>
+      
+      {/* Toast Notification */}
+      <Toast
+        message={toast.message}
+        type={toast.type}
+        isVisible={toast.isVisible}
+        onClose={hideToast}
+      />
     </div>
   );
 }
