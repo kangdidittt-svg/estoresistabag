@@ -36,6 +36,7 @@
   --font-mono: var(--font-geist-mono);
 }
 
+/* Disabled auto dark mode - aplikasi menggunakan tema sendiri
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
@@ -46,11 +47,29 @@
     --card-color: #2a2a2a;
   }
 }
+*/
+
+html {
+  /* Force light color scheme globally */
+  color-scheme: light only;
+}
 
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: 'Poppins', 'Inter', sans-serif;
+  /* Force light color scheme to prevent browser dark mode interference */
+  color-scheme: light only;
+}
+
+/* Ensure form elements are not affected by browser dark mode */
+input, textarea, select, button {
+  color-scheme: light only;
+}
+
+/* Prevent any auto dark mode styling */
+* {
+  color-scheme: light only;
 }
 
 /* Enhanced Custom animations */
