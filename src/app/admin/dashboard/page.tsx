@@ -45,6 +45,7 @@ interface DashboardStats {
 export default function AdminDashboard() {
   const [stats, setStats] = useState<DashboardStats | null>(null);
   const [loading, setLoading] = useState(true);
+  const [resettingViews, setResettingViews] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -96,6 +97,37 @@ export default function AdminDashboard() {
       console.error('Error fetching dashboard data:', error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleResetViews = async () => {
+    if (!confirm('Apakah Anda yakin ingin mereset semua view count produk ke 0? Tindakan ini tidak dapat dibatalkan.')) {
+      return;
+    }
+
+    setResettingViews(true);
+    try {
+      const response = await fetch('/api/admin/reset-views', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        alert(`Berhasil mereset view count untuk ${data.data.modifiedCount} produk`);
+        // Refresh dashboard data to show updated view counts
+        fetchDashboardData();
+      } else {
+        alert(data.error || 'Gagal mereset view count');
+      }
+    } catch (error) {
+      console.error('Error resetting views:', error);
+      alert('Terjadi kesalahan saat mereset view count');
+    } finally {
+      setResettingViews(false);
     }
   };
 
@@ -201,14 +233,31 @@ export default function AdminDashboard() {
           </div>
 
           <div className="card-theme p-6">
-            <div className="flex items-center">
-              <div className="p-3 bg-accent-lavender rounded-2xl">
-                <Eye className="h-6 w-6 text-on-accent" />
+            <div className="flex items-center justify-between">
+              <div className="flex items-center">
+                <div className="p-3 bg-accent-lavender rounded-2xl">
+                  <Eye className="h-6 w-6 text-on-accent" />
+                </div>
+                <div className="ml-4">
+                  <p className="text-sm font-medium text-theme-primary opacity-75">Total Views</p>
+                  <p className="text-2xl font-bold text-theme-primary">{stats?.totalViews || 0}</p>
+                </div>
               </div>
-              <div className="ml-4">
-                <p className="text-sm font-medium text-theme-primary opacity-75">Total Views</p>
-                <p className="text-2xl font-bold text-theme-primary">{stats?.totalViews || 0}</p>
-              </div>
+              <button
+                onClick={handleResetViews}
+                disabled={resettingViews}
+                className="px-3 py-1 bg-red-500 hover:bg-red-600 disabled:bg-red-300 disabled:cursor-not-allowed text-white text-xs rounded-lg transition-colors duration-200 shadow-soft hover:shadow-medium flex items-center gap-1"
+                title="Reset semua view count ke 0"
+              >
+                {resettingViews ? (
+                  <>
+                    <div className="animate-spin rounded-full h-3 w-3 border border-white border-t-transparent"></div>
+                    <span>Reset...</span>
+                  </>
+                ) : (
+                  'Reset'
+                )}
+              </button>
             </div>
           </div>
         </div>

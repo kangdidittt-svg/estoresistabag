@@ -93,6 +93,9 @@ export default function ProductDetailPage() {
         if (data.data.relatedProducts) {
           setRelatedProducts(data.data.relatedProducts);
         }
+        
+        // Increment view count
+        incrementViewCount();
       } else {
         console.error('Product not found');
       }
@@ -100,6 +103,20 @@ export default function ProductDetailPage() {
       console.error('Error fetching product:', error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const incrementViewCount = async () => {
+    try {
+      await fetch(`/api/products/${slug}/view`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ createLead: false })
+      });
+    } catch (error) {
+      console.error('Error incrementing view count:', error);
     }
   };
 
