@@ -351,7 +351,7 @@ export default function HomePage() {
       )}
 
       {/* Newsletter */}
-      <section className="py-16 bg-theme-main">
+      <section className="py-16 bg-theme-header">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <div className="inline-flex items-center bg-theme-primary text-theme-main px-4 py-2 rounded-2xl text-sm font-semibold mb-4">
             <Mail className="h-4 w-4 mr-2" />
@@ -364,7 +364,7 @@ export default function HomePage() {
             <input
               type="email"
               placeholder="Masukkan email Anda"
-              className="flex-1 px-4 py-3 border border-theme-primary border-opacity-30 rounded-2xl focus:ring-2 focus:ring-accent-peach focus:border-accent-peach transition-all duration-200 bg-theme-main text-theme-primary"
+              className="flex-1 px-4 py-3 border border-theme-primary border-opacity-30 rounded-2xl focus:ring-2 focus:ring-accent-peach focus:border-accent-peach transition-all duration-200 bg-theme-header text-theme-primary"
             />
             <button
               type="submit"
@@ -377,16 +377,16 @@ export default function HomePage() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-theme-main text-theme-primary py-12">
+      <footer className="bg-theme-header text-theme-primary py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
             <div>
-              <div className="flex items-center space-x-2 mb-4">
+              <Link href="/admin/login" className="flex items-center space-x-2 mb-4 hover:opacity-80 transition-opacity duration-200">
                 <div className="bg-accent-peach p-2 rounded-xl">
                   <ShoppingBag className="h-5 w-5 text-on-accent" />
                 </div>
                 <span className="text-xl font-bold text-accent-mint">SistaBag</span>
-              </div>
+              </Link>
               <p className="text-theme-primary text-opacity-70 text-sm leading-relaxed">
                 Toko tas terpercaya dengan koleksi terlengkap dan kualitas terbaik. Kepuasan pelanggan adalah prioritas utama kami.
               </p>
