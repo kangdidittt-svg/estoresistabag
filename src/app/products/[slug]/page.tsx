@@ -206,7 +206,7 @@ export default function ProductDetailPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <Link href="/" className="flex items-center space-x-2 group">
-              <div className="bg-accent-peach p-2 rounded-2xl group-hover:scale-105 transition-all duration-200 overflow-hidden">
+              <div className="group-hover:scale-105 transition-all duration-200">
                 <Image 
                   src="/logo-sis.png" 
                   alt="SistaBag Logo" 
@@ -483,7 +483,7 @@ export default function ProductDetailPage() {
                 <div className="card-theme p-4">
                   <div className="flex items-center justify-between text-lg font-semibold">
                     <span className="text-theme-primary">Total:</span>
-                    <span className="text-accent-peach">{formatCurrency(totalPrice)}</span>
+                    <span className="text-theme-primary">{formatCurrency(totalPrice)}</span>
                   </div>
                 </div>
 
@@ -517,14 +517,13 @@ export default function ProductDetailPage() {
 
             {/* Shipping Info */}
             <div className="card-theme p-4">
-              <div className="flex items-center gap-2 text-accent-peach mb-2">
+              <div className="flex items-center gap-2 text-theme-primary mb-2">
                 <Truck className="h-5 w-5" />
                 <span className="font-medium">Informasi Pengiriman</span>
               </div>
               <ul className="text-sm text-theme-primary text-opacity-80 space-y-1">
                 <li>• Pengiriman ke seluruh Indonesia</li>
                 <li>• Estimasi 2-5 hari kerja</li>
-                <li>• Gratis ongkir untuk pembelian di atas Rp 500.000</li>
               </ul>
             </div>
           </div>

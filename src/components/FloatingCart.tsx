@@ -77,9 +77,17 @@ export default function FloatingCart() {
 
       {/* Cart Overlay */}
       {state.isOpen && (
-        <div className="fixed inset-0 z-50 overflow-hidden">
+        <div 
+          className="fixed inset-0 z-50 overflow-hidden" 
+          style={{position: 'fixed'}}
+          onClick={() => dispatch({ type: 'CLOSE_CART' })}
+        >
           {/* Cart Panel */}
-          <div className="absolute right-0 top-0 h-full w-full max-w-md bg-theme-main shadow-2xl transform transition-all duration-300 ease-in-out animate-slide-in-right">
+          <div 
+            className="fixed right-0 top-0 h-screen w-full max-w-md bg-theme-main shadow-2xl transform transition-all duration-300 ease-in-out animate-slide-in-right" 
+            style={{position: 'fixed', height: '100vh'}}
+            onClick={(e) => e.stopPropagation()}
+          >
             <div className="flex flex-col h-full">
               {/* Header */}
               <div className="flex items-center justify-between p-6 border-b border-theme-primary border-opacity-20">
