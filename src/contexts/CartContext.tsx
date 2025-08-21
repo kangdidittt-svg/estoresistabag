@@ -255,6 +255,11 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 
   // Save cart to localStorage whenever it changes
   useEffect(() => {
+    // Skip saving on initial load to prevent infinite loop
+    if (state.items.length === 0 && state.totalItems === 0) {
+      return;
+    }
+
     try {
       // Optimize data before saving
       const optimizedItems = optimizeCartData(state.items);
@@ -262,39 +267,35 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       
       // Check if data size is reasonable (less than 4MB to be safe)
       if (cartData.length > 4 * 1024 * 1024) {
-        console.warn('Cart data too large, clearing oldest items');
+        console.warn('Cart data too large, saving reduced items');
         // Keep only the last 30 items if cart is too large
-         const reducedItems = optimizedItems.slice(-30);
+        const reducedItems = optimizedItems.slice(-30);
         localStorage.setItem('cart', JSON.stringify(reducedItems));
-        // Update state to match what was actually saved
-        dispatch({ type: 'LOAD_CART', payload: reducedItems });
+        showToast('Keranjang terlalu besar, beberapa item lama telah dihapus', 'info');
       } else {
         localStorage.setItem('cart', cartData);
       }
     } catch (error) {
       if (error instanceof Error && error.name === 'QuotaExceededError') {
-         console.warn('localStorage quota exceeded, clearing cart data');
-         showToast('Keranjang terlalu penuh, beberapa item lama telah dihapus', 'info');
-         try {
+        console.warn('localStorage quota exceeded, clearing cart data');
+        showToast('Keranjang terlalu penuh, beberapa item lama telah dihapus', 'info');
+        try {
           // Clear cart data and try to save a minimal version
           localStorage.removeItem('cart');
           // Keep only the last 5 items
-           const minimalItems = optimizeCartData(state.items.slice(-5));
+          const minimalItems = optimizeCartData(state.items.slice(-5));
           localStorage.setItem('cart', JSON.stringify(minimalItems));
-          // Update state to match what was actually saved
-          dispatch({ type: 'LOAD_CART', payload: minimalItems });
         } catch (secondError) {
           console.error('Failed to save even minimal cart data:', secondError);
-           showToast('Gagal menyimpan keranjang, data telah direset', 'error');
-           // Clear everything if we still can't save
-           localStorage.removeItem('cart');
-           dispatch({ type: 'CLEAR_CART' });
+          showToast('Gagal menyimpan keranjang, data telah direset', 'error');
+          // Clear everything if we still can't save
+          localStorage.removeItem('cart');
         }
       } else {
         console.error('Error saving cart to localStorage:', error);
       }
     }
-  }, [state.items]);
+  }, [state.items, state.totalItems]);
 
   return (
     <CartContext.Provider value={{ state, dispatch }}>
