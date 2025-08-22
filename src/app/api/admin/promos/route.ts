@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import dbConnect from '@/lib/mongodb';
 import Promo from '@/models/Promo';
 import { generateSlug } from '@/lib/utils';
+import { uploadToS3 } from '@/lib/s3';
 import { writeFile } from 'fs/promises';
 import path from 'path';
 
@@ -155,26 +156,17 @@ export async function POST(request: NextRequest) {
     
     if (imageFile && imageFile.size > 0) {
       try {
-        // Create uploads directory if it doesn't exist
-        const uploadsDir = path.join(process.cwd(), 'public', 'uploads', 'promos');
-        
-        // Generate unique filename
-        const timestamp = Date.now();
-        const originalName = imageFile.name.replace(/\s+/g, '-');
-        const filename = `${timestamp}-${originalName}`;
-        const filepath = path.join(uploadsDir, filename);
-        
-        // Save file
+        // Convert file to buffer and upload to S3
         const bytes = await imageFile.arrayBuffer();
         const buffer = Buffer.from(bytes);
         
-        await writeFile(filepath, buffer);
+        // Upload to S3
+        imageUrl = await uploadToS3(buffer, 'promos');
         
-        imageUrl = `/uploads/promos/${filename}`;
       } catch (error) {
-        console.error('Error uploading image:', error);
+        console.error('Error uploading image to S3:', error);
         return NextResponse.json(
-          { success: false, error: 'Failed to upload image' },
+          { success: false, error: 'Failed to upload image to S3' },
           { status: 500 }
         );
       }

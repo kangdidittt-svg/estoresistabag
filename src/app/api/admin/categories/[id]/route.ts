@@ -3,6 +3,7 @@ import dbConnect from '@/lib/mongodb';
 import Category from '@/models/Category';
 import Product from '@/models/Product';
 import { generateSlug } from '@/lib/utils';
+import { uploadToS3 } from '@/lib/s3';
 
 // GET - Get single category by ID
 export async function GET(
@@ -104,37 +105,16 @@ export async function PUT(
     
     if (newImageFile && newImageFile.size > 0) {
       try {
-        const fs = require('fs').promises;
-        const path = require('path');
-        
-        // Create upload directory if it doesn't exist
-        const uploadDir = path.join(process.cwd(), 'public', 'uploads', 'categories');
-        await fs.mkdir(uploadDir, { recursive: true });
-        
-        // Generate unique filename
-        const fileExtension = newImageFile.name.split('.').pop();
-        const fileName = `${Date.now()}-${Math.random().toString(36).substring(2)}.${fileExtension}`;
-        const filePath = path.join(uploadDir, fileName);
-        
-        // Save file
+        // Convert file to buffer and upload to S3
         const buffer = Buffer.from(await newImageFile.arrayBuffer());
-        await fs.writeFile(filePath, buffer);
         
-        finalImage = `/uploads/categories/${fileName}`;
+        // Upload to S3
+        finalImage = await uploadToS3(buffer, 'categories');
         
-        // Delete old image if it exists and is different
-        if (existingCategory.image && existingCategory.image !== finalImage) {
-          try {
-            const oldImagePath = path.join(process.cwd(), 'public', existingCategory.image);
-            await fs.unlink(oldImagePath);
-          } catch (error) {
-            console.log('Could not delete old image:', error);
-          }
-        }
       } catch (error) {
-        console.error('Error uploading image:', error);
+        console.error('Error uploading image to S3:', error);
         return NextResponse.json(
-          { success: false, error: 'Failed to upload image' },
+          { success: false, error: 'Failed to upload image to S3' },
           { status: 500 }
         );
       }

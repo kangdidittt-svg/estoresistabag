@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import dbConnect from '@/lib/mongodb';
 import Promo from '@/models/Promo';
 import { generateSlug } from '@/lib/utils';
+import { uploadToS3 } from '@/lib/s3';
 import { writeFile, unlink } from 'fs/promises';
 import path from 'path';
 
@@ -118,36 +119,17 @@ export async function PUT(
     
     if (newImageFile && newImageFile.size > 0) {
       try {
-        // Create uploads directory if it doesn't exist
-        const uploadsDir = path.join(process.cwd(), 'public', 'uploads', 'promos');
-        
-        // Generate unique filename
-        const timestamp = Date.now();
-        const originalName = newImageFile.name.replace(/\s+/g, '-');
-        const filename = `${timestamp}-${originalName}`;
-        const filepath = path.join(uploadsDir, filename);
-        
-        // Save file
+        // Convert file to buffer and upload to S3
         const bytes = await newImageFile.arrayBuffer();
         const buffer = Buffer.from(bytes);
         
-        await writeFile(filepath, buffer);
+        // Upload to S3
+        imageUrl = await uploadToS3(buffer, 'promos');
         
-        // Delete old image if it exists and is not the default
-        if (existingPromo.image && !existingPromo.image.includes('placeholder')) {
-          try {
-            const oldImagePath = path.join(process.cwd(), 'public', existingPromo.image);
-            await unlink(oldImagePath);
-          } catch (error) {
-            console.log('Could not delete old image:', error);
-          }
-        }
-        
-        imageUrl = `/uploads/promos/${filename}`;
       } catch (error) {
-        console.error('Error uploading image:', error);
+        console.error('Error uploading image to S3:', error);
         return NextResponse.json(
-          { success: false, error: 'Failed to upload image' },
+          { success: false, error: 'Failed to upload image to S3' },
           { status: 500 }
         );
       }

@@ -3,6 +3,7 @@ import dbConnect from '@/lib/mongodb';
 import Product from '@/models/Product';
 import Category from '@/models/Category';
 import { generateSlug } from '@/lib/utils';
+import { uploadToS3 } from '@/lib/s3';
 import { writeFile, unlink } from 'fs/promises';
 import path from 'path';
 
@@ -141,40 +142,31 @@ export async function PUT(
     
     if (newImageFiles.length > 0) {
       try {
-        // Create uploads directory if it doesn't exist
-        const uploadsDir = path.join(process.cwd(), 'public', 'uploads', 'products');
-        
         for (let i = 0; i < newImageFiles.length; i++) {
           const file = newImageFiles[i];
           if (file.size > 0) {
-            // Generate unique filename
-            const timestamp = Date.now();
-            const randomNum = Math.floor(Math.random() * 1000);
-            const originalName = file.name.replace(/\s+/g, '-');
-            const filename = `${timestamp}-${randomNum}-${originalName}`;
-            const filepath = path.join(uploadsDir, filename);
-            
-            // Save file
+            // Convert file to buffer and upload to S3
             const bytes = await file.arrayBuffer();
             const buffer = Buffer.from(bytes);
             
-            await writeFile(filepath, buffer);
+            // Upload to S3
+            const s3Url = await uploadToS3(buffer, 'products');
             
             // Get alt text from form data or use default
             const altText = formData.get(`newImageAlt_${i}`) as string || `${name} - Gambar ${finalImages.length + 1}`;
             
             // Add to images array
             finalImages.push({
-              url: `/uploads/products/${filename}`,
+              url: s3Url,
               alt: altText,
               isPrimary: finalImages.length === 0
             });
           }
         }
       } catch (error) {
-        console.error('Error uploading images:', error);
+        console.error('Error uploading images to S3:', error);
         return NextResponse.json(
-          { success: false, error: 'Failed to upload images' },
+          { success: false, error: 'Failed to upload images to S3' },
           { status: 500 }
         );
       }

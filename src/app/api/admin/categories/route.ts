@@ -3,6 +3,7 @@ import dbConnect from '@/lib/mongodb';
 import Category from '@/models/Category';
 import Product from '@/models/Product';
 import { generateSlug } from '@/lib/utils';
+import { uploadToS3 } from '@/lib/s3';
 
 // GET - List all categories for admin
 export async function GET(request: NextRequest) {
@@ -77,12 +78,26 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Process image if it's base64
+    let finalImageUrl = image || '';
+    if (image && image.startsWith('data:image/')) {
+      try {
+        finalImageUrl = await uploadToS3(image, 'categories');
+      } catch (error) {
+        console.error('Error uploading image to S3:', error);
+        return NextResponse.json(
+          { success: false, error: 'Failed to upload image to S3' },
+          { status: 500 }
+        );
+      }
+    }
+
     // Create category
     const category = await Category.create({
       name,
       slug,
       description: description || '',
-      image: image || ''
+      image: finalImageUrl
     });
 
     return NextResponse.json({

@@ -13,7 +13,26 @@ const nextConfig: NextConfig = {
   
   // Image optimization
   images: {
-    domains: ['res.cloudinary.com', 'localhost'],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'res.cloudinary.com',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'http',
+        hostname: 'localhost',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'freelance-store.s3.ap-southeast-1.amazonaws.com',
+        port: '',
+        pathname: '/sistabag/**',
+      },
+    ],
     dangerouslyAllowSVG: true,
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;"
   },

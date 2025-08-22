@@ -3,6 +3,7 @@ import dbConnect from '@/lib/mongodb';
 import Product from '@/models/Product';
 import Category from '@/models/Category';
 import { generateSlug, generateSKU } from '@/lib/utils';
+import { uploadToS3 } from '@/lib/s3';
 
 // Runtime configuration for handling larger payloads
 export const runtime = 'nodejs';
@@ -168,21 +169,60 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Convert images to proper format if they're still strings
-    const formattedImages = images.map((image: any, index: number) => {
+    // Process images - upload base64 to S3 or keep existing URLs
+    const formattedImages = [];
+    
+    for (let index = 0; index < images.length; index++) {
+      const image = images[index];
+      let imageUrl: string;
+      let altText: string;
+      
       if (typeof image === 'string') {
-        return {
-          url: image,
-          alt: `${name} - Gambar ${index + 1}`,
-          isPrimary: index === 0
-        };
+        // Check if it's a base64 image
+        if (image.startsWith('data:image/')) {
+          try {
+            // Upload base64 to S3
+            imageUrl = await uploadToS3(image, 'products');
+            altText = `${name} - Gambar ${index + 1}`;
+          } catch (error) {
+            console.error('Error uploading image to S3:', error);
+            return NextResponse.json(
+              { success: false, error: 'Failed to upload image' },
+              { status: 500 }
+            );
+          }
+        } else {
+          // It's already a URL
+          imageUrl = image;
+          altText = `${name} - Gambar ${index + 1}`;
+        }
+      } else {
+        // It's an object with url and alt
+        if (image.url && image.url.startsWith('data:image/')) {
+          try {
+            // Upload base64 to S3
+            imageUrl = await uploadToS3(image.url, 'products');
+            altText = image.alt || `${name} - Gambar ${index + 1}`;
+          } catch (error) {
+            console.error('Error uploading image to S3:', error);
+            return NextResponse.json(
+              { success: false, error: 'Failed to upload image' },
+              { status: 500 }
+            );
+          }
+        } else {
+          // It's already a URL
+          imageUrl = image.url;
+          altText = image.alt || `${name} - Gambar ${index + 1}`;
+        }
       }
-      return {
-        url: image.url,
-        alt: image.alt || `${name} - Gambar ${index + 1}`,
-        isPrimary: image.isPrimary || index === 0
-      };
-    });
+      
+      formattedImages.push({
+        url: imageUrl,
+        alt: altText,
+        isPrimary: index === 0
+      });
+    }
 
     // Check if category exists
     const categoryDoc = await Category.findById(category);
