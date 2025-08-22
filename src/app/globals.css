@@ -5,6 +5,7 @@
   --foreground: #444444;
   
   /* New Theme Color Variables */
+
   --bg-main: #FFE7E7;
   --header-color: #FF9E9E;
   --card-color: #FFF5F5;
@@ -48,6 +49,15 @@
   }
 }
 */
+
+/* Hide scrollbar for horizontal scroll */
+.scrollbar-hide {
+  -ms-overflow-style: none;  /* Internet Explorer 10+ */
+  scrollbar-width: none;  /* Firefox */
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;  /* Safari and Chrome */
+}
 
 html {
   /* Force light color scheme globally */

@@ -248,7 +248,7 @@ function ProductsContent() {
 
           {/* Filters */}
           {showFilters && (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 pt-4 border-t border-theme-primary border-opacity-20">
+            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-4 pt-4 border-t border-theme-primary border-opacity-20">
               {/* Category Filter */}
               <div>
                 <label className="block text-sm font-medium text-theme-primary mb-2">
@@ -380,10 +380,10 @@ function ProductsContent() {
           </div>
         ) : (
           <>
-            <div className={`grid gap-6 ${
+            <div className={`grid ${
               viewMode === 'grid' 
-                ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4' 
-                : 'grid-cols-1'
+                ? 'grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-6' 
+                : 'grid-cols-1 gap-6'
             }`}>
               {products.map((product) => (
                 <ProductCard 
@@ -610,32 +610,32 @@ function ProductCard({ product, viewMode }: { product: Product; viewMode: 'grid'
           </div>
         </div>
         
-        <div className="p-4">
-          <h3 className="font-semibold text-gray-900 mb-2 line-clamp-2 group-hover:text-blue-600">
+        <div className="p-2 sm:p-3 md:p-4">
+          <h3 className="font-semibold text-gray-900 mb-1 sm:mb-2 line-clamp-2 group-hover:text-blue-600 text-sm sm:text-base">
             {product.name}
           </h3>
-          <p className="text-sm text-gray-500 mb-2">{product.category.name}</p>
+          <p className="text-xs sm:text-sm text-gray-500 mb-2">{product.category.name}</p>
           
-          <div className="flex items-center justify-between">
+          <div className="space-y-2">
             <div>
               {product.priceAfterDiscount ? (
-                <div className="flex items-center gap-2">
-                  <span className="text-lg font-bold text-red-600">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:gap-2">
+                  <span className="text-sm sm:text-lg font-bold text-red-600">
                     {formatCurrency(product.priceAfterDiscount)}
                   </span>
-                  <span className="text-sm text-gray-500 line-through">
+                  <span className="text-xs sm:text-sm text-gray-500 line-through">
                     {formatCurrency(product.price)}
                   </span>
                 </div>
               ) : (
-                <span className="text-lg font-bold text-gray-900">
+                <span className="text-sm sm:text-lg font-bold text-gray-900">
                   {formatCurrency(product.price)}
                 </span>
               )}
             </div>
             
-            <div className="flex flex-col gap-2">
-              <span className={`text-xs px-2 py-1 rounded-full text-center ${
+            <div className="flex items-center justify-between gap-2">
+              <span className={`text-xs px-2 py-1 rounded-full flex-shrink-0 ${
                 product.stock > 0 
                   ? 'bg-green-100 text-green-800' 
                   : 'bg-red-100 text-red-800'
@@ -646,7 +646,7 @@ function ProductCard({ product, viewMode }: { product: Product; viewMode: 'grid'
               <button
                 onClick={handleAddToCart}
                 disabled={product.stock === 0}
-                className={`px-3 py-1 rounded-lg text-xs font-medium transition-colors ${
+                className={`px-2 sm:px-3 py-1 rounded-lg text-xs font-medium transition-colors flex-shrink-0 ${
                   product.stock === 0
                     ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
                     : 'bg-accent-peach text-on-accent hover:bg-accent-yellow'

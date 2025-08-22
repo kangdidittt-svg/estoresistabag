@@ -93,7 +93,7 @@ export default function CategoriesPage() {
             <p className="text-theme-primary text-opacity-60">Kategori produk akan segera tersedia</p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+          <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-6 lg:gap-8">
             {categories.map((category) => (
               <CategoryCard key={category._id} category={category} />
             ))}
@@ -168,25 +168,26 @@ function CategoryCard({ category }: { category: Category }) {
           <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
         </div>
         
-        <div className="p-6">
-          <h3 className="text-xl font-bold text-theme-primary mb-2 group-hover:text-accent-peach transition-colors duration-300">
+        <div className="p-3 sm:p-4 md:p-6">
+          <h3 className="text-sm sm:text-base md:text-xl font-bold text-theme-primary mb-1 sm:mb-2 group-hover:text-accent-peach transition-colors duration-300 line-clamp-2">
             {category.name}
           </h3>
           
           {category.description && (
-            <p className="text-theme-primary text-opacity-60 text-sm mb-4 line-clamp-2 leading-relaxed">
+            <p className="text-theme-primary text-opacity-60 text-xs sm:text-sm mb-2 sm:mb-4 line-clamp-2 leading-relaxed hidden sm:block">
               {category.description}
             </p>
           )}
           
-          <div className="flex items-center justify-between">
-            <span className="text-sm text-theme-primary text-opacity-50 font-medium">
-              {category.productCount} produk tersedia
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+            <span className="text-xs sm:text-sm text-theme-primary text-opacity-50 font-medium">
+              {category.productCount} produk
             </span>
             
-            <div className="flex items-center space-x-1 text-accent-peach group-hover:text-accent-mint font-bold text-sm group-hover:translate-x-1 transition-all duration-300">
-              <span>Lihat Produk</span>
-              <div className="w-5 h-5 bg-accent-peach rounded-full flex items-center justify-center text-on-accent text-xs group-hover:scale-110 transition-transform duration-300">
+            <div className="flex items-center space-x-1 text-accent-peach group-hover:text-accent-mint font-bold text-xs sm:text-sm group-hover:translate-x-1 transition-all duration-300">
+              <span className="hidden sm:inline">Lihat Produk</span>
+              <span className="sm:hidden">Lihat</span>
+              <div className="w-4 h-4 sm:w-5 sm:h-5 bg-accent-peach rounded-full flex items-center justify-center text-on-accent text-xs group-hover:scale-110 transition-transform duration-300">
                 →
               </div>
             </div>

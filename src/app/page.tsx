@@ -169,7 +169,7 @@ export default function HomePage() {
                 <p className="text-theme-primary text-opacity-70 text-base">Jangan lewatkan kesempatan emas ini! Hemat hingga 70%</p>
               </div>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8">
               {promos.slice(0, 3).map((promo, index) => (
                 <Link
                   key={promo._id}
@@ -242,7 +242,7 @@ export default function HomePage() {
               >
                 {Array.from({ length: Math.ceil(popularProducts.length / itemsPerSlide) }).map((_, slideIndex) => (
                   <div key={slideIndex} className="w-full flex-shrink-0">
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
                       {popularProducts
                         .slice(slideIndex * itemsPerSlide, (slideIndex + 1) * itemsPerSlide)
                         .map((product, index) => (
@@ -296,7 +296,7 @@ export default function HomePage() {
               </Link>
             </div>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
               {products.map((product, index) => (
                 <div key={product._id}>
                   <ProductCard product={product} />
@@ -322,7 +322,33 @@ export default function HomePage() {
               <p className="text-theme-primary text-opacity-70 text-base">Temukan produk sesuai kebutuhan Anda</p>
             </div>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {/* Mobile: Horizontal Scroll */}
+            <div className="md:hidden">
+              <div className="flex gap-3 overflow-x-auto pb-4 scrollbar-hide">
+                {categories.slice(0, 8).map((category, index) => (
+                  <Link
+                    key={category._id}
+                    href={`/products?category=${category.slug}`}
+                    className="group card-theme rounded-2xl p-3 shadow-soft hover:shadow-medium transition-all duration-200 border border-theme-primary border-opacity-10 hover:border-opacity-20 text-center flex-shrink-0 w-24"
+                  >
+                    <div className="bg-accent-yellow w-10 h-10 rounded-xl mx-auto mb-2 flex items-center justify-center overflow-hidden">
+                      <Image 
+                        src="/logo-sis.png" 
+                        alt="SistaBag Logo" 
+                        width={20} 
+                        height={20} 
+                        className="object-contain"
+                      />
+                    </div>
+                    <h3 className="font-semibold text-theme-primary mb-1 text-xs line-clamp-2">{category.name}</h3>
+                    <p className="text-theme-primary text-opacity-60 text-xs">{category.productCount}</p>
+                  </Link>
+                ))}
+              </div>
+            </div>
+            
+            {/* Desktop: Grid */}
+            <div className="hidden md:grid grid-cols-3 lg:grid-cols-3 gap-6">
               {categories.slice(0, 6).map((category, index) => (
                 <Link
                   key={category._id}

@@ -477,6 +477,15 @@ export default function NewPromoPage() {
                     <p className="text-sm text-theme-primary opacity-60">
                       PNG, JPG, JPEG hingga 5MB
                     </p>
+                    <div className="mt-3 p-3 bg-accent-mint bg-opacity-10 rounded-lg border border-accent-mint border-opacity-30">
+                      <p className="text-xs text-theme-primary font-medium mb-1">📏 Ukuran Optimal Banner Promo:</p>
+                      <ul className="text-xs text-theme-primary opacity-80 space-y-1">
+                        <li>• Desktop: 1200 x 400 px (rasio 3:1)</li>
+                        <li>• Mobile: 800 x 600 px (rasio 4:3)</li>
+                        <li>• Format: PNG/JPG dengan kualitas tinggi</li>
+                        <li>• Pastikan teks tetap terbaca di semua ukuran</li>
+                      </ul>
+                    </div>
                   </div>
                 </div>
               ) : (

@@ -20,10 +20,8 @@ export const metadata: Metadata = {
   description: "Temukan koleksi tas berkualitas tinggi dengan desain modern dan harga terjangkau di E-Store Siska. Tas wanita, tas pria, dan aksesoris fashion terbaik.",
   keywords: "tas, tas wanita, tas pria, tas berkualitas, fashion, aksesoris, toko online",
   authors: [{ name: "E-Store Siska" }],
-  viewport: "width=device-width, initial-scale=1",
   robots: "index, follow",
   manifest: "/manifest.json",
-  themeColor: "#FF9E9E",
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
@@ -35,6 +33,12 @@ export const metadata: Metadata = {
     type: "website",
     locale: "id_ID",
   },
+};
+
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+  themeColor: "#FF9E9E",
 };
 
 export default function RootLayout({
