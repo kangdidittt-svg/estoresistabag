@@ -99,7 +99,7 @@ export default function HomePage() {
 
       if (productsData.success) {
         // Sort products: featured first, then by creation date (newest first)
-        const sortedProducts = productsData.data.products.sort((a, b) => {
+        const sortedProducts = productsData.data.products.sort((a: Product, b: Product) => {
           // If one is featured and the other is not, featured comes first
           if (a.isFeatured && !b.isFeatured) return -1;
           if (!a.isFeatured && b.isFeatured) return 1;
@@ -116,7 +116,7 @@ export default function HomePage() {
       if (promosData.success) setPromos(promosData.data);
       if (popularData.success) {
         // Sort products: featured products first, then by views
-        const sortedProducts = popularData.data.products.sort((a, b) => {
+        const sortedProducts = popularData.data.products.sort((a: Product, b: Product) => {
           // Featured products come first
           if (a.isFeatured && !b.isFeatured) return -1;
           if (!a.isFeatured && b.isFeatured) return 1;
