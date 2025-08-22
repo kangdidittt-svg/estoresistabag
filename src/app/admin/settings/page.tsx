@@ -25,6 +25,7 @@ interface Admin {
   _id: string;
   username: string;
   email?: string;
+  role: 'super_admin' | 'admin';
   isActive: boolean;
   lastLogin?: string;
   createdAt: string;
@@ -41,6 +42,7 @@ interface NewAdminForm {
   password: string;
   confirmPassword: string;
   email: string;
+  role: 'super_admin' | 'admin';
 }
 
 interface AppConfig {
@@ -72,7 +74,8 @@ export default function AdminSettingsPage() {
     username: '',
     password: '',
     confirmPassword: '',
-    email: ''
+    email: '',
+    role: 'admin'
   });
   const [newAdminErrors, setNewAdminErrors] = useState<Record<string, string>>({});
   const [showNewAdminForm, setShowNewAdminForm] = useState(false);
@@ -108,7 +111,7 @@ export default function AdminSettingsPage() {
 
   const fetchAdmins = async () => {
     try {
-      const response = await fetch('/api/admin/users');
+      const response = await fetch('/api/admin/admins');
       const data = await response.json();
       if (data.success) {
         setAdmins(data.data);
@@ -353,7 +356,7 @@ export default function AdminSettingsPage() {
 
     setLoading(true);
     try {
-      const response = await fetch('/api/admin/users', {
+      const response = await fetch('/api/admin/admins', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -361,14 +364,15 @@ export default function AdminSettingsPage() {
         body: JSON.stringify({
           username: newAdminForm.username,
           password: newAdminForm.password,
-          email: newAdminForm.email || undefined
+          email: newAdminForm.email || undefined,
+          role: newAdminForm.role
         })
       });
 
       const data = await response.json();
       if (data.success) {
         setMessage({ type: 'success', text: 'Admin baru berhasil ditambahkan' });
-        setNewAdminForm({ username: '', password: '', confirmPassword: '', email: '' });
+        setNewAdminForm({ username: '', password: '', confirmPassword: '', email: '', role: 'admin' });
         setShowNewAdminForm(false);
         fetchAdmins();
       } else {
@@ -385,7 +389,7 @@ export default function AdminSettingsPage() {
     if (!confirm(`Apakah Anda yakin ingin menghapus admin "${username}"?`)) return;
 
     try {
-      const response = await fetch(`/api/admin/users/${adminId}`, {
+      const response = await fetch(`/api/admin/admins/${adminId}`, {
         method: 'DELETE'
       });
 
@@ -742,6 +746,20 @@ export default function AdminSettingsPage() {
                         )}
                       </div>
 
+                      <div>
+                        <label className="block text-sm font-medium text-theme-primary mb-2">
+                          Role *
+                        </label>
+                        <select
+                          value={newAdminForm.role}
+                          onChange={(e) => setNewAdminForm(prev => ({ ...prev, role: e.target.value as 'super_admin' | 'admin' }))}
+                          className="block w-full px-3 py-2 border border-theme-primary border-opacity-20 rounded-lg focus:ring-2 focus:ring-accent-peach focus:border-accent-peach bg-white text-theme-primary"
+                        >
+                          <option value="admin">Admin</option>
+                          <option value="super_admin">Super Admin</option>
+                        </select>
+                      </div>
+
                       <div className="md:col-span-2 flex items-center space-x-4">
                         <button
                           type="submit"
@@ -759,7 +777,7 @@ export default function AdminSettingsPage() {
                           type="button"
                           onClick={() => {
                             setShowNewAdminForm(false);
-                            setNewAdminForm({ username: '', password: '', confirmPassword: '', email: '' });
+                            setNewAdminForm({ username: '', password: '', confirmPassword: '', email: '', role: 'admin' });
                             setNewAdminErrors({});
                           }}
                           className="px-4 py-2 bg-theme-primary bg-opacity-10 text-theme-primary border border-theme-primary border-opacity-50 rounded-lg hover:bg-theme-primary hover:bg-opacity-20 transition-colors"
@@ -794,6 +812,13 @@ export default function AdminSettingsPage() {
                             <div className="ml-4">
                               <div className="flex items-center">
                                 <p className="text-sm font-medium text-theme-primary">{admin.username}</p>
+                                <span className={`ml-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                                  admin.role === 'super_admin' 
+                                    ? 'bg-accent-peach bg-opacity-20 text-accent-peach' 
+                                    : 'bg-accent-mint bg-opacity-20 text-accent-mint'
+                                }`}>
+                                  {admin.role === 'super_admin' ? 'Super Admin' : 'Admin'}
+                                </span>
                                 {!admin.isActive && (
                                   <span className="ml-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
                                     Nonaktif

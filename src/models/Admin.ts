@@ -4,6 +4,7 @@ interface IAdmin {
   username: string;
   password: string;
   email?: string;
+  role: 'super_admin' | 'admin';
   isActive: boolean;
   lastLogin?: Date;
   createdAt: Date;
@@ -28,6 +29,12 @@ const AdminSchema = new mongoose.Schema<IAdmin>({
     type: String,
     trim: true,
     lowercase: true
+  },
+  role: {
+    type: String,
+    enum: ['super_admin', 'admin'],
+    default: 'admin',
+    required: true
   },
   isActive: {
     type: Boolean,

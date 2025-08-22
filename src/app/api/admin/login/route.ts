@@ -33,6 +33,12 @@ export async function POST(request: NextRequest) {
       const Admin = require('@/models/Admin').default;
       await dbConnect();
       admin = await Admin.findOne({ isActive: true }).sort({ createdAt: 1 });
+      
+      // Set default role if not exists
+      if (admin && !admin.role) {
+        admin.role = 'super_admin';
+        await admin.save();
+      }
     } else {
       return NextResponse.json(
         { success: false, error: 'Username and password are required' },

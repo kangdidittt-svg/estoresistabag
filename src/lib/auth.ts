@@ -10,6 +10,7 @@ const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key';
 export interface AdminTokenPayload {
   adminId: string;
   username: string;
+  role: 'super_admin' | 'admin';
   isAdmin: boolean;
   iat: number;
   exp: number;
@@ -65,10 +66,11 @@ export async function verifyAdminToken(request: NextRequest): Promise<{
   }
 }
 
-export async function generateAdminToken(admin: { _id: string; username: string }): Promise<string> {
+export async function generateAdminToken(admin: { _id: string; username: string; role: 'super_admin' | 'admin' }): Promise<string> {
   const payload: Omit<AdminTokenPayload, 'iat' | 'exp'> = {
     adminId: admin._id.toString(),
     username: admin.username,
+    role: admin.role,
     isAdmin: true
   };
   
@@ -78,7 +80,7 @@ export async function generateAdminToken(admin: { _id: string; username: string 
 }
 
 // Verify admin credentials with username and password
-export async function verifyAdminCredentials(username: string, password: string): Promise<{ success: boolean; admin?: { _id: string; username: string; password: string; isActive: boolean } }> {
+export async function verifyAdminCredentials(username: string, password: string): Promise<{ success: boolean; admin?: { _id: string; username: string; password: string; role: 'super_admin' | 'admin'; isActive: boolean } }> {
   try {
     await dbConnect();
     
@@ -126,4 +128,41 @@ export async function verifyAdminPassword(password: string): Promise<boolean> {
 export async function hashPassword(password: string): Promise<string> {
   const saltRounds = 12;
   return await bcrypt.hash(password, saltRounds);
+}
+
+// Simple admin token verification for API routes
+export async function verifyAdminAuth(request: NextRequest): Promise<{
+  id: string;
+  username: string;
+  role: 'super_admin' | 'admin';
+} | null> {
+  try {
+    const token = request.cookies.get('admin-token')?.value;
+    
+    if (!token) {
+      return null;
+    }
+
+    const payload = jwt.verify(token, JWT_SECRET) as jwt.JwtPayload & Partial<AdminTokenPayload>;
+    
+    if (!payload.isAdmin || !payload.adminId) {
+      return null;
+    }
+
+    await dbConnect();
+    const admin = await Admin.findById(payload.adminId, 'username role isActive');
+    
+    if (!admin || !admin.isActive) {
+      return null;
+    }
+
+    return {
+      id: admin._id.toString(),
+      username: admin.username,
+      role: admin.role
+    };
+  } catch (error) {
+    console.error('Token verification error:', error);
+    return null;
+  }
 }
