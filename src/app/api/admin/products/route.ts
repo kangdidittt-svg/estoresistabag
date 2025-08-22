@@ -4,6 +4,7 @@ import Product from '@/models/Product';
 import Category from '@/models/Category';
 import { generateSlug, generateSKU } from '@/lib/utils';
 import { uploadToS3 } from '@/lib/s3';
+import { uploadImageLocally, isS3Configured } from '@/lib/upload';
 
 // Runtime configuration for handling larger payloads
 export const runtime = 'nodejs';
@@ -129,99 +130,70 @@ export async function POST(request: NextRequest) {
     await dbConnect();
     console.log('✅ Database connected successfully');
 
-    // Check content length
-    const contentLength = request.headers.get('content-length');
-    if (contentLength && parseInt(contentLength) > 10 * 1024 * 1024) { // 10MB
-      return NextResponse.json(
-        { success: false, error: 'Request payload too large. Maximum size is 10MB.' },
-        { status: 413 }
-      );
-    }
-
-    let body;
-    try {
-      body = await request.json();
-    } catch (jsonError) {
-      return NextResponse.json(
-        { success: false, error: 'Invalid JSON payload or payload too large' },
-        { status: 400 }
-      );
-    }
-
-    const {
-      name,
-      description,
-      price,
-      priceAfterDiscount,
-      images,
-      category,
-      tags,
-      stock,
-      isPublished,
-      promo
-    } = body;
+    // Parse FormData
+    const formData = await request.formData();
+    
+    const name = formData.get('name') as string;
+    const description = formData.get('description') as string;
+    const price = parseFloat(formData.get('price') as string);
+    const priceAfterDiscount = formData.get('priceAfterDiscount') ? parseFloat(formData.get('priceAfterDiscount') as string) : undefined;
+    const category = formData.get('category') as string;
+    const stock = parseInt(formData.get('stock') as string) || 0;
+    const isPublished = formData.get('isPublished') === 'true';
+    const promo = formData.get('promo') as string || undefined;
+    const tagsString = formData.get('tags') as string;
+    const tags = tagsString ? tagsString.split(',').map(tag => tag.trim()).filter(tag => tag) : [];
+    
+    // Get image files
+    const imageFiles = formData.getAll('images') as File[];
 
     // Validation
-    if (!name || !description || !price || !category || !images || images.length === 0) {
+    if (!name || !description || !price || !category || !imageFiles || imageFiles.length === 0) {
       return NextResponse.json(
-        { success: false, error: 'Missing required fields' },
+        { success: false, error: 'Semua field wajib diisi dan minimal satu gambar diperlukan' },
         { status: 400 }
       );
     }
 
-    // Process images - upload base64 to S3 or keep existing URLs
-    const formattedImages = [];
+    console.log('📝 Processing images...');
+    const processedImages = [];
+    const useS3 = isS3Configured();
+    console.log(`📤 Using ${useS3 ? 'S3' : 'local'} upload method`);
     
-    for (let index = 0; index < images.length; index++) {
-      const image = images[index];
-      let imageUrl: string;
-      let altText: string;
+    for (let i = 0; i < imageFiles.length; i++) {
+      const file = imageFiles[i];
       
-      if (typeof image === 'string') {
-        // Check if it's a base64 image
-        if (image.startsWith('data:image/')) {
-          try {
-            // Upload base64 to S3
-            imageUrl = await uploadToS3(image, 'products');
-            altText = `${name} - Gambar ${index + 1}`;
-          } catch (error) {
-            console.error('Error uploading image to S3:', error);
-            return NextResponse.json(
-              { success: false, error: 'Failed to upload image' },
-              { status: 500 }
-            );
+      if (file && file.size > 0) {
+        console.log(`📤 Uploading image ${i + 1}...`);
+        try {
+          let imageUrl: string;
+          
+          if (useS3) {
+            // Use S3 upload
+            const buffer = await file.arrayBuffer();
+            const base64 = Buffer.from(buffer).toString('base64');
+            const mimeType = file.type;
+            const base64String = `data:${mimeType};base64,${base64}`;
+            imageUrl = await uploadToS3(base64String, 'products');
+          } else {
+            // Use local upload as fallback
+            imageUrl = await uploadImageLocally(file, 'products');
           }
-        } else {
-          // It's already a URL
-          imageUrl = image;
-          altText = `${name} - Gambar ${index + 1}`;
-        }
-      } else {
-        // It's an object with url and alt
-        if (image.url && image.url.startsWith('data:image/')) {
-          try {
-            // Upload base64 to S3
-            imageUrl = await uploadToS3(image.url, 'products');
-            altText = image.alt || `${name} - Gambar ${index + 1}`;
-          } catch (error) {
-            console.error('Error uploading image to S3:', error);
-            return NextResponse.json(
-              { success: false, error: 'Failed to upload image' },
-              { status: 500 }
-            );
-          }
-        } else {
-          // It's already a URL
-          imageUrl = image.url;
-          altText = image.alt || `${name} - Gambar ${index + 1}`;
+          
+          processedImages.push({
+            url: imageUrl,
+            alt: `${name} - Image ${i + 1}`,
+            isPrimary: i === 0
+          });
+          console.log(`✅ Image ${i + 1} uploaded successfully:`, imageUrl);
+        } catch (uploadError) {
+          console.error(`❌ Failed to upload image ${i + 1}:`, uploadError);
+          return NextResponse.json(
+            { success: false, error: `Gagal mengupload gambar ${i + 1}` },
+            { status: 500 }
+          );
         }
       }
-      
-      formattedImages.push({
-        url: imageUrl,
-        alt: altText,
-        isPrimary: index === 0
-      });
     }
 
     // Check if category exists
@@ -254,7 +226,7 @@ export async function POST(request: NextRequest) {
       description,
       price,
       priceAfterDiscount: priceAfterDiscount || undefined,
-      images: formattedImages,
+      images: processedImages,
       category,
       tags: tags || [],
       stock: stock || 0,

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { CartProvider } from '@/contexts/CartContext';
-import FloatingCart from '@/components/FloatingCart';
+import CartOverlay from '@/components/CartOverlay';
 import PWAInstaller from '@/components/PWAInstaller';
 
 const geistSans = Geist({
@@ -58,7 +58,7 @@ export default function RootLayout({
       >
         <CartProvider>
           {children}
-          <FloatingCart />
+          <CartOverlay />
           <PWAInstaller />
         </CartProvider>
       </body>

@@ -30,9 +30,11 @@ export default function NewProductPage() {
     tags: '',
     stock: '',
     isPublished: true,
+    isFeatured: false,
     promo: ''
   });
-  const [images, setImages] = useState<string[]>([]);
+  const [images, setImages] = useState<File[]>([]);
+  const [imagePreviews, setImagePreviews] = useState<string[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [promos, setPromos] = useState<Promo[]>([]);
   const [loading, setLoading] = useState(false);
@@ -82,28 +84,29 @@ export default function NewProductPage() {
     if (!files) return;
 
     setImageLoading(true);
-    const newImages: string[] = [];
+    const newFiles = Array.from(files);
+    const newPreviews: string[] = [];
 
-    for (let i = 0; i < files.length; i++) {
-      const file = files[i];
+    // Create previews for display
+    for (const file of newFiles) {
       const reader = new FileReader();
-      
       reader.onload = (event) => {
         if (event.target?.result) {
-          newImages.push(event.target.result as string);
-          if (newImages.length === files.length) {
-            setImages(prev => [...prev, ...newImages]);
+          newPreviews.push(event.target.result as string);
+          if (newPreviews.length === newFiles.length) {
+            setImages(prev => [...prev, ...newFiles]);
+            setImagePreviews(prev => [...prev, ...newPreviews]);
             setImageLoading(false);
           }
         }
       };
-      
       reader.readAsDataURL(file);
     }
   };
 
   const removeImage = (index: number) => {
     setImages(prev => prev.filter((_, i) => i !== index));
+    setImagePreviews(prev => prev.filter((_, i) => i !== index));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -117,22 +120,37 @@ export default function NewProductPage() {
     setLoading(true);
     
     try {
-      const submitData = {
-        ...formData,
-        price: parseFloat(formData.price),
-        priceAfterDiscount: formData.priceAfterDiscount ? parseFloat(formData.priceAfterDiscount) : undefined,
-        stock: parseInt(formData.stock) || 0,
-        tags: formData.tags.split(',').map(tag => tag.trim()).filter(tag => tag),
-        images,
-        promo: formData.promo || undefined
-      };
+      // Create FormData for file upload
+      const formDataToSend = new FormData();
+      
+      // Add basic form data
+      formDataToSend.append('name', formData.name);
+      formDataToSend.append('description', formData.description);
+      formDataToSend.append('price', formData.price);
+      formDataToSend.append('category', formData.category);
+      formDataToSend.append('stock', formData.stock || '0');
+      formDataToSend.append('isPublished', formData.isPublished.toString());
+      
+      if (formData.priceAfterDiscount) {
+        formDataToSend.append('priceAfterDiscount', formData.priceAfterDiscount);
+      }
+      
+      if (formData.promo) {
+        formDataToSend.append('promo', formData.promo);
+      }
+      
+      if (formData.tags) {
+        formDataToSend.append('tags', formData.tags);
+      }
+      
+      // Add image files
+      images.forEach((file, index) => {
+        formDataToSend.append(`images`, file);
+      });
 
       const response = await fetch('/api/admin/products', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(submitData)
+        body: formDataToSend
       });
 
       const data = await response.json();
@@ -248,6 +266,64 @@ export default function NewProductPage() {
             </div>
           </div>
 
+
+
+          {/* Images */}
+          <div className="card-theme rounded-lg shadow-soft p-6">
+            <h2 className="text-lg font-semibold text-theme-primary mb-4">Gambar Produk *</h2>
+            
+            <div className="mb-4">
+              <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-theme-primary border-opacity-30 border-dashed rounded-lg cursor-pointer bg-theme-main hover:bg-theme-primary hover:bg-opacity-5 transition-all duration-200">
+                <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                  <Upload className="w-8 h-8 mb-2 text-theme-primary opacity-60" />
+                  <p className="mb-2 text-sm text-theme-primary opacity-75">
+                    <span className="font-semibold">Klik untuk upload</span> atau drag and drop
+                  </p>
+                  <p className="text-xs text-theme-primary opacity-60">PNG, JPG atau JPEG (MAX. 5MB)</p>
+                </div>
+                <input
+                  type="file"
+                  className="hidden"
+                  multiple
+                  accept="image/*"
+                  onChange={handleImageUpload}
+                  disabled={imageLoading}
+                />
+              </label>
+            </div>
+
+            {imageLoading && (
+              <div className="flex items-center justify-center py-4">
+                <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-accent-peach"></div>
+                <span className="ml-2 text-sm text-theme-primary opacity-75">Mengupload gambar...</span>
+              </div>
+            )}
+
+            {images.length > 0 && (
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                {images.map((image, index) => (
+                  <div key={index} className="relative group">
+                    <div className="relative w-full h-32 rounded-lg overflow-hidden">
+                      <Image
+                        src={imagePreviews[index]}
+                        alt={`${formData.name || 'Produk'} - Gambar ${index + 1}`}
+                        fill
+                        className="object-cover"
+                      />
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => removeImage(index)}
+                      className="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"
+                    >
+                      <X className="h-4 w-4" />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
           {/* Pricing */}
           <div className="card-theme rounded-lg shadow-soft p-6">
             <h2 className="text-lg font-semibold text-theme-primary mb-4">Harga & Stok</h2>
@@ -320,77 +396,36 @@ export default function NewProductPage() {
             </div>
           </div>
 
-          {/* Images */}
-          <div className="card-theme rounded-lg shadow-soft p-6">
-            <h2 className="text-lg font-semibold text-theme-primary mb-4">Gambar Produk *</h2>
-            
-            <div className="mb-4">
-              <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-theme-primary border-opacity-30 border-dashed rounded-lg cursor-pointer bg-theme-main hover:bg-theme-primary hover:bg-opacity-5 transition-all duration-200">
-                <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                  <Upload className="w-8 h-8 mb-2 text-theme-primary opacity-60" />
-                  <p className="mb-2 text-sm text-theme-primary opacity-75">
-                    <span className="font-semibold">Klik untuk upload</span> atau drag and drop
-                  </p>
-                  <p className="text-xs text-theme-primary opacity-60">PNG, JPG atau JPEG (MAX. 5MB)</p>
-                </div>
-                <input
-                  type="file"
-                  className="hidden"
-                  multiple
-                  accept="image/*"
-                  onChange={handleImageUpload}
-                  disabled={imageLoading}
-                />
-              </label>
-            </div>
-
-            {imageLoading && (
-              <div className="flex items-center justify-center py-4">
-                <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-accent-peach"></div>
-                <span className="ml-2 text-sm text-theme-primary opacity-75">Mengupload gambar...</span>
-              </div>
-            )}
-
-            {images.length > 0 && (
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                {images.map((image, index) => (
-                  <div key={index} className="relative group">
-                    <div className="relative w-full h-32 rounded-lg overflow-hidden">
-                      <Image
-                        src={image}
-                        alt={`${formData.name || 'Produk'} - Gambar ${index + 1}`}
-                        fill
-                        className="object-cover"
-                      />
-                    </div>
-                    <button
-                      type="button"
-                      onClick={() => removeImage(index)}
-                      className="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"
-                    >
-                      <X className="h-4 w-4" />
-                    </button>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-
           {/* Settings */}
           <div className="card-theme rounded-lg shadow-soft p-6">
             <h2 className="text-lg font-semibold text-theme-primary mb-4">Pengaturan</h2>
             
-            <div className="flex items-center">
-              <input
-                type="checkbox"
-                name="isPublished"
-                checked={formData.isPublished}
-                onChange={handleInputChange}
-                className="h-4 w-4 text-accent-peach focus:ring-accent-peach border-theme-primary border-opacity-30 rounded"
-              />
-              <label className="ml-2 block text-sm text-theme-primary">
-                Publikasikan produk sekarang
-              </label>
+            <div className="space-y-4">
+              <div className="flex items-center">
+                <input
+                  type="checkbox"
+                  name="isPublished"
+                  checked={formData.isPublished}
+                  onChange={handleInputChange}
+                  className="h-4 w-4 text-accent-peach focus:ring-accent-peach border-theme-primary border-opacity-30 rounded"
+                />
+                <label className="ml-2 block text-sm text-theme-primary">
+                  Publikasikan produk sekarang
+                </label>
+              </div>
+              
+              <div className="flex items-center">
+                <input
+                  type="checkbox"
+                  name="isFeatured"
+                  checked={formData.isFeatured}
+                  onChange={handleInputChange}
+                  className="h-4 w-4 text-accent-peach focus:ring-accent-peach border-theme-primary border-opacity-30 rounded"
+                />
+                <label className="ml-2 block text-sm text-theme-primary">
+                  Tandai sebagai produk unggulan
+                </label>
+              </div>
             </div>
           </div>
 
