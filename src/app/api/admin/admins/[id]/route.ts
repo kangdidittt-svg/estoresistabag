@@ -8,8 +8,9 @@ import mongoose from 'mongoose';
 // GET - Ambil detail admin berdasarkan ID
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id } = await params;
   try {
     // Verify admin token
     const adminData = await verifyAdminAuth(request);
@@ -21,7 +22,7 @@ export async function GET(
     }
 
     // Only super_admin can view other admins, or admin can view their own data
-    if (adminData.role !== 'super_admin' && adminData.id !== params.id) {
+    if (adminData.role !== 'super_admin' && adminData.id !== id) {
       return NextResponse.json(
         { success: false, error: 'Insufficient permissions' },
         { status: 403 }
@@ -30,14 +31,14 @@ export async function GET(
 
     await dbConnect();
 
-    if (!mongoose.Types.ObjectId.isValid(params.id)) {
+    if (!mongoose.Types.ObjectId.isValid(id)) {
       return NextResponse.json(
         { success: false, error: 'Invalid admin ID' },
         { status: 400 }
       );
     }
 
-    const admin = await Admin.findById(params.id, '-password');
+    const admin = await Admin.findById(id, '-password');
     if (!admin) {
       return NextResponse.json(
         { success: false, error: 'Admin not found' },
@@ -61,8 +62,9 @@ export async function GET(
 // PUT - Update admin
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id } = await params;
   try {
     // Verify admin token
     const adminData = await verifyAdminAuth(request);
@@ -75,14 +77,14 @@ export async function PUT(
 
     await dbConnect();
 
-    if (!mongoose.Types.ObjectId.isValid(params.id)) {
+    if (!mongoose.Types.ObjectId.isValid(id)) {
       return NextResponse.json(
         { success: false, error: 'Invalid admin ID' },
         { status: 400 }
       );
     }
 
-    const targetAdmin = await Admin.findById(params.id);
+    const targetAdmin = await Admin.findById(id);
     if (!targetAdmin) {
       return NextResponse.json(
         { success: false, error: 'Admin not found' },
@@ -92,7 +94,7 @@ export async function PUT(
 
     // Permission checks
     const isSuperAdmin = adminData.role === 'super_admin';
-    const isOwnProfile = adminData.id === params.id;
+    const isOwnProfile = adminData.id === id;
 
     if (!isSuperAdmin && !isOwnProfile) {
       return NextResponse.json(
@@ -145,7 +147,7 @@ export async function PUT(
     if (username && username !== targetAdmin.username) {
       const existingAdmin = await Admin.findOne({ 
         username, 
-        _id: { $ne: params.id } 
+        _id: { $ne: id } 
       });
       if (existingAdmin) {
         return NextResponse.json(
@@ -169,7 +171,7 @@ export async function PUT(
 
     // Update admin
     const updatedAdmin = await Admin.findByIdAndUpdate(
-      params.id,
+      id,
       updateData,
       { new: true, select: '-password' }
     );
@@ -191,8 +193,9 @@ export async function PUT(
 // DELETE - Hapus admin
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id } = await params;
   try {
     // Verify admin token
     const adminData = await verifyAdminAuth(request);
@@ -213,22 +216,22 @@ export async function DELETE(
 
     await dbConnect();
 
-    if (!mongoose.Types.ObjectId.isValid(params.id)) {
+    if (!mongoose.Types.ObjectId.isValid(id)) {
       return NextResponse.json(
         { success: false, error: 'Invalid admin ID' },
         { status: 400 }
       );
     }
 
-    // Prevent deleting self
-    if (adminData.id === params.id) {
+    // Prevent admin from deleting themselves
+    if (adminData.id === id) {
       return NextResponse.json(
         { success: false, error: 'Cannot delete your own account' },
         { status: 400 }
       );
     }
 
-    const admin = await Admin.findById(params.id);
+    const admin = await Admin.findById(id);
     if (!admin) {
       return NextResponse.json(
         { success: false, error: 'Admin not found' },
@@ -247,7 +250,7 @@ export async function DELETE(
       }
     }
 
-    await Admin.findByIdAndDelete(params.id);
+    await Admin.findByIdAndDelete(id);
 
     return NextResponse.json({
       success: true,
