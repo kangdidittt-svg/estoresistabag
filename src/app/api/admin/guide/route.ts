@@ -1,32 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { connectDB } from '@/lib/mongodb';
-import { ObjectId } from 'mongodb';
-
-interface GuideStep {
-  title: string;
-  description: string;
-  image?: string;
-}
-
-interface GuideContent {
-  _id?: ObjectId;
-  title: string;
-  content: string;
-  steps: GuideStep[];
-  createdAt?: Date;
-  updatedAt?: Date;
-}
+import dbConnect from '@/lib/mongodb';
+import Guide, { IGuide, IGuideStep } from '@/models/Guide';
 
 // GET - Ambil konten panduan
 export async function GET() {
   try {
-    const { db } = await connectDB();
+    await dbConnect();
     
-    const guide = await db.collection('guides').findOne({});
+    const guide = await Guide.findOne({});
     
     if (!guide) {
       // Return default guide content if none exists
-      const defaultGuide: GuideContent = {
+      const defaultGuide = {
         title: "Panduan Cara Memesan Produk",
         content: "Ikuti langkah-langkah mudah berikut untuk memesan produk di SistaBag:",
         steps: [
@@ -93,24 +78,21 @@ export async function PUT(request: NextRequest) {
       );
     }
     
-    const { db } = await connectDB();
+    await dbConnect();
     
-    const guideData: GuideContent = {
+    const guideData = {
       title,
       content,
-      steps,
-      updatedAt: new Date()
+      steps
     };
     
-    const existingGuide = await db.collection('guides').findOne({});
+    const existingGuide = await Guide.findOne({});
     
     if (existingGuide) {
       // Update existing guide
-      const result = await db.collection('guides').updateOne(
+      const result = await Guide.updateOne(
         { _id: existingGuide._id },
-        { 
-          $set: guideData
-        }
+        { $set: guideData }
       );
       
       if (result.modifiedCount === 0) {
@@ -121,10 +103,10 @@ export async function PUT(request: NextRequest) {
       }
     } else {
       // Create new guide
-      guideData.createdAt = new Date();
-      const result = await db.collection('guides').insertOne(guideData);
+      const newGuide = new Guide(guideData);
+      const result = await newGuide.save();
       
-      if (!result.insertedId) {
+      if (!result) {
         return NextResponse.json(
           { success: false, error: 'Failed to create guide' },
           { status: 500 }

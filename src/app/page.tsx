@@ -530,12 +530,13 @@ function ProductCard({ product, showPopularBadge = false }: { product: Product; 
             <div className="bg-theme-primary text-theme-main px-2 py-1 rounded-2xl text-xs flex items-center gap-1">
               <Eye className="h-3 w-3" />
               {product.views}
-              {product.isFeatured && (
-                <span className="ml-1 bg-accent-yellow text-on-accent px-1 py-0.5 rounded text-xs font-semibold">
-                  Unggulan
-                </span>
-              )}
             </div>
+            {product.isFeatured && (
+              <div className="bg-accent-yellow text-on-accent px-2 py-1 rounded-2xl text-xs font-semibold flex items-center gap-1">
+                <Star className="h-3 w-3" />
+                Unggulan
+              </div>
+            )}
           </div>
         </div>
         

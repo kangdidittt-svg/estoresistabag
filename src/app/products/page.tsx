@@ -527,13 +527,16 @@ function ProductCard({ product, viewMode }: { product: Product; viewMode: 'grid'
                   <p className="text-gray-600 mb-4">{product.category.name}</p>
                   
                   <div className="flex items-center gap-4 mb-4">
-                    <div className="flex items-center gap-1 text-gray-500">
-                      <Eye className="h-4 w-4" />
-                      <span className="text-sm">{product.views} views</span>
+                    <div className="flex items-center gap-4">
+                      <div className="flex items-center gap-1 text-gray-500">
+                        <Eye className="h-4 w-4" />
+                        <span className="text-sm">{product.views} views</span>
+                      </div>
                       {product.isFeatured && (
-                        <span className="ml-2 bg-purple-500 text-white px-2 py-1 rounded-full text-xs font-semibold">
+                        <div className="bg-yellow-400 text-yellow-900 px-2 py-1 rounded-full text-xs font-semibold flex items-center gap-1">
+                          <Star className="h-3 w-3" />
                           Unggulan
-                        </span>
+                        </div>
                       )}
                     </div>
                     
@@ -609,14 +612,17 @@ function ProductCard({ product, viewMode }: { product: Product; viewMode: 'grid'
             )}
           </div>
           
-          {/* Views */}
-          <div className="absolute top-3 right-3 bg-black bg-opacity-50 text-white px-2 py-1 rounded-full text-xs flex items-center gap-1">
-            <Eye className="h-3 w-3" />
-            {product.views}
+          {/* Views and Featured Label */}
+          <div className="absolute top-3 right-3 flex flex-col gap-1 items-end">
+            <div className="bg-black bg-opacity-50 text-white px-2 py-1 rounded-full text-xs flex items-center gap-1">
+              <Eye className="h-3 w-3" />
+              {product.views}
+            </div>
             {product.isFeatured && (
-              <span className="ml-1 bg-purple-500 text-white px-1 py-0.5 rounded text-xs font-semibold">
+              <div className="bg-yellow-400 text-yellow-900 px-2 py-1 rounded-full text-xs font-semibold flex items-center gap-1">
+                <Star className="h-3 w-3" />
                 Unggulan
-              </span>
+              </div>
             )}
           </div>
         </div>
