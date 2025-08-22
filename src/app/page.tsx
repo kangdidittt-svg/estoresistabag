@@ -29,6 +29,8 @@ interface Product {
   };
   views: number;
   stock: number;
+  isFeatured?: boolean;
+  createdAt?: string;
   promo?: {
     _id: string;
     title: string;
@@ -82,10 +84,10 @@ export default function HomePage() {
   const fetchData = async () => {
     try {
       const [productsRes, categoriesRes, promosRes, popularRes] = await Promise.all([
-        fetch('/api/products?limit=8'),
+        fetch('/api/products?limit=50'),
         fetch('/api/categories?withProductCount=true'),
         fetch('/api/promos?activeOnly=true'),
-        fetch('/api/products?sort=views&order=desc&limit=6')
+        fetch('/api/products?sort=views&order=desc&limit=12')
       ]);
 
       const [productsData, categoriesData, promosData, popularData] = await Promise.all([
@@ -95,10 +97,34 @@ export default function HomePage() {
         popularRes.json()
       ]);
 
-      if (productsData.success) setProducts(productsData.data.products);
+      if (productsData.success) {
+        // Sort products: featured first, then by creation date (newest first)
+        const sortedProducts = productsData.data.products.sort((a, b) => {
+          // If one is featured and the other is not, featured comes first
+          if (a.isFeatured && !b.isFeatured) return -1;
+          if (!a.isFeatured && b.isFeatured) return 1;
+          
+          // If both are featured or both are not featured, sort by creation date (newest first)
+          const dateA = new Date(a.createdAt || a._id).getTime();
+          const dateB = new Date(b.createdAt || b._id).getTime();
+          return dateB - dateA;
+        });
+        
+        setProducts(sortedProducts.slice(0, 8)); // Show only first 8 products
+      }
       if (categoriesData.success) setCategories(categoriesData.data);
       if (promosData.success) setPromos(promosData.data);
-      if (popularData.success) setPopularProducts(popularData.data.products);
+      if (popularData.success) {
+        // Sort products: featured products first, then by views
+        const sortedProducts = popularData.data.products.sort((a, b) => {
+          // Featured products come first
+          if (a.isFeatured && !b.isFeatured) return -1;
+          if (!a.isFeatured && b.isFeatured) return 1;
+          // If both are featured or both are not featured, sort by views
+          return b.views - a.views;
+        });
+        setPopularProducts(sortedProducts.slice(0, 6));
+      }
     } catch (error) {
       console.error('Error fetching data:', error);
     } finally {
@@ -287,21 +313,21 @@ export default function HomePage() {
               <p className="text-theme-primary text-opacity-70 text-base">Produk pilihan yang paling disukai pelanggan kami</p>
             </div>
             
-            <div className="flex justify-center mb-8">
-              <Link
-                href="/products"
-                className="bg-accent-peach text-on-accent px-6 py-3 rounded-2xl font-semibold hover:bg-opacity-90 transition-all duration-200 shadow-soft"
-              >
-                Lihat Semua →
-              </Link>
-            </div>
-            
             <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
               {products.map((product, index) => (
                 <div key={product._id}>
                   <ProductCard product={product} />
                 </div>
               ))}
+            </div>
+            
+            <div className="flex justify-center mt-8">
+              <Link
+                href="/products"
+                className="bg-accent-peach text-on-accent px-6 py-3 rounded-2xl font-semibold hover:bg-opacity-90 transition-all duration-200 shadow-soft"
+              >
+                Lihat Semua →
+              </Link>
             </div>
           </div>
         </section>
@@ -434,9 +460,9 @@ export default function HomePage() {
             <div>
               <h3 className="font-bold mb-4 text-lg text-accent-mint">Bantuan</h3>
               <ul className="space-y-2 text-theme-primary text-opacity-70">
-                <li><a href="#" className="hover:text-accent-mint transition-all duration-200 text-sm">
+                <li><Link href="/panduan" className="hover:text-accent-mint transition-all duration-200 text-sm">
                   Cara Pemesanan
-                </a></li>
+                </Link></li>
                 <li><a href="#" className="hover:text-accent-mint transition-all duration-200 text-sm">
                   Kebijakan Privasi
                 </a></li>
@@ -499,10 +525,17 @@ function ProductCard({ product, showPopularBadge = false }: { product: Product; 
             )}
           </div>
           
-          {/* Views */}
-          <div className="absolute top-3 right-3 bg-theme-primary text-theme-main px-2 py-1 rounded-2xl text-xs flex items-center gap-1">
-            <Eye className="h-3 w-3" />
-            {product.views}
+          {/* Views and Featured Label */}
+          <div className="absolute top-3 right-3 flex flex-col gap-1 items-end">
+            <div className="bg-theme-primary text-theme-main px-2 py-1 rounded-2xl text-xs flex items-center gap-1">
+              <Eye className="h-3 w-3" />
+              {product.views}
+              {product.isFeatured && (
+                <span className="ml-1 bg-accent-yellow text-on-accent px-1 py-0.5 rounded text-xs font-semibold">
+                  Unggulan
+                </span>
+              )}
+            </div>
           </div>
         </div>
         

@@ -4,7 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
-import { ShoppingBag, Grid3X3, Star, Menu, X, ShoppingCart } from 'lucide-react';
+import { ShoppingBag, Grid3X3, Star, Menu, X, ShoppingCart, BookOpen } from 'lucide-react';
 import { useCart } from '@/contexts/CartContext';
 
 interface NavigationProps {
@@ -42,6 +42,11 @@ export default function Navigation({ className = '' }: NavigationProps) {
       href: '/promos',
       label: 'Promo',
       icon: Star
+    },
+    {
+      href: '/panduan',
+      label: 'Panduan',
+      icon: BookOpen
     }
   ];
 

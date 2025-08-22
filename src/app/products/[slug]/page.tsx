@@ -547,6 +547,8 @@ export default function ProductDetailPage() {
               <ul className="text-sm text-theme-primary text-opacity-80 space-y-1">
                 <li>• Pengiriman ke seluruh Indonesia</li>
                 <li>• Estimasi 2-5 hari kerja</li>
+                <li>• Harga belum termasuk ongkos kirim</li>
+                <li>• Chat admin untuk konsultasi ongkir ya kak, siapa tau lagi promo hehe</li>
               </ul>
             </div>
           </div>

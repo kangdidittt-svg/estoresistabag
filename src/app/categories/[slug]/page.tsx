@@ -37,6 +37,7 @@ interface Product {
   images: ProductImage[];
   views: number;
   stock: number;
+  isFeatured?: boolean;
   promo?: {
     _id: string;
     title: string;
@@ -603,6 +604,11 @@ function ProductCard({ product, viewMode }: { product: Product; viewMode: 'grid'
                     <div className="flex items-center gap-1 text-gray-500">
                       <Eye className="h-4 w-4" />
                       <span className="text-sm">{product.views} views</span>
+                      {product.isFeatured && (
+                        <span className="ml-2 bg-purple-500 text-white px-2 py-1 rounded-full text-xs font-semibold">
+                          Unggulan
+                        </span>
+                      )}
                     </div>
                     
                     <span className={`text-xs px-2 py-1 rounded-full ${
@@ -669,6 +675,11 @@ function ProductCard({ product, viewMode }: { product: Product; viewMode: 'grid'
           <div className="absolute top-3 right-3 bg-black bg-opacity-50 text-white px-2 py-1 rounded-full text-xs flex items-center gap-1">
             <Eye className="h-3 w-3" />
             {product.views}
+            {product.isFeatured && (
+              <span className="ml-1 bg-purple-500 text-white px-1 py-0.5 rounded text-xs font-semibold">
+                Unggulan
+              </span>
+            )}
           </div>
         </div>
         

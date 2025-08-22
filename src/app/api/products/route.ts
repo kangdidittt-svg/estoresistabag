@@ -18,6 +18,7 @@ export async function GET(request: NextRequest) {
     const promo = searchParams.get('promo');
     const minPrice = searchParams.get('minPrice');
     const maxPrice = searchParams.get('maxPrice');
+    const featured = searchParams.get('featured');
 
     // Build query
     const query: any = { isPublished: true };
@@ -49,6 +50,11 @@ export async function GET(request: NextRequest) {
       query.price = {};
       if (minPrice) query.price.$gte = parseInt(minPrice);
       if (maxPrice) query.price.$lte = parseInt(maxPrice);
+    }
+
+    // Filter by featured products
+    if (featured === 'true') {
+      query.isFeatured = true;
     }
 
     // Build sort object

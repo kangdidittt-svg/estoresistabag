@@ -16,7 +16,9 @@ import {
   AlertCircle,
   CheckCircle,
   Phone,
-  Database
+  Database,
+  BookOpen,
+  Image as ImageIcon
 } from 'lucide-react';
 
 interface Admin {
@@ -51,7 +53,7 @@ interface AppConfig {
 
 export default function AdminSettingsPage() {
   const router = useRouter();
-  const [activeTab, setActiveTab] = useState<'password' | 'admins' | 'whatsapp' | 'data'>('password');
+  const [activeTab, setActiveTab] = useState<'password' | 'admins' | 'whatsapp' | 'guide' | 'data'>('password');
   const [loading, setLoading] = useState(false);
   const [admins, setAdmins] = useState<Admin[]>([]);
   const [showPasswords, setShowPasswords] = useState<Record<string, boolean>>({});
@@ -82,6 +84,14 @@ export default function AdminSettingsPage() {
   const [whatsappError, setWhatsappError] = useState('');
   const [templateError, setTemplateError] = useState('');
 
+  // Guide management
+  const [guideContent, setGuideContent] = useState({
+    title: '',
+    content: '',
+    steps: [{ title: '', description: '', image: '' }]
+  });
+  const [guideLoading, setGuideLoading] = useState(false);
+
   // Clear data
   const [showClearDataConfirm, setShowClearDataConfirm] = useState(false);
   const [clearDataLoading, setClearDataLoading] = useState(false);
@@ -91,6 +101,8 @@ export default function AdminSettingsPage() {
       fetchAdmins();
     } else if (activeTab === 'whatsapp') {
       fetchAppConfig();
+    } else if (activeTab === 'guide') {
+      fetchGuideContent();
     }
   }, [activeTab]);
 
@@ -166,6 +178,74 @@ export default function AdminSettingsPage() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const fetchGuideContent = async () => {
+    try {
+      const response = await fetch('/api/admin/guide');
+      const data = await response.json();
+      if (data.success && data.data) {
+        setGuideContent({
+          title: data.data.title || '',
+          content: data.data.content || '',
+          steps: data.data.steps || [{ title: '', description: '', image: '' }]
+        });
+      }
+    } catch (error) {
+      console.error('Error fetching guide content:', error);
+    }
+  };
+
+  const handleGuideUpdate = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setGuideLoading(true);
+    
+    try {
+      const response = await fetch('/api/admin/guide', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(guideContent)
+      });
+      
+      const data = await response.json();
+      
+      if (data.success) {
+        setMessage({ type: 'success', text: 'Panduan berhasil diperbarui' });
+      } else {
+        setMessage({ type: 'error', text: data.error || 'Gagal memperbarui panduan' });
+      }
+    } catch (error) {
+      setMessage({ type: 'error', text: 'Terjadi kesalahan saat memperbarui panduan' });
+    } finally {
+      setGuideLoading(false);
+    }
+  };
+
+  const addGuideStep = () => {
+    setGuideContent(prev => ({
+      ...prev,
+      steps: [...prev.steps, { title: '', description: '', image: '' }]
+    }));
+  };
+
+  const removeGuideStep = (index: number) => {
+    if (guideContent.steps.length > 1) {
+      setGuideContent(prev => ({
+        ...prev,
+        steps: prev.steps.filter((_, i) => i !== index)
+      }));
+    }
+  };
+
+  const updateGuideStep = (index: number, field: string, value: string) => {
+    setGuideContent(prev => ({
+      ...prev,
+      steps: prev.steps.map((step, i) => 
+        i === index ? { ...step, [field]: value } : step
+      )
+    }));
   };
 
   const handleClearData = async () => {
@@ -401,6 +481,17 @@ export default function AdminSettingsPage() {
               >
                 <Phone className="h-4 w-4 inline mr-2" />
                 WhatsApp
+              </button>
+              <button
+                onClick={() => setActiveTab('guide')}
+                className={`py-4 px-6 text-sm font-medium border-b-2 transition-colors ${
+                  activeTab === 'guide'
+                    ? 'border-blue-600 text-blue-600 font-semibold'
+                    : 'border-transparent text-theme-primary text-opacity-60 hover:text-blue-600 hover:border-blue-600 hover:border-opacity-50'
+                }`}
+              >
+                <BookOpen className="h-4 w-4 inline mr-2" />
+                Panduan
               </button>
               <button
                 onClick={() => setActiveTab('data')}
@@ -835,6 +926,158 @@ export default function AdminSettingsPage() {
                     </p>
                   </div>
                 )}
+              </div>
+            )}
+
+            {/* Guide Management Tab */}
+            {activeTab === 'guide' && (
+              <div>
+                <h3 className="text-lg font-medium text-theme-primary mb-4">Kelola Panduan</h3>
+                <p className="text-sm text-theme-primary text-opacity-60 mb-6">
+                  Edit konten panduan cara memesan produk yang akan ditampilkan kepada pelanggan.
+                </p>
+
+                <form onSubmit={handleGuideUpdate} className="space-y-6">
+                  {/* Title */}
+                  <div>
+                    <label className="block text-sm font-medium text-theme-primary mb-2">
+                      Judul Panduan *
+                    </label>
+                    <input
+                      type="text"
+                      value={guideContent.title}
+                      onChange={(e) => setGuideContent(prev => ({ ...prev, title: e.target.value }))}
+                      className="block w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-accent-peach focus:border-accent-peach bg-white text-theme-primary border-theme-primary border-opacity-20"
+                      placeholder="Panduan Cara Memesan Produk"
+                      required
+                    />
+                  </div>
+
+                  {/* Content */}
+                  <div>
+                    <label className="block text-sm font-medium text-theme-primary mb-2">
+                      Deskripsi Panduan *
+                    </label>
+                    <textarea
+                      value={guideContent.content}
+                      onChange={(e) => setGuideContent(prev => ({ ...prev, content: e.target.value }))}
+                      rows={3}
+                      className="block w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-accent-peach focus:border-accent-peach bg-white text-theme-primary border-theme-primary border-opacity-20 resize-none"
+                      placeholder="Ikuti langkah-langkah mudah berikut untuk memesan produk di SistaBag:"
+                      required
+                    />
+                  </div>
+
+                  {/* Steps */}
+                  <div>
+                    <div className="flex items-center justify-between mb-4">
+                      <label className="block text-sm font-medium text-theme-primary">
+                        Langkah-langkah Panduan
+                      </label>
+                      <button
+                        type="button"
+                        onClick={addGuideStep}
+                        className="flex items-center px-3 py-1 bg-accent-mint text-white rounded-lg hover:bg-opacity-90 transition-colors text-sm"
+                      >
+                        <Plus className="h-4 w-4 mr-1" />
+                        Tambah Langkah
+                      </button>
+                    </div>
+
+                    <div className="space-y-4">
+                      {guideContent.steps.map((step, index) => (
+                        <div key={index} className="card-theme p-4 border border-theme-primary border-opacity-10 rounded-lg">
+                          <div className="flex items-center justify-between mb-3">
+                            <h4 className="text-sm font-medium text-theme-primary">Langkah {index + 1}</h4>
+                            {guideContent.steps.length > 1 && (
+                              <button
+                                type="button"
+                                onClick={() => removeGuideStep(index)}
+                                className="p-1 text-red-600 hover:text-red-700 hover:bg-red-50 rounded transition-colors"
+                              >
+                                <Trash2 className="h-4 w-4" />
+                              </button>
+                            )}
+                          </div>
+
+                          <div className="space-y-3">
+                            <div>
+                              <label className="block text-xs font-medium text-theme-primary mb-1">
+                                Judul Langkah *
+                              </label>
+                              <input
+                                type="text"
+                                value={step.title}
+                                onChange={(e) => updateGuideStep(index, 'title', e.target.value)}
+                                className="block w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-accent-peach focus:border-accent-peach bg-white text-theme-primary border-theme-primary border-opacity-20 text-sm"
+                                placeholder="1. Pilih Produk"
+                                required
+                              />
+                            </div>
+
+                            <div>
+                              <label className="block text-xs font-medium text-theme-primary mb-1">
+                                Deskripsi Langkah *
+                              </label>
+                              <textarea
+                                value={step.description}
+                                onChange={(e) => updateGuideStep(index, 'description', e.target.value)}
+                                rows={3}
+                                className="block w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-accent-peach focus:border-accent-peach bg-white text-theme-primary border-theme-primary border-opacity-20 resize-none text-sm"
+                                placeholder="Jelaskan langkah ini dengan detail..."
+                                required
+                              />
+                            </div>
+
+                            <div>
+                              <label className="block text-xs font-medium text-theme-primary mb-1">
+                                URL Gambar (Opsional)
+                              </label>
+                              <div className="flex items-center space-x-2">
+                                <ImageIcon className="h-4 w-4 text-theme-primary text-opacity-50" />
+                                <input
+                                  type="url"
+                                  value={step.image || ''}
+                                  onChange={(e) => updateGuideStep(index, 'image', e.target.value)}
+                                  className="block w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-accent-peach focus:border-accent-peach bg-white text-theme-primary border-theme-primary border-opacity-20 text-sm"
+                                  placeholder="https://example.com/image.jpg"
+                                />
+                              </div>
+                              <p className="mt-1 text-xs text-theme-primary text-opacity-50">
+                                Masukkan URL gambar untuk membantu menjelaskan langkah ini
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="flex items-center space-x-4">
+                    <button
+                      type="submit"
+                      disabled={guideLoading}
+                      className="flex items-center px-6 py-2 bg-gradient-to-r from-accent-peach to-accent-mint text-white rounded-lg hover:from-accent-mint hover:to-accent-yellow transition-all duration-300 shadow-soft hover:shadow-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      {guideLoading ? (
+                        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                      ) : (
+                        <Save className="h-4 w-4 mr-2" />
+                      )}
+                      {guideLoading ? 'Menyimpan...' : 'Simpan Panduan'}
+                    </button>
+                    
+                    <a
+                      href="/panduan"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center px-4 py-2 bg-theme-primary bg-opacity-10 text-theme-primary border border-theme-primary border-opacity-50 rounded-lg hover:bg-theme-primary hover:bg-opacity-20 transition-colors"
+                    >
+                      <BookOpen className="h-4 w-4 mr-2" />
+                      Preview Panduan
+                    </a>
+                  </div>
+                </form>
               </div>
             )}
 

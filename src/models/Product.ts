@@ -19,6 +19,7 @@ export interface IProduct extends Document {
   stock: number;
   views: number;
   isPublished: boolean;
+  isFeatured: boolean;
   promo?: mongoose.Types.ObjectId;
   createdAt: Date;
   updatedAt: Date;
@@ -98,6 +99,10 @@ const ProductSchema = new Schema<IProduct>({
   isPublished: {
     type: Boolean,
     default: true
+  },
+  isFeatured: {
+    type: Boolean,
+    default: false
   },
   promo: {
     type: Schema.Types.ObjectId,
